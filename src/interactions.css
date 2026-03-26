@@ -577,6 +577,31 @@ textarea {
 .pricing-grid-3 .pc-card:nth-child(2) { animation-delay: 80ms; }
 .pricing-grid-3 .pc-card:nth-child(3) { animation-delay: 160ms; }
 
+/* 14b. STAGGERED ENTRANCE */
+.stagger-in-item {
+  opacity: 0;
+  animation: stagger-slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes stagger-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Common stagger delays */
+.stagger-in-item:nth-child(1) { animation-delay: 0.1s; }
+.stagger-in-item:nth-child(2) { animation-delay: 0.2s; }
+.stagger-in-item:nth-child(3) { animation-delay: 0.3s; }
+.stagger-in-item:nth-child(4) { animation-delay: 0.4s; }
+.stagger-in-item:nth-child(5) { animation-delay: 0.5s; }
+.stagger-in-item:nth-child(6) { animation-delay: 0.6s; }
+
 /* ─────────────────────────────────────────────────
    15. CONTENT TABLE ROWS (Dashboard)
    ───────────────────────────────────────────────── */

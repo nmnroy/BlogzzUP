@@ -33,3 +33,7 @@ refactor.js
 out.txt
 build_err*
 error.log
+
+# Environment variables
+.env
+
