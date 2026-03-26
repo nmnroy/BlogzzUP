@@ -251,13 +251,19 @@ Write a comprehensive, SEO-optimized blog post with these specifications:
 
 Format your response as valid JSON with exactly these fields:
 {
-  "title": "SEO-optimized H1 title (include keyword, under 60 chars)",
-  "metaDescription": "Compelling meta description under 155 chars with keyword and CTA",
-  "seoScore": <number between 85-98>,
-  "body": "Full blog post in markdown format with H2s, H3s, bullet points, and natural keyword usage. Minimum ${wordCount} words. Include an introduction, 5-7 main sections, and a conclusion with CTA."
+  "title": "SEO-optimized blog title with keyword, under 60 chars",
+  "metaDescription": "Meta description under 155 chars with keyword and CTA",
+  "seoScore": 92,
+  "body": "Full blog content here"
 }
 
-IMPORTANT: Return ONLY the JSON object. No preamble, no explanation, no markdown code blocks.`;
+STRICT RULES for the body field:
+- Use \\n for line breaks inside the JSON string
+- Do NOT use actual newlines inside the JSON string
+- Do NOT use unescaped double quotes inside the body
+- Keep body under 3000 words to stay within token limits
+- Use ## for H2 headings, ### for H3 headings
+- Return ONLY the raw JSON object, nothing else before or after`;
 
     try {
       const cleaned  = await callGemini(prompt, 8192);
