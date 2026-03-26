@@ -60,12 +60,10 @@ describe('BlogEditor – initial render', () => {
     expect(screen.getByLabelText(/target keyword/i)).toBeInTheDocument();
   });
 
-  it('keyword input receives autofocus', () => {
+  it('keyword input receives autofocus on mount', () => {
     const input = screen.getByLabelText(/target keyword/i);
-    // React lowercases autoFocus to autofocus in the DOM
-    expect(input.autofocus !== undefined || input === document.activeElement || input.getAttribute('autofocus') !== null || true).toBe(true);
-    // Verify the input exists and is accessible
-    expect(input.tagName).toBe('INPUT');
+    // React's autoFocus calls .focus() during mount, making it the active element
+    expect(document.activeElement).toBe(input);
   });
 
   it('renders all four tone radio options', () => {
