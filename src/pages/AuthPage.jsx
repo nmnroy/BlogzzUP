@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import Navbar from '../components/Navbar';
+import { updateProfile } from "firebase/auth";
 
 const getFriendlyError = (errorCode) => {
   if (!errorCode) return '';
@@ -42,7 +43,13 @@ const AuthPage = ({ onBack, onNavigate }) => {
       if (isLogin) {
         await login(email, password);
       } else {
-        await signup(email, password);
+        const result = await signup(email, password);
+        // Update display name immediately after signup
+        await updateProfile(result.user, {
+          displayName: name
+        });
+        // Force reload the user to get updated profile
+        await result.user.reload();
       }
     } catch (err) {
       console.error("Auth error:", err);

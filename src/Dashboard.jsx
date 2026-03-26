@@ -669,6 +669,7 @@ Return ONLY a valid JSON object:
 
 const Dashboard = () => {
   const { currentUser, logout } = useAuth();
+  const userName = currentUser?.displayName || currentUser?.email?.split('@')[0] || 'User';
 
   const handleBackToHome = async () => {
     try {
@@ -1032,7 +1033,7 @@ Use clear headings and keep it actionable. Write in a professional consulting to
         <div className="sidebar-user">
           <img src="https://i.pravatar.cc/100?img=11" alt="User" className="user-avatar" />
           <div className="user-info">
-            <span className="user-name">{currentUser?.displayName || 'User'}'s Workspace</span>
+            <span className="user-name">{userName}'s Workspace</span>
             <span className="user-plan">Growth Plan</span>
           </div>
         </div>
@@ -1110,7 +1111,7 @@ Use clear headings and keep it actionable. Write in a professional consulting to
         <div id="dash-overview" className="dash-section" style={{ display: 'block' }}>
           <header className="top-header">
             <div className="header-text">
-              <h1 className="dashboard-greeting">Good morning, {currentUser?.displayName?.split(' ')[0] || 'User'} 👋</h1>
+              <h1 className="dashboard-greeting">Good morning, {userName} 👋</h1>
               <p>Your blogs are running on autopilot.</p>
             </div>
             <div className="header-actions">

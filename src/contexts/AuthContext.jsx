@@ -25,8 +25,9 @@ export const AuthProvider = ({ children }) => {
     return unsubscribe;
   }, []);
 
-  const signup = (email, password) => {
-    return createUserWithEmailAndPassword(auth, email, password);
+  const signup = async (email, password) => {
+    const result = await createUserWithEmailAndPassword(auth, email, password);
+    return result;
   };
 
   const login = (email, password) => {

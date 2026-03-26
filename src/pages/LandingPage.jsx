@@ -9,13 +9,6 @@ import BlogPage from './BlogPage';
 import { Sparkles, ArrowRight, Search, Brain, Globe2, Link as LinkIcon, Rocket } from 'lucide-react';
 
 const LandingPage = ({ currentPage, setCurrentPage, onSignIn }) => {
-  useEffect(() => {
-    const hash = window.location.hash.replace('#', '') || 'home';
-    if (['home', 'how-it-works', 'features', 'demo', 'pricing', 'blog'].includes(hash)) {
-      setCurrentPage(hash);
-    }
-  }, [setCurrentPage]);
-
   const renderView = () => {
     switch (currentPage) {
       case 'home':

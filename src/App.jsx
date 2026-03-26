@@ -88,10 +88,17 @@ function App() {
       {showAuth ? (
         <AuthPage 
           onBack={() => setShowAuth(false)} 
-          onNavigate={(pageId) => { setShowAuth(false); setCurrentPage(pageId); }}
+          onNavigate={(pageId) => { 
+            setShowAuth(false); 
+            setCurrentPage(pageId); 
+          }}
         />
       ) : (
-        <LandingPage currentPage={currentPage} setCurrentPage={setCurrentPage} onSignIn={() => setShowAuth(true)} />
+        <LandingPage 
+          currentPage={currentPage} 
+          setCurrentPage={setCurrentPage} 
+          onSignIn={() => setShowAuth(true)} 
+        />
       )}
 
       <footer className="footer" role="contentinfo">
