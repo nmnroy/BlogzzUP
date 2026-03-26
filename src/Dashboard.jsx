@@ -20,7 +20,7 @@ let currentKeyIndex = 0;
 // Track when a key is allowed to be used again (Date.now() timestamp)
 const keyCooldowns = {};
 
-async function callGemini(prompt, maxTokens = 4000) {
+async function callGemini(prompt, maxTokens = 8192) {
   let lastError = null;
   let allKeysOnCooldown = true;
 
@@ -49,7 +49,8 @@ async function callGemini(prompt, maxTokens = 4000) {
             contents: [{ parts: [{ text: prompt }] }],
             generationConfig: {
               maxOutputTokens: maxTokens,
-              temperature: 1
+              temperature: 0.9,
+              responseMimeType: "application/json"
             }
           })
         }
