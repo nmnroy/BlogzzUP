@@ -5,6 +5,8 @@ import {
   Settings, Users, CreditCard, Sparkles, MoreVertical, LogOut
 } from 'lucide-react';
 import './Dashboard.css';
+import './BlogEditor.css';
+import BlogEditor from './BlogEditor';
 async function callGemini(prompt, maxTokens = 4000) {
   const apiKey = 'AIzaSyAOCdbhW95ld9N2pKCwy_nXF8CVYt-1UOw';
   const response = await fetch(
@@ -164,292 +166,8 @@ const MyBlogsSection = () => {
   );
 };
 
-const NewBlogSection = () => {
-  const [keyword, setKeyword] = useState('');
-  const [tone, setTone] = useState('professional');
-  const [wordCount, setWordCount] = useState('1500');
-  const [geo, setGeo] = useState('');
-  const [instructions, setInstructions] = useState('');
-  
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [progress, setProgress] = useState({ show: false, text: '', pct: 0 });
-  const [error, setError] = useState('');
-  const [output, setOutput] = useState(null);
-  const [kwFocused, setKwFocused] = useState(false);
-
-  const generateBlog = async () => {
-    if (!keyword.trim()) {
-       setError("Please enter a keyword first!");
-       return;
-    }
-    setError('');
-    setIsGenerating(true);
-    setProgress({ show: true, text: 'Analyzing keyword intent...', pct: 10 });
-    setOutput(null);
-
-    const steps = [
-      { text: 'Analyzing keyword intent...', pct: 10 },
-      { text: 'Scanning SERP gaps...', pct: 25 },
-      { text: 'Building content brief...', pct: 40 },
-      { text: 'Drafting blog content...', pct: 60 },
-      { text: 'Running SEO optimization pass...', pct: 75 },
-      { text: 'Humanizing content...', pct: 88 },
-      { text: 'Structuring for featured snippets...', pct: 95 }
-    ];
-    
-    let stepIndex = 0;
-    const progressInterval = setInterval(() => {
-      if (stepIndex < steps.length) {
-        setProgress({ show: true, text: steps[stepIndex].text, pct: steps[stepIndex].pct });
-        stepIndex++;
-      }
-    }, 800);
-
-    const geoInstruction = geo ? 'Target location: ' + geo + '. Include local entities and city-specific examples.' : '';
-    const extraInstructions = instructions ? 'Additional requirements: ' + instructions : '';
-    
-    const prompt = `You are an expert SEO content writer for Indian startups and businesses.
-
-Write a comprehensive, SEO-optimized blog post with these specifications:
-- Primary keyword: "${keyword}"
-- Tone: ${tone}
-- Target word count: ${wordCount} words
-- ${geoInstruction}
-- ${extraInstructions}
-
-Format your response as valid JSON with exactly these fields:
-{
-  "title": "SEO-optimized H1 title (include keyword, under 60 chars)",
-  "metaDescription": "Compelling meta description under 155 chars with keyword and CTA",
-  "seoScore": <number between 85-98>,
-  "body": "Full blog post in markdown format with H2s, H3s, bullet points, and natural keyword usage. Minimum ${wordCount} words. Include an introduction, 5-7 main sections, and a conclusion with CTA."
-}
-
-IMPORTANT: Return ONLY the JSON object. No preamble, no explanation, no markdown code blocks.`;
-
-    try {
-      const cleaned = await callGemini(prompt, 4000);
-      
-      clearInterval(progressInterval);
-      setProgress({ show: true, text: 'Complete! ✓', pct: 100 });
-      
-      const blogData = JSON.parse(cleaned);
-      
-      const wordCountActual = blogData.body.split(' ').length;
-      const readTime = Math.ceil(wordCountActual / 200);
-      
-      setTimeout(() => {
-        setProgress(p => ({...p, show: false}));
-        setOutput({ ...blogData, keyword, tone, geo, wordCountActual, readTime, createdAt: new Date().toISOString() });
-        setIsGenerating(false);
-      }, 500);
-
-    } catch (err) {
-      clearInterval(progressInterval);
-      setProgress(p => ({...p, show: false}));
-      setError(err.message);
-      setIsGenerating(false);
-    }
-  };
-
-  const copyBlog = (e) => {
-    if (!output) return;
-    const text = output.title + '\n\n' + output.metaDescription + '\n\n' + output.body;
-    navigator.clipboard.writeText(text).then(() => {
-      const btn = e.target;
-      const oldText = btn.textContent;
-      const oldColor = btn.style.color;
-      btn.textContent = '✓ Copied!';
-      btn.style.color = '#10B981';
-      setTimeout(() => { btn.textContent = oldText; btn.style.color = oldColor; }, 2000);
-    });
-  };
-
-  const saveBlog = (e) => {
-    if (!output) return;
-    const blogs = JSON.parse(localStorage.getItem('bf_blogs') || '[]');
-    const newBlog = {
-      id: Date.now(),
-      title: output.title,
-      metaDescription: output.metaDescription,
-      body: output.body,
-      seoScore: output.seoScore,
-      keyword: output.keyword,
-      status: 'draft',
-      createdAt: new Date().toISOString()
-    };
-    blogs.unshift(newBlog);
-    localStorage.setItem('bf_blogs', JSON.stringify(blogs));
-    if (window.updateOverviewStats) window.updateOverviewStats();
-    
-    const btn = e.target;
-    btn.textContent = '✓ Saved!';
-    btn.style.color = '#10B981';
-    setTimeout(() => { btn.textContent = 'Save Draft'; btn.style.color = '#A78BFA'; }, 2000);
-    
-    if (window.loadMyBlogs) window.loadMyBlogs();
-  };
-
-  return (
-    <div id="dash-newblog" className="dash-section" style={{display: 'none', padding: '40px', color: '#fff'}}>
-      <div style={{display: 'flex', gap: '40px', flexWrap: 'wrap'}}>
-        
-        {/* Left Column */}
-        <div style={{flex: '1 1 400px', maxWidth: '600px'}}>
-          <div style={{fontSize: '24px', fontWeight: 700, color: 'white', marginBottom: '4px'}}>Generate New Blog</div>
-          <div style={{fontSize: '14px', color: '#94A3B8', marginBottom: '32px'}}>Fill in the details and let the AI engine do the work</div>
-
-          <div style={{marginBottom: '20px'}}>
-            <label style={{display: 'block', marginBottom: '8px', fontSize: '13px', color: '#E2E8F0', fontWeight: 500}}>Target Keyword *</label>
-            <input 
-              type="text" 
-              value={keyword}
-              onChange={e => {setKeyword(e.target.value); setError('');}}
-              onFocus={() => setKwFocused(true)}
-              onBlur={() => setKwFocused(false)}
-              placeholder={error ? error : "e.g. AI tools for Indian startups"}
-              style={{
-                width: '100%', background: '#141B2D', 
-                border: `1px solid ${error ? '#EF4444' : (kwFocused ? '#7C3AED' : 'rgba(255,255,255,0.1)')}`, 
-                borderRadius: '10px', padding: '12px 16px', color: 'white', fontSize: '14px', outline: 'none',
-                transition: 'border-color 0.2s'
-              }}
-            />
-          </div>
-
-          <div style={{marginBottom: '20px'}}>
-            <label style={{display: 'block', marginBottom: '8px', fontSize: '13px', color: '#E2E8F0', fontWeight: 500}}>Tone</label>
-            <select 
-              value={tone}
-              onChange={e => setTone(e.target.value)}
-              style={{
-                width: '100%', background: '#141B2D', border: '1px solid rgba(255,255,255,0.1)', 
-                borderRadius: '10px', padding: '12px 16px', color: 'white', fontSize: '14px', outline: 'none', cursor: 'pointer'
-              }}
-            >
-              <option value="professional">Professional</option>
-              <option value="conversational">Conversational</option>
-              <option value="authoritative">Authoritative</option>
-              <option value="educational">Educational</option>
-            </select>
-          </div>
-
-          <div style={{marginBottom: '20px'}}>
-            <label style={{display: 'block', marginBottom: '8px', fontSize: '13px', color: '#E2E8F0', fontWeight: 500}}>Word Count: <span style={{color: '#A78BFA'}}>{wordCount}</span> words</label>
-            <input 
-              type="range" min="800" max="3000" step="100" 
-              value={wordCount}
-              onChange={e => setWordCount(e.target.value)}
-              style={{ width: '100%', accentColor: '#7C3AED' }}
-            />
-          </div>
-
-          <div style={{marginBottom: '20px'}}>
-            <label style={{display: 'block', marginBottom: '8px', fontSize: '13px', color: '#E2E8F0', fontWeight: 500}}>GEO Target (City/Region)</label>
-            <input 
-              type="text" placeholder="e.g. Delhi, Bangalore, Pan India"
-              value={geo}
-              onChange={e => setGeo(e.target.value)}
-              style={{
-                width: '100%', background: '#141B2D', border: '1px solid rgba(255,255,255,0.1)', 
-                borderRadius: '10px', padding: '12px 16px', color: 'white', fontSize: '14px', outline: 'none'
-              }}
-            />
-          </div>
-
-          <div style={{marginBottom: '20px'}}>
-            <label style={{display: 'block', marginBottom: '8px', fontSize: '13px', color: '#E2E8F0', fontWeight: 500}}>Additional Instructions (optional)</label>
-            <textarea 
-              rows="3" placeholder="e.g. Include stats, mention competitor names, focus on B2B audience..."
-              value={instructions}
-              onChange={e => setInstructions(e.target.value)}
-              style={{
-                width: '100%', background: '#141B2D', border: '1px solid rgba(255,255,255,0.1)', 
-                borderRadius: '10px', padding: '12px 16px', color: 'white', fontSize: '14px', outline: 'none', resize: 'vertical'
-              }}
-            ></textarea>
-          </div>
-
-          <button 
-            onClick={generateBlog}
-            disabled={isGenerating}
-            style={{
-              width: '100%', background: 'linear-gradient(135deg,#7C3AED,#5B21B6)', color: 'white', 
-              border: 'none', borderRadius: '12px', padding: '14px', fontSize: '16px', fontWeight: 600, 
-              cursor: isGenerating ? 'not-allowed' : 'pointer', transition: 'all 0.2s', marginTop: '8px',
-              opacity: isGenerating ? 0.7 : 1
-            }}
-          >
-            {isGenerating ? '⚡ Generating...' : (output ? '⚡ Generate Another Blog' : '⚡ Generate Blog')}
-          </button>
-
-          {progress.show && (
-            <div style={{marginTop: '20px'}}>
-              <div style={{background: '#141B2D', borderRadius: '12px', padding: '20px'}}>
-                <div style={{fontSize: '14px', color: '#A78BFA', marginBottom: '12px'}}>{progress.text}</div>
-                <div style={{background: '#0D1526', borderRadius: '999px', height: '6px', overflow: 'hidden'}}>
-                  <div style={{height: '100%', background: 'linear-gradient(90deg,#7C3AED,#06B6D4)', width: `${progress.pct}%`, transition: 'width 0.5s ease', borderRadius: '999px'}}></div>
-                </div>
-                <div style={{fontSize: '12px', color: '#64748B', marginTop: '8px'}}>{progress.pct}%</div>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Right Column */}
-        <div style={{flex: '1 1 500px', background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px', minHeight: '500px'}}>
-          {!output && error && !progress.show && (
-             <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '400px', color: '#4B5563', textAlign: 'center'}}>
-               <div style={{fontSize: '48px', marginBottom: '16px'}}>❌</div>
-               <div style={{fontSize: '14px', color: '#EF4444'}}>Error: {error}</div>
-               <div style={{fontSize: '12px', color: '#64748B', marginTop: '8px'}}>Check your API key and try again</div>
-             </div>
-          )}
-          {!output && !error && (
-            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '400px', color: '#4B5563', textAlign: 'center'}}>
-              <div style={{fontSize: '48px', marginBottom: '16px'}}>✍️</div>
-              <div style={{fontSize: '16px', fontWeight: 500, color: '#64748B'}}>Your blog will appear here</div>
-              <div style={{fontSize: '13px', marginTop: '8px'}}>Fill in the keyword and click Generate</div>
-            </div>
-          )}
-
-          {output && (
-            <div>
-              <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', paddingBottom: '16px', borderBottom: '1px solid rgba(255,255,255,0.06)'}}>
-                <span style={{fontSize: '13px', color: '#10B981', fontWeight: 600}}>✓ Blog Generated</span>
-                <div style={{display: 'flex', gap: '8px'}}>
-                  <button onClick={copyBlog} style={{background: '#141B2D', border: '1px solid rgba(255,255,255,0.1)', color: '#94A3B8', borderRadius: '8px', padding: '6px 14px', fontSize: '12px', cursor: 'pointer'}}>Copy</button>
-                  <button onClick={saveBlog} style={{background: 'rgba(124,58,237,0.2)', border: '1px solid rgba(124,58,237,0.4)', color: '#A78BFA', borderRadius: '8px', padding: '6px 14px', fontSize: '12px', cursor: 'pointer'}}>Save Draft</button>
-                  <button onClick={() => window.showDashboardSection && window.showDashboardSection('publisher')} style={{background: 'linear-gradient(135deg,#7C3AED,#06B6D4)', border: 'none', color: 'white', borderRadius: '8px', padding: '6px 14px', fontSize: '12px', cursor: 'pointer', fontWeight: 600}}>Publish →</button>
-                </div>
-              </div>
-              
-              <div style={{display: 'flex', gap: '12px', marginBottom: '20px', flexWrap: 'wrap'}}>
-                <div style={{background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: '8px', padding: '8px 14px', fontSize: '12px'}}>
-                  <span style={{color: '#64748B'}}>SEO Score</span>
-                  <span style={{color: '#10B981', fontWeight: 700, marginLeft: '8px'}}>{output.seoScore}/100</span>
-                </div>
-                <div style={{background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.2)', borderRadius: '8px', padding: '8px 14px', fontSize: '12px'}}>
-                  <span style={{color: '#64748B'}}>Words</span>
-                  <span style={{color: '#A78BFA', fontWeight: 700, marginLeft: '8px'}}>{output.wordCountActual.toLocaleString()}</span>
-                </div>
-                <div style={{background: 'rgba(6,182,212,0.1)', border: '1px solid rgba(6,182,212,0.2)', borderRadius: '8px', padding: '8px 14px', fontSize: '12px'}}>
-                  <span style={{color: '#64748B'}}>Read time</span>
-                  <span style={{color: '#06B6D4', fontWeight: 700, marginLeft: '8px'}}>{output.readTime} min</span>
-                </div>
-              </div>
-              
-              <div style={{fontSize: '20px', fontWeight: 700, color: 'white', marginBottom: '12px', lineHeight: 1.3}}>{output.title}</div>
-              <div style={{fontSize: '13px', color: '#64748B', background: '#0D1526', borderRadius: '8px', padding: '10px 14px', marginBottom: '16px', fontStyle: 'italic'}}>📝 {output.metaDescription}</div>
-              <div style={{fontSize: '14px', color: '#94A3B8', lineHeight: 1.8, whiteSpace: 'pre-wrap'}}>{output.body}</div>
-            </div>
-          )}
-        </div>
-
-      </div>
-    </div>
-  );
-};
+// NewBlogSection replaced by BlogEditor component (see BlogEditor.jsx)
+// BlogEditor is rendered directly in the Dashboard JSX below
 
 
 
@@ -843,12 +561,15 @@ const blogs = [
     };
 
     window.showDashboardSection = function(section) {
-      document.querySelectorAll('.dash-section').forEach(s => s.style.display = 'none');
+      document.querySelectorAll('.dash-section').forEach(s => { s.style.display = 'none'; s.classList.remove('section-entering'); });
       const target = document.getElementById('dash-' + section);
       if (target) {
         target.style.display = 'block';
-        target.style.opacity = '0';
-        setTimeout(() => { target.style.opacity = '1'; target.style.transition = 'opacity 0.2s ease'; }, 10);
+        // Force reflow so the animation class re-triggers
+        void target.offsetWidth;
+        target.classList.add('section-entering');
+        // Remove class after animation completes so it can re-trigger next time
+        target.addEventListener('animationend', () => target.classList.remove('section-entering'), { once: true });
       }
       document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('sidebar-active', 'active'));
       const activeLink = document.querySelector('[data-section="' + section + '"]');
@@ -858,7 +579,7 @@ const blogs = [
       }
       if (section === 'overview') window.updateOverviewStats();
       if (section === 'myblogs' && window.loadMyBlogs) window.loadMyBlogs();
-      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     // Auto-call on mount
@@ -907,47 +628,47 @@ const blogs = [
           </div>
         </div>
 
-        <div className="sidebar-nav">
+        <nav className="sidebar-nav" role="navigation" aria-label="Dashboard navigation">
           <div className="nav-group">
-            <a className="nav-item sidebar-link sidebar-active active" data-section="overview" onClick={() => window.showDashboardSection('overview')} style={{cursor: 'pointer'}}><Home size={18}/> Overview</a>
+            <a role="button" tabIndex={0} className="nav-item sidebar-link sidebar-active active" data-section="overview" onClick={() => window.showDashboardSection('overview')} onKeyDown={(e) => (e.key==='Enter'||e.key===' ') && window.showDashboardSection('overview')} style={{cursor: 'pointer'}}><Home size={18} aria-hidden="true"/> Overview</a>
           </div>
 
           <div className="nav-group">
-            <h4 className="nav-label">Content</h4>
-            <a className="nav-item sidebar-link" data-section="newblog" onClick={() => window.showDashboardSection('newblog')} style={{cursor: 'pointer'}}><Plus size={18}/> New Blog</a>
-            <a className="nav-item sidebar-link" data-section="myblogs" onClick={() => window.showDashboardSection('myblogs')} style={{cursor: 'pointer'}}><FileText size={18}/> My Blogs</a>
-            <a className="nav-item sidebar-link" data-section="calendar" onClick={() => window.showDashboardSection('calendar')} style={{cursor: 'pointer'}}><Calendar size={18}/> Content Calendar</a>
-            <a className="nav-item sidebar-link" data-section="clustermap" onClick={() => window.showDashboardSection('clustermap')} style={{cursor: 'pointer'}}><Network size={18}/> Cluster Map</a>
+            <h4 className="nav-label" id="nav-label-content">Content</h4>
+            <a role="button" tabIndex={0} className="nav-item sidebar-link" data-section="newblog" onClick={() => window.showDashboardSection('newblog')} onKeyDown={(e) => (e.key==='Enter'||e.key===' ') && window.showDashboardSection('newblog')} style={{cursor: 'pointer'}}><Plus size={18} aria-hidden="true"/> New Blog</a>
+            <a role="button" tabIndex={0} className="nav-item sidebar-link" data-section="myblogs" onClick={() => window.showDashboardSection('myblogs')} onKeyDown={(e) => (e.key==='Enter'||e.key===' ') && window.showDashboardSection('myblogs')} style={{cursor: 'pointer'}}><FileText size={18} aria-hidden="true"/> My Blogs</a>
+            <a role="button" tabIndex={0} className="nav-item sidebar-link" data-section="calendar" onClick={() => window.showDashboardSection('calendar')} onKeyDown={(e) => (e.key==='Enter'||e.key===' ') && window.showDashboardSection('calendar')} style={{cursor: 'pointer'}}><Calendar size={18} aria-hidden="true"/> Content Calendar</a>
+            <a role="button" tabIndex={0} className="nav-item sidebar-link" data-section="clustermap" onClick={() => window.showDashboardSection('clustermap')} onKeyDown={(e) => (e.key==='Enter'||e.key===' ') && window.showDashboardSection('clustermap')} style={{cursor: 'pointer'}}><Network size={18} aria-hidden="true"/> Cluster Map</a>
           </div>
 
           <div className="nav-group">
-            <h4 className="nav-label">Research</h4>
-            <a className="nav-item sidebar-link" data-section="serpgap" onClick={() => window.showDashboardSection('serpgap')} style={{cursor: 'pointer'}}><Search size={18}/> SERP Gap Scanner</a>
-            <a className="nav-item sidebar-link" data-section="keywords" onClick={() => window.showDashboardSection('keywords')} style={{cursor: 'pointer'}}><Key size={18}/> Keyword Planner</a>
-            <a className="nav-item sidebar-link" data-section="competitor" onClick={() => window.showDashboardSection('competitor')} style={{cursor: 'pointer'}}><Target size={18}/> Competitor Spy</a>
+            <h4 className="nav-label" id="nav-label-research">Research</h4>
+            <a role="button" tabIndex={0} className="nav-item sidebar-link" data-section="serpgap" onClick={() => window.showDashboardSection('serpgap')} onKeyDown={(e) => (e.key==='Enter'||e.key===' ') && window.showDashboardSection('serpgap')} style={{cursor: 'pointer'}}><Search size={18} aria-hidden="true"/> SERP Gap Scanner</a>
+            <a role="button" tabIndex={0} className="nav-item sidebar-link" data-section="keywords" onClick={() => window.showDashboardSection('keywords')} onKeyDown={(e) => (e.key==='Enter'||e.key===' ') && window.showDashboardSection('keywords')} style={{cursor: 'pointer'}}><Key size={18} aria-hidden="true"/> Keyword Planner</a>
+            <a role="button" tabIndex={0} className="nav-item sidebar-link" data-section="competitor" onClick={() => window.showDashboardSection('competitor')} onKeyDown={(e) => (e.key==='Enter'||e.key===' ') && window.showDashboardSection('competitor')} style={{cursor: 'pointer'}}><Target size={18} aria-hidden="true"/> Competitor Spy</a>
           </div>
 
           <div className="nav-group">
-            <h4 className="nav-label">Publish</h4>
-            <a className="nav-item sidebar-link" data-section="publisher" onClick={() => window.showDashboardSection('publisher')} style={{cursor: 'pointer'}}><UploadCloud size={18}/> Auto-Publisher</a>
-            <a className="nav-item sidebar-link" data-section="integrations" onClick={() => window.showDashboardSection('integrations')} style={{cursor: 'pointer'}}><LinkIcon size={18}/> Integrations</a>
-            <a className="nav-item sidebar-link" data-section="schedule" onClick={() => window.showDashboardSection('schedule')} style={{cursor: 'pointer'}}><List size={18}/> Schedule Queue</a>
+            <h4 className="nav-label" id="nav-label-publish">Publish</h4>
+            <a role="button" tabIndex={0} className="nav-item sidebar-link" data-section="publisher" onClick={() => window.showDashboardSection('publisher')} onKeyDown={(e) => (e.key==='Enter'||e.key===' ') && window.showDashboardSection('publisher')} style={{cursor: 'pointer'}}><UploadCloud size={18} aria-hidden="true"/> Auto-Publisher</a>
+            <a role="button" tabIndex={0} className="nav-item sidebar-link" data-section="integrations" onClick={() => window.showDashboardSection('integrations')} onKeyDown={(e) => (e.key==='Enter'||e.key===' ') && window.showDashboardSection('integrations')} style={{cursor: 'pointer'}}><LinkIcon size={18} aria-hidden="true"/> Integrations</a>
+            <a role="button" tabIndex={0} className="nav-item sidebar-link" data-section="schedule" onClick={() => window.showDashboardSection('schedule')} onKeyDown={(e) => (e.key==='Enter'||e.key===' ') && window.showDashboardSection('schedule')} style={{cursor: 'pointer'}}><List size={18} aria-hidden="true"/> Schedule Queue</a>
           </div>
 
           <div className="nav-group">
-            <h4 className="nav-label">Analyze</h4>
-            <a className="nav-item sidebar-link" data-section="seoscores" onClick={() => window.showDashboardSection('seoscores')} style={{cursor: 'pointer'}}><BarChart3 size={18}/> SEO Scores</a>
-            <a className="nav-item sidebar-link" data-section="traffic" onClick={() => window.showDashboardSection('traffic')} style={{cursor: 'pointer'}}><TrendingUp size={18}/> Traffic Tracker</a>
-            <a className="nav-item sidebar-link" data-section="roi" onClick={() => window.showDashboardSection('roi')} style={{cursor: 'pointer'}}><PieChart size={18}/> ROI Dashboard</a>
+            <h4 className="nav-label" id="nav-label-analyze">Analyze</h4>
+            <a role="button" tabIndex={0} className="nav-item sidebar-link" data-section="seoscores" onClick={() => window.showDashboardSection('seoscores')} onKeyDown={(e) => (e.key==='Enter'||e.key===' ') && window.showDashboardSection('seoscores')} style={{cursor: 'pointer'}}><BarChart3 size={18} aria-hidden="true"/> SEO Scores</a>
+            <a role="button" tabIndex={0} className="nav-item sidebar-link" data-section="traffic" onClick={() => window.showDashboardSection('traffic')} onKeyDown={(e) => (e.key==='Enter'||e.key===' ') && window.showDashboardSection('traffic')} style={{cursor: 'pointer'}}><TrendingUp size={18} aria-hidden="true"/> Traffic Tracker</a>
+            <a role="button" tabIndex={0} className="nav-item sidebar-link" data-section="roi" onClick={() => window.showDashboardSection('roi')} onKeyDown={(e) => (e.key==='Enter'||e.key===' ') && window.showDashboardSection('roi')} style={{cursor: 'pointer'}}><PieChart size={18} aria-hidden="true"/> ROI Dashboard</a>
           </div>
 
           <div className="nav-group">
-            <h4 className="nav-label">Settings</h4>
-            <a className="nav-item sidebar-link" data-section="brandvoice" onClick={() => window.showDashboardSection('brandvoice')} style={{cursor: 'pointer'}}><Settings size={18}/> Brand Voice</a>
-            <a className="nav-item sidebar-link" data-section="team" onClick={() => window.showDashboardSection('team')} style={{cursor: 'pointer'}}><Users size={18}/> Team</a>
-            <a className="nav-item sidebar-link" data-section="billing" onClick={() => window.showDashboardSection('billing')} style={{cursor: 'pointer'}}><CreditCard size={18}/> Billing</a>
+            <h4 className="nav-label" id="nav-label-settings">Settings</h4>
+            <a role="button" tabIndex={0} className="nav-item sidebar-link" data-section="brandvoice" onClick={() => window.showDashboardSection('brandvoice')} onKeyDown={(e) => (e.key==='Enter'||e.key===' ') && window.showDashboardSection('brandvoice')} style={{cursor: 'pointer'}}><Settings size={18} aria-hidden="true"/> Brand Voice</a>
+            <a role="button" tabIndex={0} className="nav-item sidebar-link" data-section="team" onClick={() => window.showDashboardSection('team')} onKeyDown={(e) => (e.key==='Enter'||e.key===' ') && window.showDashboardSection('team')} style={{cursor: 'pointer'}}><Users size={18} aria-hidden="true"/> Team</a>
+            <a role="button" tabIndex={0} className="nav-item sidebar-link" data-section="billing" onClick={() => window.showDashboardSection('billing')} onKeyDown={(e) => (e.key==='Enter'||e.key===' ') && window.showDashboardSection('billing')} style={{cursor: 'pointer'}}><CreditCard size={18} aria-hidden="true"/> Billing</a>
           </div>
-        </div>
+        </nav>
 
         <div className="sidebar-footer">
           <div style={{background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.15)', borderRadius: '10px', padding: '12px 14px', margin: '12px 8px'}}>
@@ -955,7 +676,7 @@ const blogs = [
               <span style={{width: '8px', height: '8px', background: '#10B981', borderRadius: '50%', display: 'inline-block'}}></span>
               <span style={{fontSize: '12px', color: '#10B981', fontWeight: 600}}>AI Engine Active</span>
             </div>
-            <div style={{fontSize: '11px', color: '#64748B'}}>Gemini 2.5 Flash</div>
+            <div style={{fontSize: '11px', color: 'var(--text-subtle)'}}>Gemini 2.5 Flash</div>
           </div>
 
           <div style={{background: '#141B2D', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', padding: '14px', margin: '8px'}}>
@@ -1090,7 +811,7 @@ const blogs = [
           </div>
         </div>
 
-        <NewBlogSection />
+        <BlogEditor callGemini={callGemini} />
         <MyBlogsSection />
         <SerpGapSection />
         <SeoScoresSection />

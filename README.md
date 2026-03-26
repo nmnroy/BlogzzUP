@@ -1,8 +1,8 @@
-# ✨ BlogForge AI
+# ✨ BlogForge AI V2
 
-> India's most powerful AI blog engine — from keyword to ranked blog post in under 10 minutes.
+> India's most powerful AI blog engine — from keyword to ranked blog post in under 10 minutes. Now with **V2 Glassmorphism UI** and **Gemini 2.0 Flash** engine.
 
-![BlogForge AI](https://img.shields.io/badge/Gemini%202.5%20Flash-Powered-purple?style=for-the-badge&logo=google)
+![BlogForge AI](https://img.shields.io/badge/Gemini%202.0%20Flash-Powered-purple?style=for-the-badge&logo=google)
 ![React](https://img.shields.io/badge/React-18-blue?style=for-the-badge&logo=react)
 ![Vite](https://img.shields.io/badge/Vite-5-yellow?style=for-the-badge&logo=vite)
 ![Firebase](https://img.shields.io/badge/Firebase-Auth-orange?style=for-the-badge&logo=firebase)
@@ -11,35 +11,36 @@
 
 ## 🚀 What is BlogForge AI?
 
-BlogForge AI is a full-stack SaaS platform that automates your entire SEO content pipeline — from keyword research to published blog post — powered by **Gemini 2.5 Flash Preview** with advanced thinking capabilities.
+BlogForge AI is a premium full-stack SaaS platform that automates your entire SEO content pipeline. Powered by **Gemini 2.0 Flash**, it combines high-speed generation with deep SEO intelligence to help you dominate SERPs in record time.
 
 ---
 
-## ✨ Key Features
+## ✨ Key Features (V2 Dashboard)
 
-### 🤖 AI-Powered Tools
+### 🤖 SEO & Research Modules
 | Feature | Description |
 |---|---|
-| **AI Blog Generator** | Generates 2,500+ word SEO-optimised articles with NLP suggestions |
-| **SERP Gap Scanner** | Analyses top 10 results, finds missing competitor topics |
-| **Live SEO Scorer** | Real-time 0–100 scoring across readability, density & snippets |
-| **Content Cluster Map** | Visual pillar/cluster topic universe builder |
-| **Keyword Planner** | AI-powered keyword research and intent mapping |
-| **Competitor Spy** | Deep competitor content analysis |
+| **SERP Gap Scanner** | Finds missing topics in top 10 competitor results |
+| **Live SEO Scorer** | 10-metric real-time scoring including NLP & AI detection risk |
+| **Keyword Planner** | AI-driven intent mapping and volume estimation |
+| **Competitor Spy** | Deep-dive analysis of any URL's content strategy |
+| **Cluster Map** | Visualises your topical authority universe |
 
-### 🔄 Publishing & Automation
+### ✍️ Content & Editing
 | Feature | Description |
 |---|---|
-| **Auto-Publisher** | Direct integration with WordPress, Webflow, Shopify |
-| **Content Calendar** | Plan and schedule your entire content strategy |
-| **Schedule Queue** | Automated publishing queue management |
+| **AI Blog Generator** | Long-form (2,500+ words) SEO-optimised generation |
+| **Premium Blog Editor** | Glassmorphism-rich distraction-free writing environment |
+| **My Blogs Library** | Centralised vault for all your content assets |
+| **Brand Voice Control** | Custom AI training on your unique writing style |
 
-### 📊 Analytics
+### 🔄 Publishing & Analytics
 | Feature | Description |
 |---|---|
-| **Traffic Tracker** | Monitor organic traffic growth over time |
-| **ROI Dashboard** | Track content ROI and conversion metrics |
-| **Brand Voice Control** | Train AI on your exact tone and style |
+| **Auto-Publisher** | One-click export to WordPress, Webflow, and Shopify |
+| **Content Calendar** | Visual drag-and-drop planning for your team |
+| **Traffic Tracker** | Live monitoring of organic growth and rankings |
+| **ROI Dashboard** | Track conversion value of every published word |
 
 ---
 
@@ -47,9 +48,8 @@ BlogForge AI is a full-stack SaaS platform that automates your entire SEO conten
 
 - **Frontend**: React 18 + Vite 5
 - **Styling**: Vanilla CSS (glassmorphism dark design system)
-- **AI Engine**: Google Gemini 2.5 Flash Preview (`gemini-2.5-flash-preview-04-17`)
-  - `thinkingBudget: 512` for higher accuracy SEO analysis
-  - `temperature: 1` for optimal generation quality
+- **AI Engine**: Google Gemini 2.0 Flash (`gemini-2.0-flash`)
+  - Optimized for low-latency SEO scanning and high-accuracy generation.
 - **Authentication**: Firebase Auth (Google Sign-In)
 - **State/Persistence**: React state + `localStorage`
 - **Icons**: Lucide React
@@ -122,20 +122,20 @@ blogforge-ai/
 
 ## 🎨 Design System
 
-- **Theme**: Dark glassmorphism
+- **Theme**: Dark glassmorphism (V2 Design System)
+- **Fluid UI**: Dynamic scaling and micro-interactions
+- **Tokens**: Design-token driven architecture (`tokens.css`)
 - **Primary Accent**: `#7C3AED` (violet)
 - **Secondary Accent**: `#06B6D4` (cyan)
-- **Success**: `#10B981` (emerald)
-- **Font**: Inter (Google Fonts)
+- **Font**: Inter & Outfit (Google Fonts)
 
 ---
 
-## 🗺️ Roadmap
-
+- [x] Firebase Authentication (Google Sign-In)
+- [x] V2 Glassmorphism UI Implementation
 - [ ] Supabase/Firebase Firestore backend for blog persistence
 - [ ] Real WordPress REST API / Webflow CMS publishing
 - [ ] Google Search Console integration for live traffic data
-- [ ] Team collaboration and role-based access
 - [ ] AI image generation per blog post
 
 ---

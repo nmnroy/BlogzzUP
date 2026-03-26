@@ -114,7 +114,7 @@ const HowItWorksAccordion = () => {
         />
       ))}
       <div className="cta-bottom">
-        <button className="btn btn-primary" onClick={() => window.showPage('demo')}>See the Engine in Action →</button>
+        <button className="btn btn-primary" onClick={() => window.showPage('auth')}>See the Engine in Action →</button>
       </div>
     </div>
   );
@@ -680,7 +680,7 @@ const DemoPage = () => {
 
       <div style={{marginTop: '64px', textAlign: 'center'}}>
         <p style={{fontSize: '18px', color: '#94A3B8'}}>Ready for the real thing?</p>
-        <button onClick={() => window.showPage('pricing')} style={{background: 'linear-gradient(135deg,#7C3AED,#9333EA)', color: '#fff', borderRadius: '999px', padding: '14px 32px', fontSize: '16px', fontWeight: 600, border: 'none', cursor: 'pointer', marginTop: '16px'}}>
+        <button onClick={() => window.showPage('auth')} style={{background: 'linear-gradient(135deg,#7C3AED,#9333EA)', color: '#fff', borderRadius: '999px', padding: '14px 32px', fontSize: '16px', fontWeight: '600', border: 'none', cursor: 'pointer', marginTop: '16px'}}>
           Start Free — First Month on Us →
         </button>
       </div>
@@ -747,7 +747,7 @@ const PricingPage = () => {
             <li className="pc-feat"><span className="pc-feat-check">✓</span> Content Calendar</li>
             <li className="pc-feat"><span className="pc-feat-check">✓</span> Email support</li>
           </ul>
-          <button className="pc-btn-outline" onClick={() => window.showDashboard()}>Start Free →</button>
+          <button className="pc-btn-outline" onClick={() => window.showPage('auth')}>Start Free →</button>
         </div>
 
         {/* Growth */}
@@ -770,7 +770,7 @@ const PricingPage = () => {
             <li className="pc-feat"><span className="pc-feat-check">✓</span> ROI & Traffic Tracker</li>
             <li className="pc-feat"><span className="pc-feat-check">✓</span> Priority support</li>
           </ul>
-          <button className="pc-btn-solid" onClick={() => window.showDashboard()}>Get Started →</button>
+          <button className="pc-btn-solid" onClick={() => window.showPage('auth')}>Get Started →</button>
         </div>
 
         {/* Scale */}
@@ -1208,7 +1208,7 @@ function App() {
     };
 
     const hash = window.location.hash.replace('#', '') || 'home';
-    if (['home', 'howitworks', 'features', 'demo', 'pricing', 'blog'].includes(hash)) {
+    if (['home', 'howitworks', 'features', 'demo', 'pricing', 'blog', 'auth'].includes(hash)) {
       setTimeout(() => window.showPage(hash), 100);
     } else {
       setTimeout(() => window.showPage('home'), 100);
@@ -1223,19 +1223,23 @@ function App() {
 
   return (
     <>
+      {/* Skip navigation — keyboard / screen-reader accessibility */}
+      <a href="#main-content" className="skip-link">Skip to main content</a>
+      {/* Hidden live region for screen-reader announcements */}
+      <div id="sr-live-region" aria-live="polite" aria-atomic="true" />
       <div id="marketing-site" style={{ display: 'block' }}>
-      <div className="bg-grid"></div>
-      <div className="bg-glow"></div>
+      <div className="bg-grid" role="presentation" aria-hidden="true"></div>
+      <div className="bg-glow" role="presentation" aria-hidden="true"></div>
 
-      <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
+      <nav className={`navbar ${scrolled ? 'scrolled' : ''}`} role="navigation" aria-label="Main navigation">
         <div className="container">
-          <a href="#" className="logo">
-            <Sparkles className="logo-icon" size={24} />
+          <a href="#" className="logo" aria-label="BlogForge AI — home">
+            <Sparkles className="logo-icon" size={24} aria-hidden="true" />
             BlogForge AI
           </a>
           
-          <ul className="nav-links">
-            <li><a href="#home" onClick={(e) => { e.preventDefault(); window.showPage('home'); }} data-nav="home" className="nav-link active">Home</a></li>
+          <ul className="nav-links" role="list" aria-label="Site pages">
+            <li><a href="#home" onClick={(e) => { e.preventDefault(); window.showPage('home'); }} data-nav="home" className="nav-link active" aria-current="page">Home</a></li>
             <li><a href="#howitworks" onClick={(e) => { e.preventDefault(); window.showPage('howitworks'); }} data-nav="howitworks" className="nav-link">How it Works</a></li>
             <li><a href="#features" onClick={(e) => { e.preventDefault(); window.showPage('features'); }} data-nav="features" className="nav-link">Features</a></li>
             <li><a href="#demo" onClick={(e) => { e.preventDefault(); window.showPage('demo'); }} data-nav="demo" className="nav-link">Demo</a></li>
@@ -1243,21 +1247,28 @@ function App() {
             <li><a href="#blog" onClick={(e) => { e.preventDefault(); window.showPage('blog'); }} data-nav="blog" className="nav-link">Blog</a></li>
           </ul>
 
-          <div className="nav-actions">
-            <button onClick={() => window.showDashboard()} className="btn btn-ghost" style={{border: 'none', background: 'transparent', color: '#fff', cursor: 'pointer', fontWeight: 600}}>Sign In</button>
-            <button onClick={() => window.showDashboard()} className="btn btn-primary desktop-only" style={{cursor: 'pointer'}}>Start Free</button>
+          <div className="nav-actions" role="group" aria-label="Account actions">
+            <button className="btn btn-ghost" onClick={() => window.showPage('auth')}>Sign In</button>
+            <button className="btn btn-primary" onClick={() => window.showPage('auth')} aria-label="Start free for 30 days">Start Free</button>
           </div>
 
-          <button className="mobile-menu-btn" onClick={() => setMobileMenuOpen(true)}>
-            <Menu size={24} color="#fff" />
+          <button className="mobile-menu-btn" onClick={() => setMobileMenuOpen(true)} aria-label="Open navigation menu" aria-expanded={mobileMenuOpen} aria-controls="mobile-drawer">
+            <Menu size={24} color="#fff" aria-hidden="true" />
           </button>
         </div>
       </nav>
 
       {/* Mobile Drawer */}
-      <div className={`mobile-drawer ${mobileMenuOpen ? 'open' : ''}`}>
-        <button className="mobile-close-btn" onClick={() => setMobileMenuOpen(false)}>
-          <X size={24} color="#fff" />
+      <div
+        id="mobile-drawer"
+        className={`mobile-drawer ${mobileMenuOpen ? 'open' : ''}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Navigation menu"
+        aria-hidden={!mobileMenuOpen}
+      >
+        <button className="mobile-close-btn" onClick={() => setMobileMenuOpen(false)} aria-label="Close navigation menu">
+          <X size={24} color="#fff" aria-hidden="true" />
         </button>
         <ul className="mobile-nav-links">
           <li><a href="#home" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); window.showPage('home'); }} data-nav="home" className="nav-link active">Home</a></li>
@@ -1268,8 +1279,8 @@ function App() {
           <li><a href="#blog" onClick={(e) => { e.preventDefault(); setMobileMenuOpen(false); window.showPage('blog'); }} data-nav="blog" className="nav-link">Blog</a></li>
         </ul>
         <div className="mobile-nav-actions">
-          <button onClick={() => { window.showDashboard(); setMobileMenuOpen(false); }} className="btn btn-outline-white w-full">Sign In</button>
-          <button onClick={() => { window.showDashboard(); setMobileMenuOpen(false); }} className="btn btn-primary w-full mt-4">Start Free</button>
+          <button onClick={() => { window.showPage('auth'); setMobileMenuOpen(false); }} className="btn btn-outline-white w-full">Sign In</button>
+          <button onClick={() => { window.showPage('auth'); setMobileMenuOpen(false); }} className="btn btn-primary w-full mt-4">Start Free</button>
         </div>
       </div>
 
@@ -1293,55 +1304,55 @@ function App() {
 
       
             <div className="page-section" id="page-home" style={{ display: 'none' }}>
-        <main className="hero fade-section" id="home" style={{ position: 'relative' }}>
+        <main className="hero fade-section" id="main-content" style={{ position: 'relative' }} tabIndex={-1}>
           <div className="hero-glow-orb"></div>
           <div className="container hero-content">
-            <div className="badge">
+            <div className="badge stagger-in-item">
               <span className="badge-dot"></span>
               ✦ India's #1 AI Blog Engine — Now in Beta
             </div>
             
-            <h1 className="hero-title">
+            <h1 className="hero-title stagger-in-item">
               Publish <span className="title-accent-violet">10x Output</span><br />
               With Zero Writing.
             </h1>
             
-            <p className="subheading">
+            <p className="subheading stagger-in-item">
               Stop fighting writer's block. BlogForge researches, writes, optimizes, and automatically publishes high-ranking SEO content directly to your WordPress, Webflow, or custom CMS.
             </p>
 
-            <div className="hero-actions">
-              <button className="btn btn-primary" onClick={() => window.showDashboard()}>Start Free Trial →</button>
-              <button className="btn btn-outline" onClick={() => window.showPage('demo')}><Play size={18} style={{marginRight: '8px'}} /> Watch Demo</button>
+            <div className="hero-actions stagger-in-item">
+              <button className="btn btn-primary btn-lg" onClick={() => window.showDashboard()}>Start Free Trial →</button>
+              <button className="btn btn-outline btn-lg" onClick={() => window.showPage('demo')}><Play size={18} style={{marginRight: '8px'}} /> Watch Demo</button>
             </div>
 
-            <div className="feature-pill-grid">
-              <div className="fp-card" onClick={(e) => { e.preventDefault(); window.showPage('howitworks'); }}>
+            <div className="feature-pill-grid stagger-in">
+              <div className="fp-card glass-card" onClick={(e) => { e.preventDefault(); window.showPage('howitworks'); }}>
                 <div className="fp-card-header"><span style={{fontSize: '20px'}}>🧠</span><span className="fp-title">AI Prompt Engine</span></div>
                 <div className="fp-desc">7-stage pipeline from keyword to publish</div>
                 <span className="fp-arrow">→</span>
               </div>
-              <div className="fp-card" onClick={(e) => { e.preventDefault(); window.showPage('features'); }}>
+              <div className="fp-card glass-card" onClick={(e) => { e.preventDefault(); window.showPage('features'); }}>
                 <div className="fp-card-header"><span style={{fontSize: '20px'}}>🔍</span><span className="fp-title">SERP Gap Scanner</span></div>
                 <div className="fp-desc">Find keywords competitors miss</div>
                 <span className="fp-arrow">→</span>
               </div>
-              <div className="fp-card" onClick={(e) => { e.preventDefault(); window.showPage('demo'); }}>
+              <div className="fp-card glass-card" onClick={(e) => { e.preventDefault(); window.showPage('demo'); }}>
                 <div className="fp-card-header"><span style={{fontSize: '20px'}}>📊</span><span className="fp-title">Live SEO Scorer</span></div>
                 <div className="fp-desc">Real-time 10-metric scoring</div>
                 <span className="fp-arrow">→</span>
               </div>
-              <div className="fp-card" onClick={(e) => { e.preventDefault(); window.showPage('features'); }}>
+              <div className="fp-card glass-card" onClick={(e) => { e.preventDefault(); window.showPage('features'); }}>
                 <div className="fp-card-header"><span style={{fontSize: '20px'}}>🗺️</span><span className="fp-title">Content Cluster Map</span></div>
                 <div className="fp-desc">Visual topic universe builder</div>
                 <span className="fp-arrow">→</span>
               </div>
-              <div className="fp-card" onClick={(e) => { e.preventDefault(); window.showPage('features'); }}>
+              <div className="fp-card glass-card" onClick={(e) => { e.preventDefault(); window.showPage('features'); }}>
                 <div className="fp-card-header"><span style={{fontSize: '20px'}}>🌍</span><span className="fp-title">GEO Optimizer</span></div>
                 <div className="fp-desc">Rank in every city automatically</div>
                 <span className="fp-arrow">→</span>
               </div>
-              <div className="fp-card" onClick={(e) => { e.preventDefault(); window.showPage('features'); }}>
+              <div className="fp-card glass-card" onClick={(e) => { e.preventDefault(); window.showPage('features'); }}>
                 <div className="fp-card-header"><span style={{fontSize: '20px'}}>🔁</span><span className="fp-title">Social Repurpose</span></div>
                 <div className="fp-desc">One blog → 10 content pieces</div>
                 <span className="fp-arrow">→</span>
@@ -1422,10 +1433,10 @@ function App() {
              <div style={{position: 'absolute', top: 'calc(50% - 4px)', left: '20%', width: '8px', height: '8px', background: '#A78BFA', borderRadius: '50%', boxShadow: '0 0 10px #A78BFA', animation: 'moveRightParticle 3s linear infinite', zIndex: 1}}></div>
              <div style={{position: 'absolute', top: 'calc(50% - 4px)', left: '20%', width: '8px', height: '8px', background: '#06B6D4', borderRadius: '50%', boxShadow: '0 0 10px #06B6D4', animation: 'moveRightParticle 3s linear infinite 1.5s', zIndex: 1}}></div>
              {/* Node 1 – Discovery */}
-             <div style={{background: '#0D1526', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '24px', textAlign: 'center', width: '220px', flexShrink: 0, zIndex: 2, boxShadow: '0 10px 30px rgba(0,0,0,0.5)'}}>
-               <div style={{background: 'rgba(255,255,255,0.05)', width: '64px', height: '64px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', color: '#94A3B8'}}><Search size={32}/></div>
+             <div className="glass-card" style={{padding: '24px', textAlign: 'center', width: '220px', flexShrink: 0, zIndex: 2}}>
+               <div style={{background: 'rgba(255,255,255,0.05)', width: '64px', height: '64px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', color: 'var(--text-muted)'}}><Search size={32}/></div>
                <h3 style={{color: 'white', fontSize: '18px', margin: '0 0 8px', fontWeight: 700}}>1. Discovery</h3>
-               <p style={{color: '#64748B', fontSize: '13px', margin: 0, lineHeight: 1.5}}>Keyword & SERP analysis automatically extracts missing competitor topics.</p>
+               <p style={{color: 'var(--text-subtle)', fontSize: '13px', margin: 0, lineHeight: 1.5}}>Keyword & SERP analysis automatically extracts missing competitor topics.</p>
              </div>
              {/* Node 2 – AI Engine (centre, glowing) */}
              <div style={{background: 'linear-gradient(135deg, #1A1333, #0D1526)', border: '1px solid rgba(124,58,237,0.4)', borderRadius: '24px', padding: '32px', textAlign: 'center', width: '240px', flexShrink: 0, zIndex: 2, boxShadow: '0 0 40px rgba(124,58,237,0.25)', position: 'relative'}}>
@@ -1435,10 +1446,10 @@ function App() {
                <p style={{color: '#A78BFA', fontSize: '13px', margin: 0}}>Generates, scores & optimises NLP content in real time.</p>
              </div>
              {/* Node 3 – Publishing */}
-             <div style={{background: '#0D1526', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px', padding: '24px', textAlign: 'center', width: '220px', flexShrink: 0, zIndex: 2, boxShadow: '0 10px 30px rgba(0,0,0,0.5)'}}>
+             <div className="glass-card" style={{padding: '24px', textAlign: 'center', width: '220px', flexShrink: 0, zIndex: 2}}>
                <div style={{background: 'rgba(6,182,212,0.1)', width: '64px', height: '64px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', color: '#06B6D4'}}><Globe2 size={32}/></div>
                <h3 style={{color: 'white', fontSize: '18px', margin: '0 0 8px', fontWeight: 700}}>3. Publishing</h3>
-               <p style={{color: '#64748B', fontSize: '13px', margin: 0, lineHeight: 1.5}}>Pushed live to WordPress, Webflow or Shopify instantly on schedule.</p>
+               <p style={{color: 'var(--text-subtle)', fontSize: '13px', margin: 0, lineHeight: 1.5}}>One-click sync to major CMS platforms like WordPress or Ghost.</p>
              </div>
              <style dangerouslySetInnerHTML={{__html: `
                @keyframes moveRightParticle {
@@ -1566,88 +1577,109 @@ function App() {
         </div>
       </div>
 
-      <footer className="site-footer">
+      <div className="page-section" id="page-auth" style={{ display: 'none' }}>
+        <div className="auth-layout container">
+          <div className="auth-hero stagger-in">
+            <div className="glass-card auth-hero-content stagger-in-item">
+              <h2 className="auth-welcome-title">India's largest brands trust BlogForge</h2>
+              <p className="auth-welcome-desc">Join 500+ startups saving 92% of their content creation time.</p>
+              
+              <div className="auth-quotes stagger-in-item">
+                <div className="auth-quote">
+                  "BlogForge replaced our entire content agency. We're now publishing 4x more for 1/10th the cost."
+                  <div className="auth-author">— Founder, Delhi.AI</div>
+                </div>
+              </div>
+
+              <div className="auth-stats-grid stagger-in-item">
+                <div className="auth-stat">
+                  <div className="auth-stat-val">94%</div>
+                  <div className="auth-stat-lab">Avg. SEO Score</div>
+                </div>
+                <div className="auth-stat">
+                  <div className="auth-stat-val">10/10</div>
+                  <div className="auth-stat-lab">Human Feel</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="auth-form-container stagger-in">
+            <div className="auth-form-card glass-card stagger-in-item">
+              <div className="auth-header">
+                <h1 className="auth-title">Welcome Back</h1>
+                <p className="auth-subtitle">Sign in to your BlogForge Workspace</p>
+              </div>
+
+              <div className="auth-google-btn-wrap">
+                <button className="btn btn-outline btn-lg w-full" onClick={() => window.showDashboard()}>
+                  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" width="18" alt="" />
+                  Continue with Google
+                </button>
+              </div>
+
+              <div className="auth-divider">
+                <span>or continue with email</span>
+              </div>
+
+              <div className="auth-fields">
+                <div className="input-group">
+                  <label>Email Address</label>
+                  <input type="email" placeholder="name@company.com" disabled />
+                </div>
+                <div className="input-group">
+                  <label>Password</label>
+                  <input type="password" placeholder="••••••••" disabled />
+                </div>
+              </div>
+
+              <button className="btn btn-primary btn-lg w-full" disabled>
+                Sign In (SSO Only)
+              </button>
+
+              <div className="auth-footer">
+                Don't have an account? <span className="auth-link" onClick={() => window.showPage('pricing')}>View Pricing</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button className={`scroll-top ${showTop ? 'visible' : ''}`} onClick={scrollToTop} aria-label="Scroll to top of page">
+        <ArrowUp size={24} aria-hidden="true" />
+      </button>
+
+      <footer className="footer" role="contentinfo">
         <div className="container">
-          <div className="footer-top">
+          <div className="footer-grid">
             <div className="footer-brand">
-              <a href="#" className="logo">
-                <Sparkles className="logo-icon block" size={24} color="#A78BFA" />
+              <div className="logo">
+                <Sparkles className="logo-icon" size={24} aria-hidden="true" />
                 BlogForge AI
-              </a>
-              <p className="footer-tagline">India's most powerful AI blog engine</p>
-              <div className="ph-badge">
-                <a href="https://www.producthunt.com/posts/blogforge-ai" target="_blank" rel="noopener noreferrer" style={{display: 'block', marginTop: '12px'}}>
-                  <img 
-                    src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=blogforge-ai&theme=dark" 
-                    alt="BlogForge AI on Product Hunt" 
-                    width="200" 
-                    height="44"
-                    style={{display: 'block'}}
-                    onError={(e) => { e.currentTarget.style.display='none'; e.currentTarget.nextElementSibling.style.display='flex'; }}
-                  />
-                  <div style={{display: 'none', alignItems: 'center', gap: '8px', background: '#FF6154', borderRadius: '8px', padding: '8px 14px', width: 'fit-content', cursor: 'pointer'}}>
-                    <span style={{fontSize: '18px'}}>🐱</span>
-                    <div>
-                      <div style={{fontSize: '11px', color: 'white', opacity: 0.8}}>Featured on</div>
-                      <div style={{fontSize: '13px', color: 'white', fontWeight: 700}}>Product Hunt</div>
-                    </div>
-                  </div>
-                </a>
               </div>
+              <p className="footer-desc">Empowering Indian startups with autonomous, SEO-winning content engines.</p>
             </div>
             
-            <div className="footer-links-grid">
-              <div className="footer-col">
-                <h4>Product</h4>
-                <ul>
-                  <li><a href="#">Features</a></li>
-                  <li><a href="#">Pricing</a></li>
-                  <li><a href="#">Integrations</a></li>
-                  <li><a href="#">Changelog</a></li>
-                  <li><a href="#">Roadmap</a></li>
-                </ul>
-              </div>
-              <div className="footer-col">
-                <h4>Company</h4>
-                <ul>
-                  <li><a href="#">About</a></li>
-                  <li><a href="#">Blog</a></li>
-                  <li><a href="#">Press Kit</a></li>
-                  <li><a href="#">Careers</a></li>
-                  <li><a href="#">Contact</a></li>
-                </ul>
-              </div>
-              <div className="footer-col">
-                <h4>Resources</h4>
-                <ul>
-                  <li><a href="#">Documentation</a></li>
-                  <li><a href="#">API Reference</a></li>
-                  <li><a href="#">SEO Guide</a></li>
-                  <li><a href="#prompt-arch" onClick={(e) => { e.preventDefault(); setView('architecture'); window.scrollTo(0,0); }}>Prompt Architecture</a></li>
-                </ul>
-              </div>
-              <div className="footer-col">
-                <h4>Legal</h4>
-                <ul>
-                  <li><a href="#">Privacy Policy</a></li>
-                  <li><a href="#">Terms of Service</a></li>
-                  <li><a href="#">Cookie Policy</a></li>
-                  <li><a href="#">GDPR</a></li>
-                </ul>
-              </div>
+            <div className="footer-links">
+              <h4>Platform</h4>
+              <ul>
+                <li><a href="#features" onClick={(e) => { e.preventDefault(); window.showPage('features'); }}>Features</a></li>
+                <li><a href="#pricing" onClick={(e) => { e.preventDefault(); window.showPage('pricing'); }}>Pricing</a></li>
+                <li><a href="#howitworks" onClick={(e) => { e.preventDefault(); window.showPage('howitworks'); }}>How it Works</a></li>
+              </ul>
             </div>
-            
-            <div className="footer-newsletter">
-              <h4>Get weekly SEO tips + AI content playbooks</h4>
-              <form className="newsletter-form">
-                <input type="email" placeholder="Email address" required />
-                <button type="submit" className="btn btn-primary">Subscribe</button>
-              </form>
+
+            <div className="footer-links">
+              <h4>Legal</h4>
+              <ul>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#">Security</a></li>
+              </ul>
             </div>
           </div>
           
           <div className="footer-bottom">
-            <div className="footer-copy">
               © 2026 BlogForge AI. Built in India 🇮🇳. All rights reserved.
             </div>
             <div className="footer-socials" style={{display: 'flex', alignItems: 'center', gap: '10px'}}>

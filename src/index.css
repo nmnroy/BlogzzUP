@@ -1,29 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+/* =====================================================================
+   BlogForge AI — Main Styles
+   Design tokens are defined in tokens.css (imported first).
+   Do NOT add raw hex values here — use token vars.
+   ===================================================================== */
+@import url('./tokens.css');
+@import url('./interactions.css');
+@import url('./a11y.css');
 
+/* ─── Legacy aliases for backward compatibility with old JSX ─── */
 :root {
-  --bg-navy: #0A0F1E;
-  --accent-violet: #7C3AED;
-  --accent-cyan: #06B6D4;
-  --text-main: #FFFFFF;
-  --text-muted: #94A3B8;
-  --glass-bg: rgba(255, 255, 255, 0.03);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-blur: blur(12px);
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Inter', sans-serif;
-}
-
-body {
-  background-color: var(--bg-navy);
-  color: var(--text-main);
-  min-height: 100vh;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
+  --bg-navy:      var(--bg-base);
+  --accent-violet: var(--color-primary-600);
+  --accent-cyan:   var(--color-secondary-500);
+  --text-main:     var(--text-primary);
 }
 
 /* Typography Utilities */

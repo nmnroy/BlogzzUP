@@ -1,0 +1,776 @@
+/* =====================================================================
+   a11y.css — Accessibility-first UX refinement for BlogForge AI
+   WCAG 2.1 AA compliance + visual quality lift.
+   Imported AFTER tokens.css and interactions.css in index.css.
+   ===================================================================== */
+
+/* ─────────────────────────────────────────────────
+   1. SKIP NAVIGATION LINK
+      Screen-reader / keyboard users jump straight to main content.
+   ───────────────────────────────────────────────── */
+
+.skip-link {
+  position: fixed;
+  top: -100%;
+  left: var(--space-4, 16px);
+  z-index: 9999;
+  background: var(--color-primary-600);
+  color: #fff;
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: top 200ms ease;
+  outline: none;
+}
+
+.skip-link:focus {
+  top: var(--space-4, 16px);
+  box-shadow: var(--focus-ring);
+}
+
+/* ─────────────────────────────────────────────────
+   2. UNIVERSAL FOCUS-VISIBLE RING
+      Overrides browser default with our brand ring.
+      Uses :focus-visible so mouse users never see it.
+   ───────────────────────────────────────────────── */
+
+*:focus {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 2.5px solid var(--color-primary-500);
+  outline-offset: 2px;
+  border-radius: inherit;
+}
+
+/* Specific overrides for elements that use box-shadow focus */
+button:focus-visible,
+[role="button"]:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: inherit;
+}
+
+/* High-contrast mode support */
+@media (forced-colors: active) {
+  *:focus-visible {
+    outline: 3px solid Highlight !important;
+    outline-offset: 2px !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────
+   3. TOUCH TARGET SIZING (WCAG 2.5.8, min 24×24 / target 44×44)
+   ───────────────────────────────────────────────── */
+
+/* All interactive leaf elements get a min touch target */
+button,
+[role="button"],
+a,
+input[type="checkbox"],
+input[type="radio"],
+select {
+  min-height: 44px;
+}
+
+/* Exception: inline text links don't need 44px height */
+p a,
+li a,
+.footer-col a,
+.comp-mark-yes,
+.comp-mark-no,
+.comp-mark-partial {
+  min-height: unset;
+}
+
+/* Small buttons: pad them up to meet target */
+.btn-sm,
+button.btn-sm,
+.be-view-btn,
+.be-range-mark,
+.be-examples-toggle,
+.be-example-chip {
+  min-height: 36px; /* compact but acceptable at common DPR */
+  padding-inline: var(--space-3);
+}
+
+/* Icon-only buttons get a square hit area */
+.be-icon-btn,
+.action-btn,
+button[aria-label] {
+  min-width:  44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Nav links in sidebar */
+.nav-item,
+.sidebar-link {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+/* ─────────────────────────────────────────────────
+   4. COLOUR CONTRAST — WCAG AA PATCHES
+      Overrides inline-style text that uses old failing colours.
+      Targets hardcoded slate-500 (#64748B) equivalents.
+   ───────────────────────────────────────────────── */
+
+/* Re-alias to ensure token cascade wins everywhere */
+:root {
+  /* hint aliases seen in index.css legacy section */
+  --text-muted-safe: var(--text-muted);   /* #94a3b8 — 6.1:1 ✓ */
+  --text-subtle-safe: var(--text-subtle); /* #8b9eb5 — 4.7:1 ✓ (fixed in tokens) */
+}
+
+/* Stale color: #64748B or rgb(100,116,139) used in many inline styles.
+   We can't easily override inline styles in CSS; the token fix in tokens.css
+   handles all components using --text-subtle. For components still using
+   the raw value, these class-level overrides help: */
+
+/* Dashboard placeholder text, table empty states */
+.dash-section td[style],
+td p {
+  color: var(--text-subtle) !important;
+}
+
+/* Form hints must not be below 4.5:1 */
+.form-hint {
+  color: var(--text-subtle);
+}
+
+/* Stat section — dates/secondary labels */
+.stat-desc,
+.stat-label + span,
+.be-history-date,
+.be-metric-label {
+  color: var(--text-muted);
+}
+
+/* Pricing card desc must contrast on dark card bg */
+.pc-desc,
+.pc-per {
+  color: var(--text-muted);
+}
+
+/* Footer tagline */
+.footer-tagline {
+  color: var(--text-muted);
+}
+
+/* ─────────────────────────────────────────────────
+   5. SEMANTIC LANDMARK STYLING
+      Visual affordance for <main>, <nav>, <header>, <footer>
+      (keeps layout unchanged, adds semantic boundaries)
+   ───────────────────────────────────────────────── */
+
+/* Ensure landmarks are block-level */
+main, header, footer, nav, section, aside, article {
+  display: block;
+}
+
+/* Dashboard main scrolling area */
+.dash-main,
+#dash-main,
+[role="main"] {
+  outline: none; /* programmatic focus target — hide ring */
+}
+
+/* ─────────────────────────────────────────────────
+   6. FORM ACCESSIBILITY
+   ───────────────────────────────────────────────── */
+
+/* Visible label always */
+.form-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-2);
+  cursor: default;
+}
+
+/* Required indicator — accessible */
+.form-label-required::after {
+  content: ' *';
+  color: var(--color-danger-400);
+  font-size: var(--text-xs);
+  /* Note: set aria-hidden="true" on the element in HTML to hide from screen readers */
+}
+
+/* Error message linked to input */
+.form-error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  color: var(--color-danger-400);
+  margin-top: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-danger-100);
+  border: 1px solid var(--color-danger-border);
+  border-radius: var(--radius-md);
+}
+
+/* Input invalid state */
+.form-input.is-invalid,
+.form-textarea.is-invalid {
+  border-color: var(--color-danger-500);
+  box-shadow: 0 0 0 1px var(--color-danger-500);
+}
+
+.form-input.is-invalid:focus,
+.form-textarea.is-invalid:focus {
+  box-shadow: var(--focus-ring-danger);
+}
+
+/* ─────────────────────────────────────────────────
+   7. TYPE HIERARCHY — VERTICAL RHYTHM
+   ───────────────────────────────────────────────── */
+
+/* Consistent section title weight/size */
+.section-title,
+h1.section-title {
+  font-size: var(--text-4xl);
+  font-weight: var(--font-extrabold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+.section-subtitle {
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  color: var(--text-muted);
+  max-width: 60ch;
+  margin-inline: auto;
+}
+
+/* Dashboard section headers */
+.top-header h1 {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  letter-spacing: var(--tracking-tight);
+  margin: 0;
+}
+
+.top-header p {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  margin: var(--space-1) 0 0;
+  line-height: var(--leading-relaxed);
+}
+
+/* Feature card title */
+.feat-title {
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-snug);
+  color: var(--text-primary);
+}
+
+.feat-desc {
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--text-muted);
+}
+
+.feat-bullets li {
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--text-secondary);
+}
+
+/* Accordion */
+.accordion-title {
+  font-size: var(--text-base);
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+  line-height: var(--leading-snug);
+}
+
+.accordion-desc,
+.accordion-code {
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  color: var(--text-muted);
+}
+
+/* NavBar links — slightly larger for readability */
+.nav-links a {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  letter-spacing: var(--tracking-normal);
+}
+
+/* Pricing card */
+.pc-header {
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  letter-spacing: var(--tracking-tight);
+}
+
+.pc-price {
+  font-size: 2.5rem;
+  font-weight: var(--font-extrabold);
+  letter-spacing: var(--tracking-tight);
+  line-height: 1;
+}
+
+/* ─────────────────────────────────────────────────
+   8. SPACING RHYTHM
+   ───────────────────────────────────────────────── */
+
+/* Consistent section vertical padding */
+.works-section,
+.stats-section,
+.integrations-section,
+.testimonials-section {
+  padding-block: clamp(4rem, 8vw, 8rem);
+}
+
+/* Section headers — consistent spacing */
+.section-header {
+  margin-bottom: clamp(2.5rem, 5vw, 5rem);
+}
+
+.section-header .section-title {
+  margin-bottom: var(--space-4);
+}
+
+/* Dashboard section padding */
+.be-root,
+.dash-section[style*="padding: 40px"] {
+  padding: clamp(24px, 4vw, 48px) clamp(20px, 4vw, 48px);
+}
+
+/* ─────────────────────────────────────────────────
+   9. CARD / SECTION REFINEMENTS
+   ───────────────────────────────────────────────── */
+
+/* Feature cards */
+.feat-card {
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-2xl);
+  background: var(--bg-elevated);
+  padding: clamp(24px, 3vw, 40px);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(24px, 3vw, 40px);
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .feat-card { grid-template-columns: 1fr; }
+  .feat-right { order: -1; }
+}
+
+/* Stat cards */
+.stat-card {
+  border-radius: var(--radius-2xl);
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+/* Dashboard cards */
+.content-table-panel,
+.calendar-panel {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+}
+
+/* Pricing cards */
+.pc-card {
+  border-radius: var(--radius-2xl);
+  padding: clamp(1.5rem, 3vw, 2rem);
+  border: 1px solid var(--border-default);
+}
+
+.pc-card.popular {
+  border-color: var(--color-primary-600);
+  background: rgba(124, 58, 237, 0.06);
+}
+
+/* ─────────────────────────────────────────────────
+   10. ICON SIZING & ALIGNMENT
+   ───────────────────────────────────────────────── */
+
+/* Ensure all Lucide SVGs are vertically centered */
+svg[viewBox] {
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+/* Nav icons */
+.nav-item svg,
+.sidebar-link svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* Button icons */
+.btn svg,
+button svg {
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+
+/* Stat card icons */
+.stat-icon-wrapper svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Feature card icons */
+.feat-icon {
+  font-size: 2rem;
+  line-height: 1;
+  margin-bottom: var(--space-3);
+}
+
+/* Logo icon */
+.logo-icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* ─────────────────────────────────────────────────
+   11. RESPONSIVE LAYOUT — BREAKPOINT FIXES
+   ───────────────────────────────────────────────── */
+
+/* ── 480px (small phones) ── */
+@media (max-width: 480px) {
+  /* Hero */
+  .hero {
+    padding: 8rem 0 5rem;
+    text-align: center;
+  }
+  .hero-actions {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .hero-actions .btn {
+    width: 100%;
+    max-width: 320px;
+    justify-content: center;
+  }
+
+  /* Navbar: tighten padding */
+  .navbar { padding: 1rem 0; }
+  .navbar .container { padding: 0 1rem; }
+
+  /* Stats grid: single column */
+  .stats-grid { grid-template-columns: 1fr; gap: 1rem; }
+
+  /* Integrations grid: single column */
+  .integrations-grid { grid-template-columns: 1fr; }
+
+  /* Pricing cards: single column */
+  .pricing-grid-3 { grid-template-columns: 1fr; gap: 1rem; }
+
+  /* FAQ */
+  .accordion-container { padding: var(--space-4); }
+
+  /* Timeline: single column */
+  .timeline-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .timeline-grid::before { display: none; }
+
+  /* BlogEditor form: full width */
+  .be-configure { grid-template-columns: 1fr; }
+  .be-tone-grid  { grid-template-columns: 1fr; }
+  .be-range-marks .be-range-mark:nth-child(n+4) { display: none; }
+}
+
+/* ── 768px (tablets) ── */
+@media (max-width: 768px) {
+  /* Feature tabs: scroll horizontally */
+  .feature-tabs {
+    overflow-x: auto;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: var(--space-2);
+    gap: var(--space-2);
+  }
+  .feature-tabs::-webkit-scrollbar { display: none; }
+  .feature-tab-btn { white-space: nowrap; flex-shrink: 0; }
+
+  /* Demo page: stack columns */
+  div[style*="flex: '1 1 60%'"],
+  div[style*="flex: '1 1 40%'"] {
+    flex: 1 1 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* Pricing toggle */
+  .pt-container { flex-wrap: wrap; }
+
+  /* Dashboard: make sidebar collapsible */
+  .sidebar {
+    width: 100%;
+    flex-direction: row !important;
+    padding: var(--space-2);
+    gap: var(--space-1);
+    min-height: unset;
+    border-right: none;
+    border-bottom: 1px solid var(--border-subtle);
+    overflow-x: auto;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--bg-surface);
+  }
+  .sidebar .nav-item {
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-lg);
+    min-height: 44px;
+    font-size: var(--text-2xs);
+    gap: var(--space-2);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .sidebar .sidebar-header,
+  .sidebar .sidebar-user,
+  .sidebar .sidebar-section-label,
+  .sidebar .nav-label,
+  .sidebar .sidebar-footer,
+  .sidebar .plan-usage-block,
+  .sidebar .sidebar-footer-stats { 
+    display: none !important; 
+  }
+  .sidebar .sidebar-nav {
+    display: flex;
+    flex-direction: row;
+    gap: var(--space-1);
+    padding: 0;
+  }
+  .sidebar .nav-group {
+    display: contents;
+  }
+
+  /* Dashboard layout: stack */
+  .dash-layout {
+    flex-direction: column !important;
+  }
+
+  /* Stats row */
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Dashboard grid */
+  .dashboard-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Blog editor review layout */
+  .be-review {
+    grid-template-columns: 1fr;
+  }
+  .be-action-panel {
+    position: static;
+  }
+  .be-action-panel-inner {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--space-2);
+  }
+}
+
+/* ── 1024px (small laptops) ── */
+@media (max-width: 1024px) {
+  /* Container padding */
+  .container { padding: 0 1.5rem; }
+
+  /* TimelineGrid: 2 column */
+  .timeline-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Sidebar: compact labels */
+  .dash-sidebar { min-width: 200px; }
+
+  /* Stats row: 2 wide */
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ─────────────────────────────────────────────────
+   12. LAYOUT SHIFT PREVENTION
+   ───────────────────────────────────────────────── */
+
+/* Reserve space for avatar images */
+.avatar img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  aspect-ratio: 1;
+}
+
+/* Reserve space for Product Hunt badge */
+.ph-badge img {
+  display: block;
+  width: 200px;
+  height: 44px;
+  aspect-ratio: 200 / 44;
+}
+
+/* All img tags: prevent reflow */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Fonts: hint browser to reserve line-height space */
+body {
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Reserve hero height to prevent jump */
+.hero {
+  min-height: clamp(600px, 100svh, 100dvh);
+  contain: layout; /* prevents children from causing layout shift */
+}
+
+/* ─────────────────────────────────────────────────
+   13. MOBILE: STICKY BOTTOM BAR
+   ───────────────────────────────────────────────── */
+
+.mobile-sticky-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--space-3) var(--space-4);
+  background: rgba(13, 21, 38, 0.95);
+  border-top: 1px solid var(--border-subtle);
+  backdrop-filter: var(--glass-blur);
+  z-index: 40;
+  display: none; /* JS reveals on mobile */
+}
+
+@media (max-width: 640px) {
+  .mobile-sticky-bottom { display: block; }
+  /* Add padding to footer so bar doesn't cover it */
+  .site-footer { padding-bottom: 6rem; }
+}
+
+/* ─────────────────────────────────────────────────
+   14. BACK-TO-TOP: TOUCH-TARGET FIX
+   ───────────────────────────────────────────────── */
+
+.back-to-top {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ─────────────────────────────────────────────────
+   15. TABLE ACCESSIBILITY
+   ───────────────────────────────────────────────── */
+
+/* Dashboard / blog tables */
+.dash-table,
+.comp-table,
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+/* Sortable column header hint */
+th[scope][aria-sort] { cursor: pointer; }
+th[scope][aria-sort]:hover { color: var(--text-primary); }
+
+/* Table caption (sr-only but present for screen readers) */
+.table-caption {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0);
+  white-space: nowrap; border: 0;
+}
+
+/* Ensure table text meets contrast */
+td, th {
+  color: var(--text-secondary);
+}
+
+th {
+  color: var(--text-muted);
+  font-weight: var(--font-semibold);
+  text-transform: uppercase;
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-wide);
+}
+
+/* ─────────────────────────────────────────────────
+   16. LIVE REGION FOR SCREEN-READER ANNOUNCEMENTS
+   ───────────────────────────────────────────────── */
+
+/* Add a hidden live region to body for SR announcements */
+#sr-live-region {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0);
+  white-space: nowrap; border: 0;
+}
+
+/* ─────────────────────────────────────────────────
+   17. REDUCED-MOTION: a11y layer override
+       (complements interactions.css reduced-motion block)
+   ───────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  .hero .badge { animation: none !important; }
+  .pill  { animation: none !important; }
+  .cms-icon { animation: none !important; }
+  .pipeline-item { animation: none !important; opacity: 1 !important; }
+  .growth-path { animation: none !important; stroke-dashoffset: 0 !important; }
+  .pulse-dot  { animation: none !important; opacity: 1 !important; }
+}
+
+/* ─────────────────────────────────────────────────
+   18. SELECTION & PRINT
+   ───────────────────────────────────────────────── */
+
+@media print {
+  .navbar,
+  .mobile-sticky-bottom,
+  .back-to-top,
+  .skip-link,
+  .floating-pills,
+  .bg-grid,
+  .bg-glow {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+    color: #000;
+  }
+}
