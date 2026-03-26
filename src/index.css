@@ -7,12 +7,22 @@
 @import url('./interactions.css');
 @import url('./a11y.css');
 
-/* ─── Legacy aliases for backward compatibility with old JSX ─── */
+/* ─── Dark Theme Tokens & Legacy Aliases ─── */
 :root {
-  --bg-navy:      var(--bg-base);
+  /* 1) Dark theme tokens */
+  --theme-bg: var(--bg-base, #0A0F1E);
+  --theme-surface: var(--bg-surface, #0D1526);
+  --theme-text: var(--text-primary, #ffffff);
+  --theme-text-muted: var(--text-muted, #94a3b8);
+  --theme-border: var(--border-subtle, rgba(255, 255, 255, 0.05));
+  --theme-accent: var(--color-primary-500, #8b5cf6);
+  --theme-focus-ring: 0 0 0 2px var(--theme-bg), 0 0 0 4px var(--theme-accent);
+
+  /* Legacy aliases for backward compatibility with old JSX */
+  --bg-navy:      var(--theme-bg);
   --accent-violet: var(--color-primary-600);
   --accent-cyan:   var(--color-secondary-500);
-  --text-main:     var(--text-primary);
+  --text-main:     var(--theme-text);
 }
 
 /* Typography Utilities */
@@ -22,10 +32,12 @@ h1 {
   line-height: 1.1;
   letter-spacing: -0.03em;
   margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, #FFFFFF 0%, #A5B4FC 100%);
+  color: var(--theme-text);
+  background: linear-gradient(135deg, #FFFFFF 0%, rgba(255, 255, 255, 0.7) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  text-shadow: 0 4px 24px rgba(255, 255, 255, 0.1);
 }
 
 .subheading {
@@ -98,21 +110,29 @@ h1 {
 }
 
 .nav-links a {
-  color: var(--text-muted);
+  color: var(--theme-text-muted);
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: 500;
-  transition: color 0.2s ease;
+  transition: all 0.2s ease;
+  border-radius: 4px;
 }
 
 .nav-links a:hover {
-  color: var(--text-main);
+  color: var(--text-secondary);
 }
 
-.nav-link.active {
-  color: #fff;
-  border-bottom: 2px solid #7C3AED;
+.nav-links a:focus-visible {
+  outline: none;
+  box-shadow: var(--theme-focus-ring);
+}
+
+.nav-link.active,
+.nav-links a.active {
+  color: var(--theme-text);
+  border-bottom: 2px solid var(--theme-accent);
   padding-bottom: 2px;
+  border-radius: 0;
 }
 
 .nav-actions {
@@ -631,8 +651,13 @@ h1 {
 .section-title {
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 700;
-  color: #fff;
+  color: var(--theme-text);
   margin-bottom: 1rem;
+  background: linear-gradient(135deg, #FFFFFF 0%, rgba(255, 255, 255, 0.7) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 2px 16px rgba(255, 255, 255, 0.08);
 }
 
 .section-subtitle {
