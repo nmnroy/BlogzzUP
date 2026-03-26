@@ -2,6 +2,27 @@ import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import Navbar from '../components/Navbar';
 
+const getFriendlyError = (errorCode) => {
+  if (!errorCode) return '';
+  const err = errorCode.toLowerCase();
+  if (err.includes('invalid-credential') || err.includes('wrong-password') || err.includes('user-not-found')) {
+    return 'Incorrect email or password. Please try again.';
+  } else if (err.includes('email-already-in-use')) {
+    return 'An account with this email already exists. Try signing in.';
+  } else if (err.includes('weak-password')) {
+    return 'Password must be at least 6 characters.';
+  } else if (err.includes('invalid-email')) {
+    return 'Please enter a valid email address.';
+  } else if (err.includes('too-many-requests')) {
+    return 'Too many failed attempts. Please wait a moment and try again.';
+  } else if (err.includes('network-request-failed')) {
+    return 'Network error. Please check your connection.';
+  } else if (err.includes('popup-closed-by-user')) {
+    return 'Google sign-in was cancelled.';
+  }
+  return 'Something went wrong. Please try again.';
+};
+
 const AuthPage = ({ onBack, onNavigate }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
@@ -22,14 +43,10 @@ const AuthPage = ({ onBack, onNavigate }) => {
         await login(email, password);
       } else {
         await signup(email, password);
-        // If names are supported in your backend/firebase profile, you'd update it here.
       }
-      // Success: AuthContext will update currentUser, and App.jsx will show Dashboard.
     } catch (err) {
       console.error("Auth error:", err);
-      // Map Firebase error codes to user-friendly messages if desired, 
-      // or just show the raw message for now as requested.
-      setError(err.message);
+      setError(getFriendlyError(err.message || err.code));
     } finally {
       setLoading(false);
     }
@@ -39,10 +56,8 @@ const AuthPage = ({ onBack, onNavigate }) => {
     try {
       setLoading(true);
       await googleSignIn();
-      // Do NOT manually navigate here
-      // App.jsx will automatically show Dashboard when currentUser updates
-    } catch (error) {
-      setError(error.message);
+    } catch (err) {
+      setError(getFriendlyError(err.message || err.code));
     } finally {
       setLoading(false);
     }
@@ -143,8 +158,17 @@ const AuthPage = ({ onBack, onNavigate }) => {
               </div>
 
               {error && (
-                <div className="auth-error-message" style={{ color: '#EF4444', fontSize: '13px', marginTop: '10px', textAlign: 'center' }}>
-                  {error}
+                <div style={{
+                  background: 'rgba(239, 68, 68, 0.1)',
+                  border: '1px solid rgba(239, 68, 68, 0.3)',
+                  borderRadius: '8px',
+                  padding: '10px 14px',
+                  color: '#EF4444',
+                  fontSize: '13px',
+                  marginTop: '12px',
+                  textAlign: 'center'
+                }}>
+                  ⚠️ {error}
                 </div>
               )}
 
