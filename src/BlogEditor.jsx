@@ -260,11 +260,52 @@ Format your response as valid JSON with exactly these fields:
 IMPORTANT: Return ONLY the JSON object. No preamble, no explanation, no markdown code blocks.`;
 
     try {
-      const cleaned  = await callGemini(prompt, 4000);
+      const cleaned  = await callGemini(prompt, 8192);
       clearInterval(interval);
       setProgress({ pct: 100, text: 'Complete! ✓' });
 
-      const blogData = JSON.parse(cleaned);
+      let blogData;
+      try {
+        blogData = JSON.parse(cleaned);
+      } catch (parseErr) {
+        // Gemini truncated the JSON — extract fields manually
+        const extractField = (text, field) => {
+          const regex = new RegExp('"' + field + '"\\s*:\\s*"((?:[^"\\\\]|\\\\.)*)');
+          const match = text.match(regex);
+          return match ? match[1].replace(/\\n/g, '\n').replace(/\\"/g, '"') : '';
+        };
+        
+        const titleMatch = cleaned.match(/"title"\s*:\s*"([^"]+)"/);
+        const metaMatch = cleaned.match(/"metaDescription"\s*:\s*"([^"]+)"/);
+        const seoMatch = cleaned.match(/"seoScore"\s*:\s*(\d+)/);
+        
+        // For body — extract everything between "body": " and the truncation point
+        const bodyStart = cleaned.indexOf('"body"');
+        let body = '';
+        if (bodyStart !== -1) {
+          const afterBody = cleaned.substring(bodyStart + 8);
+          const firstQuote = afterBody.indexOf('"');
+          if (firstQuote !== -1) {
+            body = afterBody.substring(firstQuote + 1)
+              .replace(/\\n/g, '\n')
+              .replace(/\\"/g, '"')
+              .replace(/\\"$/, '')
+              .replace(/\\$/, '');
+            // Clean truncated end
+            const lastGoodSentence = body.lastIndexOf('.');
+            if (lastGoodSentence > body.length * 0.7) {
+              body = body.substring(0, lastGoodSentence + 1);
+            }
+          }
+        }
+        
+        blogData = {
+          title: titleMatch ? titleMatch[1] : 'Generated Blog',
+          metaDescription: metaMatch ? metaMatch[1] : '',
+          seoScore: seoMatch ? parseInt(seoMatch[1]) : 82,
+          body: body || 'Content was generated but could not be fully parsed. Please try again.'
+        };
+      }
       const wordCountActual = blogData.body.split(' ').length;
       const readTime        = Math.ceil(wordCountActual / 200);
       const id              = Date.now();
