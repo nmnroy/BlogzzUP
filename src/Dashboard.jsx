@@ -10,8 +10,7 @@ import BlogEditor from './BlogEditor';
 const apiKeys = [
   'AIzaSyAOCdbhW95ld9N2pKCwy_nXF8CVYt-1UOw',
   'AIzaSyDzZo0hGbJ3T916Oy00wtwzJ6SpJjck_MA',
-  //'AIzaSyCaykRyQyoL4iJbjAqGhWc0b4FFqiMvjcA',
-  
+  //env.key1
   
   
   

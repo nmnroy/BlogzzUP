@@ -1115,6 +1115,10 @@ function App() {
   const [view, setView] = useState('landing');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showTop, setShowTop] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [isLogin, setIsLogin] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -1607,8 +1611,8 @@ function App() {
           <div className="auth-form-container stagger-in">
             <div className="auth-form-card glass-card stagger-in-item">
               <div className="auth-header">
-                <h1 className="auth-title">Welcome Back</h1>
-                <p className="auth-subtitle">Sign in to your BlogForge Workspace</p>
+                <h1 className="auth-title">{isLogin ? 'Welcome Back' : 'Create Account'}</h1>
+                <p className="auth-subtitle">{isLogin ? 'Sign in to your BlogForge Workspace' : 'Get started with BlogForge'}</p>
               </div>
 
               <div className="auth-google-btn-wrap">
@@ -1623,22 +1627,32 @@ function App() {
               </div>
 
               <div className="auth-fields">
+                {!isLogin && (
+                  <div className="input-group">
+                    <label>Full Name</label>
+                    <input type="text" placeholder="John Doe" value={name} onChange={(e) => setName(e.target.value)} />
+                  </div>
+                )}
                 <div className="input-group">
                   <label>Email Address</label>
-                  <input type="email" placeholder="name@company.com" disabled />
+                  <input type="email" placeholder="name@company.com" value={email} onChange={(e) => setEmail(e.target.value)} />
                 </div>
                 <div className="input-group">
                   <label>Password</label>
-                  <input type="password" placeholder="••••••••" disabled />
+                  <input type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} />
                 </div>
               </div>
 
-              <button className="btn btn-primary btn-lg w-full" disabled>
-                Sign In (SSO Only)
+              <button className="btn btn-primary btn-lg w-full" onClick={() => window.showDashboard()}>
+                {isLogin ? 'Sign In' : 'Sign Up'}
               </button>
 
               <div className="auth-footer">
-                Don't have an account? <span className="auth-link" onClick={() => window.showPage('pricing')}>View Pricing</span>
+                {isLogin ? (
+                  <>Don't have an account? <span className="auth-link" onClick={() => setIsLogin(false)}>Sign Up</span></>
+                ) : (
+                  <>Already have an account? <span className="auth-link" onClick={() => setIsLogin(true)}>Sign In</span></>
+                )}
               </div>
             </div>
           </div>
