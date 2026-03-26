@@ -45,6 +45,11 @@ function App() {
     }
   }, []);
 
+  // Scroll to top on page change
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [currentPage]);
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -68,18 +73,23 @@ function App() {
 
   return (
     <div className="site-wrapper">
-      <Navbar 
-        scrolled={scrolled} 
-        mobileMenuOpen={mobileMenuOpen} 
-        setMobileMenuOpen={setMobileMenuOpen}
-        onSignIn={() => setShowAuth(true)}
-        onBackToHome={() => { setShowAuth(false); setCurrentPage('home'); }}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-      />
+      {!showAuth && (
+        <Navbar 
+          scrolled={scrolled} 
+          mobileMenuOpen={mobileMenuOpen} 
+          setMobileMenuOpen={setMobileMenuOpen}
+          onSignIn={() => setShowAuth(true)}
+          onBackToHome={() => { setShowAuth(false); setCurrentPage('home'); }}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+      )}
 
       {showAuth ? (
-        <AuthPage onBack={() => setShowAuth(false)} />
+        <AuthPage 
+          onBack={() => setShowAuth(false)} 
+          onNavigate={(pageId) => { setShowAuth(false); setCurrentPage(pageId); }}
+        />
       ) : (
         <LandingPage currentPage={currentPage} setCurrentPage={setCurrentPage} onSignIn={() => setShowAuth(true)} />
       )}

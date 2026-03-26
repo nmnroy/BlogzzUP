@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { Sparkles } from 'lucide-react';
+import Navbar from '../components/Navbar';
 
-const AuthPage = ({ onBack }) => {
+const AuthPage = ({ onBack, onNavigate }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -49,132 +49,126 @@ const AuthPage = ({ onBack }) => {
   };
 
   return (
-    <div className="auth-layout container" style={{ paddingTop: '100px' }}>
-      <div style={{ position: 'absolute', top: '20px', left: '2rem', zIndex: 60 }}>
-        <button
-          onClick={onBack}
-          className="btn btn-ghost"
-          style={{ fontSize: '14px', color: '#94A3B8' }}
-        >
-          ← Back to Website
-        </button>
-      </div>
-      <div className="auth-hero stagger-in">
-        <div className="glass-card auth-hero-content stagger-in-item">
-          <h2 className="auth-welcome-title">India's largest brands trust BlogForge</h2>
-          <p className="auth-welcome-desc">Join 500+ startups saving 92% of their content creation time.</p>
+    <>
+      <Navbar currentPage="auth" onNavigate={onNavigate} onSignIn={() => setIsLogin(true)} />
+      <div className="auth-layout container" style={{ paddingTop: '100px' }}>
+        <div className="auth-hero stagger-in">
+          <div className="glass-card auth-hero-content stagger-in-item">
+            <h2 className="auth-welcome-title">India's largest brands trust BlogForge</h2>
+            <p className="auth-welcome-desc">Join 500+ startups saving 92% of their content creation time.</p>
 
-          <div className="auth-quotes stagger-in-item">
-            <div className="auth-quote">
-              "BlogForge replaced our entire content agency. We're now publishing 4x more for 1/10th the cost."
-              <div className="auth-author">— Founder, Delhi.AI</div>
+            <div className="auth-quotes stagger-in-item">
+              <div className="auth-quote">
+                "BlogForge replaced our entire content agency. We're now publishing 4x more for 1/10th the cost."
+                <div className="auth-author">— Founder, Delhi.AI</div>
+              </div>
             </div>
-          </div>
 
-          <div className="auth-stats-grid stagger-in-item">
-            <div className="auth-stat">
-              <div className="auth-stat-val">94%</div>
-              <div className="auth-stat-lab">Avg. SEO Score</div>
-            </div>
-            <div className="auth-stat">
-              <div className="auth-stat-val">10/10</div>
-              <div className="auth-stat-lab">Human Feel</div>
+            <div className="auth-stats-grid stagger-in-item">
+              <div className="auth-stat">
+                <div className="auth-stat-val">94%</div>
+                <div className="auth-stat-lab">Avg. SEO Score</div>
+              </div>
+              <div className="auth-stat">
+                <div className="auth-stat-val">10/10</div>
+                <div className="auth-stat-lab">Human Feel</div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="auth-form-container stagger-in">
-        <div className="auth-form-card glass-card stagger-in-item">
-          <div className="auth-header">
-            <h1 className="auth-title">{isLogin ? 'Welcome Back' : 'Create Account'}</h1>
-            <p className="auth-subtitle">{isLogin ? 'Sign in to your BlogForge Workspace' : 'Get started with BlogForge'}</p>
-          </div>
+        <div className="auth-form-container stagger-in">
+          <div className="auth-form-card glass-card stagger-in-item">
+            <div className="auth-header">
+              <h1 className="auth-title">{isLogin ? 'Welcome Back' : 'Create Account'}</h1>
+              <p className="auth-subtitle">{isLogin ? 'Sign in to your BlogForge Workspace' : 'Get started with BlogForge'}</p>
+            </div>
 
-          <div className="auth-google-btn-wrap">
-            <button
-              className="btn btn-outline btn-lg w-full"
-              onClick={handleGoogleSignIn}
-              disabled={loading}
-            >
-              <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" width="18" alt="" />
-              {loading ? 'Connecting...' : 'Continue with Google'}
-            </button>
-          </div>
+            <div className="auth-google-btn-wrap">
+              <button
+                className="btn btn-outline btn-lg w-full"
+                onClick={handleGoogleSignIn}
+                disabled={loading}
+              >
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" width="18" alt="" />
+                {loading ? 'Connecting...' : 'Continue with Google'}
+              </button>
+            </div>
 
-          <div className="auth-divider">
-            <span>or continue with email</span>
-          </div>
+            <div className="auth-divider">
+              <span>or continue with email</span>
+            </div>
 
-          <form onSubmit={handleAuth} className="auth-fields">
-            {!isLogin && (
+            <form onSubmit={handleAuth} className="auth-fields">
+              {!isLogin && (
+                <div className="input-group">
+                  <label htmlFor="name">Full Name</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="John Doe"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required={!isLogin}
+                    disabled={loading}
+                  />
+                </div>
+              )}
               <div className="input-group">
-                <label htmlFor="name">Full Name</label>
+                <label htmlFor="email">Email Address</label>
                 <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  placeholder="John Doe"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required={!isLogin}
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="name@company.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
                   disabled={loading}
                 />
               </div>
-            )}
-            <div className="input-group">
-              <label htmlFor="email">Email Address</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="name@company.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                disabled={loading}
-              />
-            </div>
-            <div className="input-group">
-              <label htmlFor="password">Password</label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                disabled={loading}
-              />
-            </div>
-
-            {error && (
-              <div className="auth-error-message" style={{ color: '#EF4444', fontSize: '13px', marginTop: '10px', textAlign: 'center' }}>
-                {error}
+              <div className="input-group">
+                <label htmlFor="password">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  disabled={loading}
+                />
               </div>
-            )}
 
-            <button
-              type="submit"
-              className="btn btn-primary btn-lg w-full"
-              style={{ marginTop: '20px' }}
-              disabled={loading}
-            >
-              {loading ? 'Processing...' : (isLogin ? 'Sign In' : 'Sign Up')}
-            </button>
-          </form>
+              {error && (
+                <div className="auth-error-message" style={{ color: '#EF4444', fontSize: '13px', marginTop: '10px', textAlign: 'center' }}>
+                  {error}
+                </div>
+              )}
 
-          <div className="auth-footer">
-            {isLogin ? (
-              <>Don't have an account? <span className="auth-link" onClick={() => setIsLogin(false)}>Sign Up</span></>
-            ) : (
-              <>Already have an account? <span className="auth-link" onClick={() => setIsLogin(true)}>Sign In</span></>
-            )}
+              <button
+                type="submit"
+                className="btn btn-primary btn-lg w-full"
+                style={{ marginTop: '20px' }}
+                disabled={loading}
+              >
+                {loading ? 'Processing...' : (isLogin ? 'Sign In' : 'Sign Up')}
+              </button>
+            </form>
+
+            <div className="auth-footer">
+              {isLogin ? (
+                <>Don't have an account? <span className="auth-link" onClick={() => setIsLogin(false)}>Sign Up</span></>
+              ) : (
+                <>Already have an account? <span className="auth-link" onClick={() => setIsLogin(true)}>Sign In</span></>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -8,7 +8,8 @@ const Navbar = ({
   onSignIn, 
   onBackToHome,
   currentPage,
-  setCurrentPage
+  setCurrentPage,
+  onNavigate
 }) => {
   const navItems = [
     { id: 'home', label: 'Home' },
@@ -20,7 +21,11 @@ const Navbar = ({
   ];
 
   const handleNavClick = (id) => {
-    setCurrentPage(id);
+    if (onNavigate) {
+      onNavigate(id);
+    } else {
+      setCurrentPage(id);
+    }
     if (setMobileMenuOpen) setMobileMenuOpen(false);
     // Explicitly update hash for secondary detection and URL consistency
     window.location.hash = id === 'home' ? '' : id;
