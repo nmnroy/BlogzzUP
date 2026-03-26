@@ -1689,7 +1689,6 @@ function App() {
               <a href="#" className="social-icon" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '36px', height: '36px', borderRadius: '8px', background: '#24292E', color: 'white', textDecoration: 'none', fontSize: '18px'}}>⌥</a>
             </div>
         </div>
-          </div>
       </footer>
 
       {showTop && (
