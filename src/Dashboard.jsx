@@ -1202,7 +1202,7 @@ Use clear headings and keep it actionable. Write in a professional consulting to
     window.viewBlog = function(id) {
       const blogs = JSON.parse(localStorage.getItem('bf_blogs') || '[]');
       const blog = blogs.find(b => b.id == id);
-      if (blog) setModalBlog(blog);
+      if (blog) setPublishModalBlog(blog);
     };
 
     window.scheduleBlog = function(id, e) {
@@ -1290,7 +1290,7 @@ Use clear headings and keep it actionable. Write in a professional consulting to
       <aside className="sidebar">
         <div className="sidebar-header">
           <Sparkles className="logo-icon text-violet-400" size={24} color="#A78BFA" />
-          <span className="logo-text" onClick={() => window.showMarketingSite && window.showMarketingSite()} style={{cursor: 'pointer'}}>BlogForge AI</span>
+          <span className="logo-text" onClick={() => window.showMarketingSite && window.showMarketingSite()} style={{cursor: 'pointer'}}>BlogzzUP</span>
         </div>
         
         <div style={{padding: '0 12px'}}>
@@ -1302,7 +1302,7 @@ Use clear headings and keep it actionable. Write in a professional consulting to
         <div className="sidebar-user">
           <img src="https://i.pravatar.cc/100?img=11" alt="User" className="user-avatar" />
           <div className="user-info">
-            <span className="user-name">Aryan's Workspace</span>
+            <span className="user-name">My Workspace</span>
             <span className="user-plan">Growth Plan</span>
           </div>
         </div>
@@ -1380,7 +1380,7 @@ Use clear headings and keep it actionable. Write in a professional consulting to
         <div id="dash-overview" className="dash-section" style={{display: 'block'}}>
           <header className="top-header">
             <div className="header-text">
-              <h1 className="dashboard-greeting">Good morning, Aryan 👋</h1>
+              <h1 className="dashboard-greeting">Good morning 👋</h1>
               <p>Your blogs are running on autopilot.</p>
             </div>
             <div className="header-actions">
@@ -1536,7 +1536,7 @@ Use clear headings and keep it actionable. Write in a professional consulting to
           </div>
         </div>
 
-        <BlogEditor callGemini={callGemini} />
+        <BlogEditor callGemini={callGemini} publishBlog={publishBlog} />
         <MyBlogsSection />
         <SerpGapSection />
         <SeoScoresSection />
@@ -1682,7 +1682,7 @@ Use clear headings and keep it actionable. Write in a professional consulting to
                 <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
                    <div>
                      <h3 style={{color:'white', margin:'0 0 4px', fontSize:'16px'}}>Zapier</h3>
-                     <p style={{color:'#64748B', margin:0, fontSize:'13px'}}>Connect BlogForge AI to 5,000+ apps.</p>
+                     <p style={{color:'#64748B', margin:0, fontSize:'13px'}}>Connect BlogzzUP to 5,000+ apps.</p>
                    </div>
                    <button style={{background:'rgba(255,255,255,0.05)', color:'white', border:'1px solid rgba(255,255,255,0.1)', padding:'8px 20px', borderRadius:'8px', cursor:'pointer'}}>Connect</button>
                 </div>

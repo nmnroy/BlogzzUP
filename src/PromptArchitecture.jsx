@@ -33,7 +33,7 @@ const stages = [
 
 Recommended Snippet Target:
 [H2] What are the top AI blogging tools in India?
-[List] 1. BlogForge AI 2. Jasper 3. Copy.ai 4. Writesonic`
+[List] 1. BlogzzUP 2. Jasper 3. Copy.ai 4. Writesonic`
   },
   {
     id: 3,
@@ -51,7 +51,7 @@ OUTLINE:
 H1: 7 Best AI Blog Tools for Indian Startups in 2026 (Ranked & Reviewed)
  H2: Why Traditional Content Writing is Dead
  H2: The Top AI Content Generators available in India
-  H3: 1. BlogForge AI (Best Automated SEO)
+  H3: 1. BlogzzUP (Best Automated SEO)
   H3: 2. Writesonic (Best for Short-Form)
  H2: Pricing Comparison (INR)`
   },
@@ -60,11 +60,11 @@ H1: 7 Best AI Blog Tools for Indian Startups in 2026 (Ranked & Reviewed)
     title: "Structured Draft",
     description: "Write section by section using role-based prompting (expert SEO writer for [niche]).",
     prompt: `[System] You are a highly sought-after tech journalist and SEO expert in India.
-[Task] Draft the section "H3: 1. BlogForge AI" from the brief.
+[Task] Draft the section "H3: 1. BlogzzUP" from the brief.
 [Constraints] Use short paragraphs, active voice, bullet points. No fluff. Do not hallucinate features.`,
-    output: `### 1. BlogForge AI (Best Automated SEO)
+    output: `### 1. BlogzzUP (Best Automated SEO)
 
-When it comes to full-cycle content automation, BlogForge AI stands completely apart from the pack. Unlike typical generic LLMs that just spit out text, BlogForge acts as an autonomous marketing agent. 
+When it comes to full-cycle content automation, BlogzzUP stands completely apart from the pack. Unlike typical generic LLMs that just spit out text, BlogzzUP acts as an autonomous marketing agent. 
 
 **Key Differentiators in 2026:**
 - **Live SEO Scoring:** Grades your content against top Indian SERPs.
@@ -112,7 +112,7 @@ INTERNAL LINK SUGGESTIONS:
 
 REVISIONS MADE:
 Removed: "In conclusion, these tools are highly effective."
-Added: "Bottom line: if your marketing team isn't leveraging tools like BlogForge, you're already losing traffic to competitors who do."
+Added: "Bottom line: if your marketing team isn't leveraging tools like BlogzzUP, you're already losing traffic to competitors who do."
 Added: "Supports standard domestic billing via UPI and credit cards."`
   },
   {
@@ -133,7 +133,7 @@ Added: "Supports standard domestic billing via UPI and credit cards."`
     "name": "What are the top AI blogging tools in India?",
     "acceptedAnswer": {
       "@type": "Answer",
-      "text": "The top tools for Indian startups in 2026 include BlogForge AI for full automation, Jasper for enterprise, and Writesonic for short-form copy."
+      "text": "The top tools for Indian startups in 2026 include BlogzzUP for full automation, Jasper for enterprise, and Writesonic for short-form copy."
     }
   }]
 }
@@ -142,7 +142,7 @@ Added: "Supports standard domestic billing via UPI and credit cards."`
 <!-- Snippet Optimized Table -->
 <table class="snippet-table">
   <tr><th>Tool</th><th>Best For</th><th>Starting Price</th></tr>
-  <tr><td>BlogForge AI</td><td>SEO Automation</td><td>₹1,999/mo</td></tr>
+  <tr><td>BlogzzUP</td><td>SEO Automation</td><td>₹1,999/mo</td></tr>
 </table>`
   }
 ];
