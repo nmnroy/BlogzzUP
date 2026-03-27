@@ -34,10 +34,10 @@ BlogForge executes a multi-agent architectural flow to ensure human-grade qualit
 ## 🔥 Key Features
 
 - **🧠 Autonomous Intelligence**: One keyword is all you need. The system handles intent extraction, SERP analysis, and drafting.
+- **✨ 3D Interactive UX**: A state-of-the-art landing experience featuring **Perspective tilts** and **Live AI Pipelines** that respond to user presence.
 - **📊 Real-time SEO Scoring**: A dynamic 10-metric score that provides instant feedback on keyword density and NLP optimization.
 - **🏙️ GEO-Targeting (India Special)**: Localize content for Indian Tier-1 and Tier-2 cities with native landmark injection.
 - **🎙️ Brand Voice DNA**: Clone your unique founder voice by analyzing past newsletters and manifestos.
-- **🗺️ Topic Cluster Map**: Visualize your content authority to ensure 100% niche dominance.
 - **🌓 Obsidian Core Design**: A premium Glassmorphism-based UI/UX system optimized for high-performance dark mode.
 - **📋 Management Actions**: Integrated 3-dot menus for View, Copy, Publish, and Schedule with real-time Toasts.
 - **📑 Premium Marketing Hub**: A fully functional, SEO-optimized blog grid with AI-generated covers and deep-article detail views.
@@ -50,6 +50,7 @@ BlogForge executes a multi-agent architectural flow to ensure human-grade qualit
 | :--- | :--- | :--- |
 | **Frontend** | React 19 + Vite 8 | UI Architecture & Build |
 | **AI Engine** | Google Gemini (JSON Mode) | Content & Logic Generation |
+| **Visuals** | CSS 3D Transforms | 3D Interactive Persistence (v2) |
 | **Design** | Vanilla CSS Tokens | Obsidian Core Design System |
 | **Auth** | Firebase Auth | Secure Google OAuth Integration |
 | **Management** | LocalStorage + Hooks | High-performance State Management |
