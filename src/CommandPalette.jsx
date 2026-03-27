@@ -1,6 +1,6 @@
 /**
  * CommandPalette.jsx
- * Global command palette for BlogForge AI.
+ * Global command palette for BlogzzUP.
  * Trigger: Ctrl+K / ⌘+K or via the sidebar cmd-trigger button.
  *
  * Usage:

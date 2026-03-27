@@ -1,6 +1,6 @@
 /**
  * ToastSystem.jsx
- * Global toast notification system for BlogForge AI.
+ * Global toast notification system for BlogzzUP.
  * Usage:
  *   import { useToast, ToastContainer } from './ToastSystem';
  *   const { addToast } = useToast();

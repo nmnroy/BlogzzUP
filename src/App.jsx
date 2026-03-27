@@ -158,7 +158,7 @@ const TabContent = () => (
     <FeatureCard 
       icon="🎙️" 
       title="Speak It. We Write It." 
-      description="Record a 60-second voice note about your topic. BlogForge transcribes it, structures it, and outputs a full SEO-optimized blog post." 
+      description="Record a 60-second voice note about your topic. BlogzzUP transcribes it, structures it, and outputs a full SEO-optimized blog post." 
       bullets={["Powered by OpenAI Whisper API", "Auto-structures your spoken ideas", "Full SEO pass on transcription"]}
       mockUI={
         <div style={{textAlign: 'center'}}>
@@ -182,7 +182,7 @@ const TabContent = () => (
     <FeatureCard 
       icon="🎯" 
       title="Your Voice. Every Post." 
-      description="Paste 3 of your best blogs and BlogForge learns your writing style. Every generated post matches your tone, vocabulary, and structure." 
+      description="Paste 3 of your best blogs and BlogzzUP learns your writing style. Every generated post matches your tone, vocabulary, and structure." 
       bullets={["Trains on your existing content", "Tone consistency across all posts", "Customize formality level"]}
       mockUI={
         <div>
@@ -426,7 +426,7 @@ const FeaturesPage = () => {
             <thead>
               <tr style={{background: '#141B2D', borderBottom: '1px solid rgba(255,255,255,0.06)'}}>
                 <th style={{padding: '16px 20px', color: '#fff'}}>Feature</th>
-                <th style={{padding: '16px 20px', color: '#7C3AED', fontWeight: 700}}>BlogForge AI</th>
+                <th style={{padding: '16px 20px', color: '#7C3AED', fontWeight: 700}}>BlogzzUP</th>
                 <th style={{padding: '16px 20px', color: '#fff'}}>Blogy</th>
                 <th style={{padding: '16px 20px', color: '#fff'}}>Jasper</th>
                 <th style={{padding: '16px 20px', color: '#fff'}}>Manual</th>
@@ -557,7 +557,7 @@ const DemoPage = () => {
   return (
     <div className="container" style={{paddingTop: '8rem', paddingBottom: '8rem'}}>
       <div style={{textAlign: 'center', marginBottom: '48px'}}>
-        <h1 style={{fontSize: '48px', fontWeight: 800, color: '#fff', margin: 0}}>Try BlogForge AI Live</h1>
+        <h1 style={{fontSize: '48px', fontWeight: 800, color: '#fff', margin: 0}}>Try BlogzzUP Live</h1>
         <p style={{color: '#94A3B8', marginTop: '12px', fontSize: '18px'}}>No signup required. See the engine work in real time.</p>
       </div>
 
@@ -570,12 +570,12 @@ const DemoPage = () => {
                 <div style={{width: '12px', height: '12px', borderRadius: '50%', background: '#F59E0B'}}></div>
                 <div style={{width: '12px', height: '12px', borderRadius: '50%', background: '#10B981'}}></div>
               </div>
-              <div style={{fontSize: '12px', color: '#64748B', marginLeft: '8px'}}>BlogForge AI — Content Engine</div>
+              <div style={{fontSize: '12px', color: '#64748B', marginLeft: '8px'}}>BlogzzUP — Content Engine</div>
             </div>
             
             <div style={{display: 'flex', height: '480px'}}>
               <div style={{width: '160px', background: '#080E1C', borderRight: '1px solid rgba(255,255,255,0.06)', padding: '16px', flexShrink: 0, display: 'flex', flexDirection: 'column'}}>
-                <div style={{fontSize: '13px', color: '#fff', fontWeight: 600, marginBottom: '20px'}}>⚡ BlogForge</div>
+                <div style={{fontSize: '13px', color: '#fff', fontWeight: 600, marginBottom: '20px'}}>⚡ BlogzzUP</div>
                 <div style={{display: 'flex', flexDirection: 'column', gap: '4px'}}>
                   <div style={{padding: '8px 12px', borderRadius: '6px', fontSize: '12px', color: '#64748B', cursor: 'pointer'}}>+ New Project</div>
                   <div style={{padding: '8px 12px', borderRadius: '6px', fontSize: '12px', color: '#64748B', cursor: 'pointer'}}>📄 My Documents</div>
@@ -697,11 +697,11 @@ const PricingPage = () => {
   const faqs = [
     { q: "Is there a free trial?", a: "Yes. The Starter plan is free for your first month — no credit card required. You get full access to all Starter features for 30 days." },
     { q: "Can I cancel anytime?", a: "Absolutely. Cancel with one click from your dashboard. No cancellation fees, no questions asked." },
-    { q: "Do I own the content BlogForge generates?", a: "100%. All content generated and published through BlogForge belongs entirely to you." },
+    { q: "Do I own the content BlogzzUP generates?", a: "100%. All content generated and published through BlogzzUP belongs entirely to you." },
     { q: "Which CMS platforms are supported?", a: "WordPress, Webflow, Shopify, Ghost, Strapi, Sanity, and any platform via custom webhook." },
-    { q: "How is this different from ChatGPT?", a: "ChatGPT is a general AI. BlogForge is a purpose-built SEO engine — it clusters keywords, analyzes SERPs, scores content in real time, and auto-publishes. ChatGPT can't do any of that." },
+    { q: "How is this different from ChatGPT?", a: "ChatGPT is a general AI. BlogzzUP is a purpose-built SEO engine — it clusters keywords, analyzes SERPs, scores content in real time, and auto-publishes. ChatGPT can't do any of that." },
     { q: "What is GEO Optimization?", a: "GEO (Generative Engine Optimization) structures your content to rank both in Google and in AI answer engines like ChatGPT, Perplexity, and Gemini." },
-    { q: "How does auto-publishing work?", a: "Connect your CMS once via API. BlogForge generates, schedules, and publishes blogs automatically at your set frequency — no manual steps." },
+    { q: "How does auto-publishing work?", a: "Connect your CMS once via API. BlogzzUP generates, schedules, and publishes blogs automatically at your set frequency — no manual steps." },
     { q: "Is the content SEO-optimized?", a: "Yes. Every post is scored across 10 metrics including keyword density, readability, snippet eligibility, and AI detection before it ever gets published." },
     { q: "Can my team use one account?", a: "The Growth and Scale plans include shared team access. You can invite members and assign roles from your dashboard." },
     { q: "Is there a white-label option?", a: "Yes, available on the Scale plan. Contact our sales team for details." }
@@ -837,7 +837,7 @@ const BlogDetailView = ({ post, onBack }) => {
         <div className="blog-meta" style={{marginBottom: '3rem'}}>
           <span>📅 Mar 2026</span>
           <span>⏱ {post.readTime}</span>
-          <span>👤 By BlogForge AI</span>
+          <span>👤 By BlogzzUP</span>
         </div>
         
         <div className="blog-content">
@@ -870,7 +870,7 @@ const BlogPage = () => {
         { type: 'p', text: "Cluster mapping is the process of visually and strategically organizing your content into 'Pillars' and 'Clusters'. A pillar page serves as the comprehensive anchor for a broad topic, while cluster pages deep-dive into specific long-tail keywords that link back to the pillar." },
         { type: 'p', text: "This structure signals to search engines that your site is a definitive resource on the subject, creating a web of internal links that is far more resilient than sporadic external backlinks. When your site is structured this way, every new post strengthens the authority of the entire domain, rather than standing alone." },
         { type: 'h2', text: "Why AI-Driven Mapping is Essential" },
-        { type: 'p', text: "Manually mapping out content ecosystems used to take agencies weeks of research and spreadsheet management. With BlogForge AI, we analyze live SERP data to identify the exact semantic gaps in your niche, building your cluster map in seconds." },
+        { type: 'p', text: "Manually mapping out content ecosystems used to take agencies weeks of research and spreadsheet management. With BlogzzUP, we analyze live SERP data to identify the exact semantic gaps in your niche, building your cluster map in seconds." },
         { type: 'p', text: "Our engine looks at the top 100 ranking pages, extracts their entity relationships, and identifies topics that aren't being fully addressed. This allows you to build a content moat that competitors find nearly impossible to breach without significant manual effort." }
       ]
     },
@@ -887,7 +887,7 @@ const BlogPage = () => {
         { type: 'h2', text: "The Content Bottleneck" },
         { type: 'p', text: "The bottleneck isn't just the writing; it's the research. Identifying what competitors are doing, finding the right NLP keywords, and structuring the H-tags takes more time than the actual typing. By the time many writers get to the body content, they are already mentally exhausted, leading to generic results." },
         { type: 'h2', text: "Enter the One-Click Workflow" },
-        { type: 'p', text: "BlogForge AI collapses this entire pipeline. By using a 7-stage prompt architecture, we handle the boring parts—the research and the SEO optimization—leaving you to simply review and hit publish. We're not just making writing faster; we're redefining the marketer's role from 'creator' to 'director'." },
+        { type: 'p', text: "BlogzzUP collapses this entire pipeline. By using a 7-stage prompt architecture, we handle the boring parts—the research and the SEO optimization—leaving you to simply review and hit publish. We're not just making writing faster; we're redefining the marketer's role from 'creator' to 'director'." },
         { type: 'p', text: "In a world where speed is a competitive advantage, the ability to iterate on content strategies in real-time is invaluable. Instead of waiting a month for a content agency to deliver four posts, you can now produce an entire content series in a single afternoon, responding to market trends while they are still relevant." }
       ]
     },
@@ -904,7 +904,7 @@ const BlogPage = () => {
         { type: 'h2', text: "The Power of Localized Search" },
         { type: 'p', text: "When a user in Delhi searches for a service, they see different results than someone in Chennai. GEO optimization means automatically infusing your content with local context, landmarks, and regional keywords without sounding like a bot. This builds immediate trust with the user who feels the content was written specifically for their local needs." },
         { type: 'h2', text: "Scaling to 500 Cities" },
-        { type: 'p', text: "BlogForge's GEO Optimizer allows you to generate city-specific versions of your landing pages and blog posts. Imagine having 500 unique, high-quality blog posts targeting 500 different Indian cities, all generated and published in a single afternoon." },
+        { type: 'p', text: "BlogzzUP's GEO Optimizer allows you to generate city-specific versions of your landing pages and blog posts. Imagine having 500 unique, high-quality blog posts targeting 500 different Indian cities, all generated and published in a single afternoon." },
         { type: 'p', text: "This strategy allows you to capture long-tail traffic that is often high-intent. A user searching for 'marketing agency in Indiranagar' is much closer to a conversion than someone searching for 'global marketing agencies'. We give you the tools to win those local battles at scale." }
       ]
     },
@@ -938,7 +938,7 @@ const BlogPage = () => {
         { type: 'h2', text: "The 24/7 Marketing Department" },
         { type: 'p', text: "Autonomous agents don't just write; they think. They can analyze your analytics, notice a drop in traffic for a specific keyword, and automatically draft a replacement article to regain your ranking. They can monitor competitor moves and suggest counter-strategies, acting as a proactive partner in your marketing department." },
         { type: 'h2', text: "Connecting the Dots" },
-        { type: 'p', text: "At BlogForge, we're building the infrastructure for this autonomous future. By connecting your Google Search Console and CMS, our agents can operate as a self-healing content ecosystem that compounds in value while you sleep. The goal isn't just to produce more content, but to produce the *right* content at the exact moment it's needed by the market." }
+        { type: 'p', text: "At BlogzzUP, we're building the infrastructure for this autonomous future. By connecting your Google Search Console and CMS, our agents can operate as a self-healing content ecosystem that compounds in value while you sleep. The goal isn't just to produce more content, but to produce the *right* content at the exact moment it's needed by the market." }
       ]
     },
     { 
@@ -952,7 +952,7 @@ const BlogPage = () => {
       content: [
         { type: 'p', text: "Meet Rakesh, the founder of BuildFast Delhi. Like many entrepreneurs, he had a great product but zero organic visibility. Agencies quoted him 6 months and 5 lakhs to 'start seeing results'. He didn't have that kind of time or budget, and was close to giving up on organic search entirely." },
         { type: 'h2', text: "The Strategy: Volume + Velocity" },
-        { type: 'p', text: "Using BlogForge, Rakesh didn't just publish one blog a week. He used our automation tools to publish three high-quality blogs *a day*. By leveraging our SERP Gap Scanner, he targeted thousands of low-difficulty long-tail keywords that competitors were ignoring because they were too labor-intensive to target manually." },
+        { type: 'p', text: "Using BlogzzUP, Rakesh didn't just publish one blog a week. He used our automation tools to publish three high-quality blogs *a day*. By leveraging our SERP Gap Scanner, he targeted thousands of low-difficulty long-tail keywords that competitors were ignoring because they were too labor-intensive to target manually." },
         { type: 'h2', text: "The Results" },
         { type: 'p', text: "Within 30 days, BuildFast was ranking for 450 long-tail keywords. By day 90, they hit the 100,000 monthly visitor mark, leading to a 400% increase in inbound leads and a significant decrease in their cost-per-acquisition. Total cost? Less than a single month's agency retainer. Rakesh's story proves that with the right AI tools, David can indeed beat Goliath in the search results." }
       ]
@@ -966,7 +966,7 @@ const BlogPage = () => {
   return (
     <div className="container" style={{paddingTop: '8rem', paddingBottom: '8rem'}}>
       <div style={{textAlign: 'center', marginBottom: '48px'}}>
-        <h1 style={{fontSize: '48px', color: '#fff', margin: 0, fontWeight: 800}}>Latest from BlogForge</h1>
+        <h1 style={{fontSize: '48px', color: '#fff', margin: 0, fontWeight: 800}}>Latest from BlogzzUP</h1>
         <p style={{color: '#94A3B8', marginTop: '12px', fontSize: '18px'}}>Insights, strategies, and playbooks on AI content and SEO</p>
       </div>
 
@@ -1154,7 +1154,7 @@ const HomeFeaturesSection = () => {
                     <div style={{width: 10, height: 10, borderRadius: '50%', background: '#EF4444'}}></div>
                     <div style={{width: 10, height: 10, borderRadius: '50%', background: '#F59E0B'}}></div>
                     <div style={{width: 10, height: 10, borderRadius: '50%', background: '#10B981'}}></div>
-                    <div style={{marginLeft: 'auto', fontSize: '10px', color: '#64748B', fontFamily: 'monospace'}}>blogforge.ai/dash/{f.id}</div>
+                    <div style={{marginLeft: 'auto', fontSize: '10px', color: '#64748B', fontFamily: 'monospace'}}>BlogzzUP.ai/dash/{f.id}</div>
                   </div>
                   {renderMockup(f.id)}
                </div>
@@ -1369,9 +1369,9 @@ function App() {
 
       <nav className={`navbar ${scrolled ? 'scrolled' : ''}`} role="navigation" aria-label="Main navigation">
         <div className="container">
-          <a href="#" className="logo" aria-label="BlogForge AI — home">
+          <a href="#" className="logo" aria-label="BlogzzUP — home">
             <Sparkles className="logo-icon" size={24} aria-hidden="true" />
-            BlogForge AI
+            BlogzzUP
           </a>
           
           <ul className="nav-links" role="list" aria-label="Site pages">
@@ -1454,7 +1454,7 @@ function App() {
             </h1>
             
             <p className="subheading stagger-in-item">
-              Stop fighting writer's block. BlogForge researches, writes, optimizes, and automatically publishes high-ranking SEO content directly to your WordPress, Webflow, or custom CMS.
+              Stop fighting writer's block. BlogzzUP researches, writes, optimizes, and automatically publishes high-ranking SEO content directly to your WordPress, Webflow, or custom CMS.
             </p>
 
             <div className="hero-actions stagger-in-item">
@@ -1558,7 +1558,7 @@ function App() {
       <div className="page-section" id="page-howitworks" style={{ display: 'none' }}>
         <div className="container" style={{paddingTop: '8rem'}}>
           <div className="hiw-header">
-            <h1 className="hiw-title">How BlogForge Works</h1>
+            <h1 className="hiw-title">How BlogzzUP Works</h1>
             <p className="hiw-subtitle">From keyword to ranked blog post in under 10 minutes</p>
           </div>
           
@@ -1616,7 +1616,7 @@ function App() {
                 </div>
                 <h3 className="step-title">1. Connect Your Brand</h3>
                 <p className="step-desc">
-                  Connect your CMS (WordPress, Webflow, Shopify, etc.) and paste your website URL. BlogForge reads your brand, niche, and competitor landscape in 60 seconds.
+                  Connect your CMS (WordPress, Webflow, Shopify, etc.) and paste your website URL. BlogzzUP reads your brand, niche, and competitor landscape in 60 seconds.
                 </p>
               </div>
               
@@ -1630,7 +1630,7 @@ function App() {
                   <div className="connection-path">
                     <div className="data-packet"></div>
                   </div>
-                  <div className="blogforge-node">
+                  <div className="BlogzzUP-node">
                     <Sparkles size={24} className="logo-icon block" />
                   </div>
                 </div>
@@ -1714,12 +1714,12 @@ function App() {
         <div className="auth-layout container">
           <div className="auth-hero stagger-in">
             <div className="glass-card auth-hero-content stagger-in-item">
-              <h2 className="auth-welcome-title">India's largest brands trust BlogForge</h2>
+              <h2 className="auth-welcome-title">India's largest brands trust BlogzzUP</h2>
               <p className="auth-welcome-desc">Join 500+ startups saving 92% of their content creation time.</p>
               
               <div className="auth-quotes stagger-in-item">
                 <div className="auth-quote">
-                  "BlogForge replaced our entire content agency. We're now publishing 4x more for 1/10th the cost."
+                  "BlogzzUP replaced our entire content agency. We're now publishing 4x more for 1/10th the cost."
                   <div className="auth-author">— Founder, Delhi.AI</div>
                 </div>
               </div>
@@ -1741,7 +1741,7 @@ function App() {
             <div className="auth-form-card glass-card stagger-in-item">
               <div className="auth-header">
                 <h1 className="auth-title">{isLogin ? 'Welcome Back' : 'Create Account'}</h1>
-                <p className="auth-subtitle">{isLogin ? 'Sign in to your BlogForge Workspace' : 'Get started with BlogForge'}</p>
+                <p className="auth-subtitle">{isLogin ? 'Sign in to your BlogzzUP Workspace' : 'Get started with BlogzzUP'}</p>
               </div>
 
               <div className="auth-google-btn-wrap">
@@ -1798,7 +1798,7 @@ function App() {
             <div className="footer-brand">
               <div className="logo">
                 <Sparkles className="logo-icon" size={24} aria-hidden="true" />
-                BlogForge AI
+                BlogzzUP
               </div>
               <p className="footer-desc">Empowering Indian startups with autonomous, SEO-winning content engines.</p>
             </div>
@@ -1824,7 +1824,7 @@ function App() {
           
           <div className="footer-bottom">
             <span>
-              © 2026 BlogForge AI. Built in India 🇮🇳. All rights reserved.
+              © 2026 BlogzzUP. Built in India 🇮🇳. All rights reserved.
             </span>
             <div className="footer-socials" style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
               <a href="#" className="social-icon" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '36px', height: '36px', borderRadius: '8px', background: '#000', color: 'white', textDecoration: 'none', fontSize: '15px', fontWeight: 900, fontFamily: 'sans-serif'}}>𝕏</a>
