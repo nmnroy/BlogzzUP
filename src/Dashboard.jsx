@@ -7,11 +7,20 @@ import {
 import './Dashboard.css';
 import './BlogEditor.css';
 import { publishBlog } from './utils/publishBlog';
+import { fetchUserBlogs, createBlog, updateBlog, deleteBlog, saveCredentials, fetchCredentials } from './utils/blogStorage';
 import BlogEditor from './BlogEditor';
+import { useAuth } from './AuthContext';
 const apiKeys = [
   import.meta.env.VITE_API1,
   import.meta.env.VITE_API2,
   import.meta.env.VITE_API3,
+  import.meta.env.VITE_API4,
+  import.meta.env.VITE_API5,
+  import.meta.env.VITE_API6,
+  import.meta.env.VITE_API7,
+  import.meta.env.VITE_API8,
+  import.meta.env.VITE_API9,
+  import.meta.env.VITE_API10,
 ].filter(Boolean);
 let currentKeyIndex = 0;
 
@@ -109,30 +118,6 @@ const MyBlogsSection = () => {
 
   const loadMyBlogs = () => {
     let saved = JSON.parse(localStorage.getItem('bf_blogs') || '[]');
-    // Check if we need to refresh old demo data (Oct 2026) to March 2026
-    const hasOldData = saved.some(b => b.id === 'db1' || b.id === 'db2');
-    if (saved.length === 0 || hasOldData) {
-      // Inject standard demo blogs for MARCH 2026
-      saved = [
-        {
-          id: 'db1_mar', title: '10 AI Tools Disrupting Martech in India', seoScore: '94', status: 'published',
-          createdAt: '2026-03-12T10:00:00Z', views: '1,240', keyword: 'martech ai india', body: '# 10 AI Tools...'
-        },
-        {
-          id: 'db2_mar', title: 'How to Automate SEO with Generative AI', seoScore: '88', status: 'published',
-          createdAt: '2026-03-10T14:30:00Z', views: '890', keyword: 'automate seo ai', body: '# How to Automate...'
-        },
-        {
-          id: 'db3_mar', title: 'Top 5 Tier-2 Cities for Tech Startups', seoScore: '96', status: 'scheduled',
-          scheduledAt: '2026-03-15T09:00:00Z', views: '---', keyword: 'tier 2 cities startups', body: '# Top 5 Tier-2 Cities...'
-        },
-        {
-          id: 'db4_mar', title: "Understanding Google's Helpful Content Update", seoScore: '91', status: 'scheduled',
-          scheduledAt: '2026-03-18T16:00:00Z', views: '---', keyword: 'google helpful content update', body: '# Understanding Google...'
-        }
-      ];
-      localStorage.setItem('bf_blogs', JSON.stringify(saved));
-    }
     setBlogs(saved);
   };
 
@@ -146,13 +131,8 @@ const MyBlogsSection = () => {
     };
   }, []);
 
-  const deleteBlog = (id) => {
-    if (!window.confirm('Delete this blog post?')) return;
-    const updated = blogs.filter(b => b.id !== id);
-    localStorage.setItem('bf_blogs', JSON.stringify(updated));
-    if (window.updateOverviewStats) window.updateOverviewStats();
-    setBlogs(updated);
-  };
+  // Redundant local deleteBlog removed, now using window.confirmDeleteBlog
+
 
   const copyBlogFromModal = (blog, e) => {
     const text = blog.title + '\n\n' + blog.metaDescription + '\n\n' + blog.body;
@@ -217,7 +197,8 @@ const MyBlogsSection = () => {
                 const scoreColor = blog.seoScore >= 90 ? '#10B981' : blog.seoScore >= 75 ? '#F59E0B' : '#EF4444';
                 const statusStyle = blog.status === 'published' ? {background: 'rgba(16,185,129,0.1)', color: '#10B981'} : blog.status === 'scheduled' ? {background: 'rgba(245,158,11,0.1)', color: '#F59E0B'} : {background: 'rgba(100,116,139,0.1)', color: '#94A3B8'};
                 const displayDate = blog.status === 'scheduled' ? (blog.scheduledAt || blog.createdAt) : blog.createdAt;
-                const date = new Date(displayDate).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+                // Formatted with time
+                const date = displayDate ? new Date(displayDate).toLocaleString('en-IN', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : 'No date';
                 return (
                   <tr key={blog.id} style={{borderTop: '1px solid rgba(255,255,255,0.04)', transition: 'background 0.15s'}} onMouseOver={e => e.currentTarget.style.background = 'rgba(124,58,237,0.05)'} onMouseOut={e => e.currentTarget.style.background = 'transparent'}>
                     <td onClick={() => setModalBlog(blog)} style={{padding: '14px 20px', fontSize: '14px', color: 'white', fontWeight: 500, maxWidth: '280px', cursor: 'pointer', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
@@ -242,7 +223,6 @@ const MyBlogsSection = () => {
       </div>
 
       
-  
 
       {/* Modal */}
       {modalBlog && (
@@ -447,80 +427,6 @@ Return ONLY a valid JSON object with exactly this structure, no explanation:
   );
 };
 
-const RoidashboardSection = () => {
-  return (
-    <div id="dash-roi" className="dash-section" style={{display: 'none', padding: '40px', color: '#fff'}}>
-      {/* Section Header */}
-      <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'28px'}}>
-        <div>
-          <h2 style={{fontSize:'24px', fontWeight:'700', color:'white', margin:0}}>ROI & Reports</h2>
-          <p style={{fontSize:'14px', color:'#64748B', marginTop:'4px'}}>Track your content performance and organic growth</p>
-        </div>
-        <button onClick={(e) => window.generateReport && window.generateReport(e)} style={{background:'linear-gradient(135deg,#7C3AED,#06B6D4)', color:'white', border:'none', borderRadius:'10px', padding:'10px 20px', fontSize:'14px', fontWeight:'600', cursor:'pointer'}}>
-          ⚡ Generate AI Report
-        </button>
-      </div>
-
-      {/* KPI Cards */}
-      <div style={{display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:'16px', marginBottom:'28px'}}>
-        <div style={{background:'#141B2D', border:'1px solid rgba(255,255,255,0.06)', borderRadius:'16px', padding:'24px'}}>
-          <div style={{fontSize:'12px', color:'#64748B', textTransform:'uppercase', letterSpacing:'0.5px', marginBottom:'12px'}}>Total Blogs</div>
-          <div id="roi-total-blogs" style={{fontSize:'32px', fontWeight:'700', color:'white'}}>152</div>
-        </div>
-        <div style={{background:'#141B2D', border:'1px solid rgba(255,255,255,0.06)', borderRadius:'16px', padding:'24px'}}>
-          <div style={{fontSize:'12px', color:'#64748B', textTransform:'uppercase', letterSpacing:'0.5px', marginBottom:'12px'}}>Avg SEO Score</div>
-          <div id="roi-avg-seo" style={{fontSize:'32px', fontWeight:'700', color:'#06B6D4'}}>—</div>
-        </div>
-        <div style={{background:'#141B2D', border:'1px solid rgba(255,255,255,0.06)', borderRadius:'16px', padding:'24px'}}>
-          <div style={{fontSize:'12px', color:'#64748B', textTransform:'uppercase', letterSpacing:'0.5px', marginBottom:'12px'}}>Est. Monthly Traffic</div>
-          <div id="roi-traffic" style={{fontSize:'32px', fontWeight:'700', color:'#10B981'}}>+14,250</div>
-          <div style={{fontSize:'12px', color:'#64748B', marginTop:'4px'}}>visits</div>
-        </div>
-        <div style={{background:'#141B2D', border:'1px solid rgba(255,255,255,0.06)', borderRadius:'16px', padding:'24px'}}>
-          <div style={{fontSize:'12px', color:'#64748B', textTransform:'uppercase', letterSpacing:'0.5px', marginBottom:'12px'}}>Content Health</div>
-          <div id="roi-health" style={{fontSize:'32px', fontWeight:'700', color:'#A78BFA'}}>—</div>
-        </div>
-      </div>
-
-      {/* Performance Table */}
-      <div style={{background:'#141B2D', border:'1px solid rgba(255,255,255,0.06)', borderRadius:'16px', overflow:'hidden', marginBottom:'28px'}}>
-        <div style={{padding:'18px 20px', borderBottom:'1px solid rgba(255,255,255,0.06)', display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-          <h3 style={{fontSize:'15px', fontWeight:'600', color:'white', margin:0}}>📊 Blog Performance Breakdown</h3>
-        </div>
-        <div style={{overflowX:'auto'}}>
-          <table style={{width:'100%', borderCollapse:'collapse', minWidth:'600px'}}>
-            <thead>
-              <tr style={{background:'#0D1526'}}>
-                <th style={{textAlign:'left', padding:'12px 20px', fontSize:'11px', color:'#64748B', fontWeight:'600', letterSpacing:'0.5px'}}>BLOG TITLE</th>
-                <th style={{padding:'12px 20px', fontSize:'11px', color:'#64748B', fontWeight:'600', textAlign:'center'}}>SEO SCORE</th>
-                <th style={{padding:'12px 20px', fontSize:'11px', color:'#64748B', fontWeight:'600', textAlign:'center'}}>WORD COUNT</th>
-                <th style={{padding:'12px 20px', fontSize:'11px', color:'#64748B', fontWeight:'600', textAlign:'center'}}>EST. TRAFFIC</th>
-                <th style={{padding:'12px 20px', fontSize:'11px', color:'#64748B', fontWeight:'600', textAlign:'center'}}>STATUS</th>
-              </tr>
-            </thead>
-            <tbody id="roi-table-body">
-              <tr>
-                <td colSpan="5" style={{textAlign:'center', padding:'40px', color:'#4B5563', fontSize:'14px'}}>
-                  No blogs yet. <span style={{color:'#7C3AED', cursor:'pointer'}} onClick={() => window.showDashboardSection && window.showDashboardSection('newblog')}>Generate your first blog →</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* AI Report Area */}
-      <div id="roi-report-area" style={{display:'none', background:'#141B2D', border:'1px solid rgba(124,58,237,0.3)', borderRadius:'16px', padding:'24px'}}>
-        <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'16px'}}>
-          <h3 style={{fontSize:'15px', fontWeight:'600', color:'white', margin:0}}>🤖 AI Performance Report</h3>
-          <button onClick={(e) => window.copyReport && window.copyReport(e)} style={{background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.1)', color:'#94A3B8', borderRadius:'8px', padding:'6px 14px', fontSize:'12px', cursor:'pointer'}}>Copy Report</button>
-        </div>
-        <div id="roi-report-content" style={{fontSize:'14px', color:'#94A3B8', lineHeight:1.8, whiteSpace:'pre-wrap'}}></div>
-      </div>
-    </div>
-  );
-};
-
 const SeoScoresSection = () => {
   const [keyword, setKeyword] = useState('');
   const [content, setContent] = useState('');
@@ -692,6 +598,82 @@ Return ONLY a valid JSON object:
   );
 };
 
+const RoidashboardSection = () => {
+  return (
+    <div id="dash-roi" className="dash-section" style={{display: 'none', padding: '40px', color: '#fff'}}>
+      {/* Section Header */}
+      <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'28px'}}>
+        <div>
+          <h2 style={{fontSize:'24px', fontWeight:'700', color:'white', margin:0}}>ROI & Reports</h2>
+          <p style={{fontSize:'14px', color:'#64748B', marginTop:'4px'}}>Track your content performance and organic growth</p>
+        </div>
+        <button onClick={(e) => window.generateReport && window.generateReport(e)} style={{background:'linear-gradient(135deg,#7C3AED,#06B6D4)', color:'white', border:'none', borderRadius:'10px', padding:'10px 20px', fontSize:'14px', fontWeight:'600', cursor:'pointer'}}>
+          ⚡ Generate AI Report
+        </button>
+      </div>
+
+      {/* KPI Cards */}
+      <div style={{display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:'16px', marginBottom:'28px'}}>
+        <div style={{background:'#141B2D', border:'1px solid rgba(255,255,255,0.06)', borderRadius:'16px', padding:'24px'}}>
+          <div style={{fontSize:'12px', color:'#64748B', textTransform:'uppercase', letterSpacing:'0.5px', marginBottom:'12px'}}>Total Blogs</div>
+          <div id="roi-total-blogs" style={{fontSize:'32px', fontWeight:'700', color:'white'}}>0</div>
+        </div>
+        <div style={{background:'#141B2D', border:'1px solid rgba(255,255,255,0.06)', borderRadius:'16px', padding:'24px'}}>
+          <div style={{fontSize:'12px', color:'#64748B', textTransform:'uppercase', letterSpacing:'0.5px', marginBottom:'12px'}}>Avg SEO Score</div>
+          <div id="roi-avg-seo" style={{fontSize:'32px', fontWeight:'700', color:'#06B6D4'}}>—</div>
+        </div>
+        <div style={{background:'#141B2D', border:'1px solid rgba(255,255,255,0.06)', borderRadius:'16px', padding:'24px'}}>
+          <div style={{fontSize:'12px', color:'#64748B', textTransform:'uppercase', letterSpacing:'0.5px', marginBottom:'12px'}}>Est. Monthly Traffic</div>
+          <div id="roi-traffic" style={{fontSize:'32px', fontWeight:'700', color:'#10B981'}}>0</div>
+          <div style={{fontSize:'12px', color:'#64748B', marginTop:'4px'}}>visits</div>
+        </div>
+        <div style={{background:'#141B2D', border:'1px solid rgba(255,255,255,0.06)', borderRadius:'16px', padding:'24px'}}>
+          <div style={{fontSize:'12px', color:'#64748B', textTransform:'uppercase', letterSpacing:'0.5px', marginBottom:'12px'}}>Content Health</div>
+          <div id="roi-health" style={{fontSize:'32px', fontWeight:'700', color:'#A78BFA'}}>—</div>
+        </div>
+      </div>
+
+      {/* Performance Table */}
+      <div style={{background:'#141B2D', border:'1px solid rgba(255,255,255,0.06)', borderRadius:'16px', overflow:'hidden', marginBottom:'28px'}}>
+        <div style={{padding:'18px 20px', borderBottom:'1px solid rgba(255,255,255,0.06)', display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+          <h3 style={{fontSize:'15px', fontWeight:'600', color:'white', margin:0}}>📊 Blog Performance Breakdown</h3>
+        </div>
+        <div style={{overflowX:'auto'}}>
+          <table style={{width:'100%', borderCollapse:'collapse', minWidth:'600px'}}>
+            <thead>
+              <tr style={{background:'#0D1526'}}>
+                <th style={{textAlign:'left', padding:'12px 20px', fontSize:'11px', color:'#64748B', fontWeight:'600', letterSpacing:'0.5px'}}>BLOG TITLE</th>
+                <th style={{padding:'12px 20px', fontSize:'11px', color:'#64748B', fontWeight:'600', textAlign:'center'}}>SEO SCORE</th>
+                <th style={{padding:'12px 20px', fontSize:'11px', color:'#64748B', fontWeight:'600', textAlign:'center'}}>WORD COUNT</th>
+                <th style={{padding:'12px 20px', fontSize:'11px', color:'#64748B', fontWeight:'600', textAlign:'center'}}>EST. TRAFFIC</th>
+                <th style={{padding:'12px 20px', fontSize:'11px', color:'#64748B', fontWeight:'600', textAlign:'center'}}>STATUS</th>
+              </tr>
+            </thead>
+            <tbody id="roi-table-body">
+              <tr>
+                <td colSpan="5" style={{textAlign:'center', padding:'40px', color:'#4B5563', fontSize:'14px'}}>
+                  No blogs yet. <span style={{color:'#7C3AED', cursor:'pointer'}} onClick={() => window.showDashboardSection && window.showDashboardSection('newblog')}>Generate your first blog →</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* AI Report Area */}
+      <div id="roi-report-area" style={{display:'none', background:'#141B2D', border:'1px solid rgba(124,58,237,0.3)', borderRadius:'16px', padding:'24px'}}>
+        <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'16px'}}>
+          <h3 style={{fontSize:'15px', fontWeight:'600', color:'white', margin:0}}>🤖 AI Performance Report</h3>
+          <button onClick={(e) => window.copyReport && window.copyReport(e)} style={{background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.1)', color:'#94A3B8', borderRadius:'8px', padding:'6px 14px', fontSize:'12px', cursor:'pointer'}}>Copy Report</button>
+        </div>
+        <div id="roi-report-content" style={{fontSize:'14px', color:'#94A3B8', lineHeight:1.8, whiteSpace:'pre-wrap'}}></div>
+      </div>
+    </div>
+  );
+};
+
+
+
 
 
 
@@ -836,7 +818,13 @@ const AutoPublisherSection = () => {
 
 
 const Dashboard = ({ onLogout }) => {
+  const { currentUser, logOut } = useAuth();
+  const uid = currentUser?.uid;
+  const displayName = currentUser?.displayName || 'User';
+  const firstName = displayName.split(' ')[0];
+
   const [blogs, setBlogs] = useState([]);
+  const [blogsLoading, setBlogsLoading] = useState(false);
   const [viewDate, setViewDate] = useState(new Date());
 
   // Global Publish Modal State
@@ -845,33 +833,26 @@ const Dashboard = ({ onLogout }) => {
   const [publishStatus, setPublishStatus] = useState('');
   const [isScheduled, setIsScheduled] = useState(false);
   const [scheduledAt, setScheduledAt] = useState('');
+  // New state to track in-progress publications and prevent infinite loops
+  const [publishingIds, setPublishingIds] = useState(new Set());
+  const [failedIds, setFailedIds] = useState(new Set());
 
-  const loadDashboardBlogs = () => {
-    let saved = JSON.parse(localStorage.getItem('bf_blogs') || '[]');
-    const hasOldData = saved.some(b => b.id === 'db1' || b.id === 'db2');
-    if (saved.length === 0 || hasOldData) {
-      // Inject standard demo blogs for MARCH 2026
-      saved = [
-        {
-          id: 'db1_mar', title: '10 AI Tools Disrupting Martech in India', seoScore: '94', status: 'published',
-          createdAt: '2026-03-12T10:00:00Z', views: '1,240', keyword: 'martech ai india', body: '# 10 AI Tools...'
-        },
-        {
-          id: 'db2_mar', title: 'How to Automate SEO with Generative AI', seoScore: '88', status: 'published',
-          createdAt: '2026-03-10T14:30:00Z', views: '890', keyword: 'automate seo ai', body: '# How to Automate...'
-        },
-        {
-          id: 'db3_mar', title: 'Top 5 Tier-2 Cities for Tech Startups', seoScore: '96', status: 'scheduled',
-          scheduledAt: '2026-03-15T09:00:00Z', views: '---', keyword: 'tier 2 cities startups', body: '# Top 5 Tier-2 Cities...'
-        },
-        {
-          id: 'db4_mar', title: "Understanding Google's Helpful Content Update", seoScore: '91', status: 'scheduled',
-          scheduledAt: '2026-03-18T16:00:00Z', views: '---', keyword: 'google helpful content update', body: '# Understanding Google...'
-        }
-      ];
+
+
+  const loadDashboardBlogs = async () => {
+    if (!uid) return;
+    setBlogsLoading(true);
+    try {
+      const saved = await fetchUserBlogs(uid);
+      setBlogs(saved.length ? saved : []);
+      // Sync to localStorage for pure-DOM sections that read from it
       localStorage.setItem('bf_blogs', JSON.stringify(saved));
+      if (window.loadMyBlogs) window.loadMyBlogs();
+    } catch (e) {
+      console.error('Failed to load blogs:', e);
+    } finally {
+      setBlogsLoading(false);
     }
-    setBlogs(saved);
   };
 
   const changeMonth = (offset) => {
@@ -903,14 +884,25 @@ const Dashboard = ({ onLogout }) => {
       setPublishStatus('Scheduling for ' + scheduledAt + '...');
       
       const blogs = JSON.parse(localStorage.getItem('bf_blogs') || '[]');
-      const bIdx = blogs.findIndex(b => b.id === publishModalBlog.id);
+      const stringId = String(publishModalBlog.id);
+      const bIdx = blogs.findIndex(b => String(b.id) === stringId);
       if (bIdx !== -1) {
-        blogs[bIdx].status = 'scheduled';
-        blogs[bIdx].scheduledAt = scheduledAt;
-        blogs[bIdx].platform = publishingPlatform;
-        localStorage.setItem('bf_blogs', JSON.stringify(blogs));
-        if (window.loadMyBlogs) window.loadMyBlogs();
-        if (window.loadDashboardBlogs) window.loadDashboardBlogs();
+        try {
+          await updateBlog(uid, stringId, { 
+            status: 'scheduled', 
+            scheduledAt: scheduledAt, 
+            platform: publishingPlatform 
+          });
+          blogs[bIdx].status = 'scheduled';
+          blogs[bIdx].scheduledAt = scheduledAt;
+          blogs[bIdx].platform = publishingPlatform;
+          localStorage.setItem('bf_blogs', JSON.stringify(blogs));
+          if (window.loadMyBlogs) window.loadMyBlogs();
+          if (window.loadDashboardBlogs) window.loadDashboardBlogs();
+        } catch (err) {
+          setPublishStatus('Error: Failed to save to database. ' + err.message);
+          return;
+        }
       }
       
       setPublishStatus('✓ Blog scheduled!');
@@ -929,12 +921,21 @@ const Dashboard = ({ onLogout }) => {
       setPublishStatus('Published successfully!');
       
       const blogs = JSON.parse(localStorage.getItem('bf_blogs') || '[]');
-      const bIdx = blogs.findIndex(b => b.id === publishModalBlog.id);
+      const stringId = String(publishModalBlog.id);
+      const bIdx = blogs.findIndex(b => String(b.id) === stringId);
       if (bIdx !== -1) {
-        blogs[bIdx].status = 'published';
-        localStorage.setItem('bf_blogs', JSON.stringify(blogs));
-        if (window.loadMyBlogs) window.loadMyBlogs();
-        if (window.loadDashboardBlogs) window.loadDashboardBlogs();
+        try {
+          await updateBlog(uid, stringId, { 
+            status: 'published',
+            platform: publishingPlatform
+          });
+          blogs[bIdx].status = 'published';
+          localStorage.setItem('bf_blogs', JSON.stringify(blogs));
+          if (window.loadMyBlogs) window.loadMyBlogs();
+          if (window.loadDashboardBlogs) window.loadDashboardBlogs();
+        } catch (err) {
+          console.error("Failed to update status to published:", err);
+        }
       }
 
       setTimeout(() => setPublishModalBlog(null), 1500);
@@ -943,25 +944,75 @@ const Dashboard = ({ onLogout }) => {
     }
   };
 
+  // Auto-publisher loop for scheduled blogs
+  useEffect(() => {
+    if (!uid || !blogs.length) return;
+    const interval = setInterval(() => {
+      const now = new Date();
+      const checkBlogs = async () => {
+        let hasChanges = false;
+        for (const b of blogs) {
+          const stringId = String(b.id);
+          // Skip if already being published, failed previously, or status is not scheduled
+          if (b.status === 'scheduled' && b.scheduledAt && !publishingIds.has(stringId) && !failedIds.has(stringId)) {
+            const scheduledTime = new Date(b.scheduledAt);
+            if (scheduledTime <= now) {
+              console.log("Auto-publishing scheduled blog:", b.title);
+              const credsStr = localStorage.getItem('bf_credentials');
+              if (!credsStr) continue;
+              const creds = JSON.parse(credsStr)[b.platform];
+              
+              if (creds && Object.keys(creds).length > 0) {
+                // Add to publishing set to avoid duplicate triggers
+                setPublishingIds(prev => new Set(prev).add(stringId));
+                try {
+                  await publishBlog(b.platform, { title: b.title, content: b.body, tags: [b.keyword].filter(Boolean), credentials: creds });
+                  await updateBlog(uid, stringId, { status: 'published' });
+                  hasChanges = true;
+                  if (window.showToast) window.showToast(`Auto-published: ${b.title}`);
+                } catch (err) {
+                  console.error("Failed to auto-publish:", err);
+                  // Mark as failed to avoid hammering the API if rate limited
+                  setFailedIds(prev => new Set(prev).add(stringId));
+                  if (window.showToast) window.showToast(`Failed: ${b.title}. ${err.message}`, 'error');
+                } finally {
+                  setPublishingIds(prev => {
+                    const next = new Set(prev);
+                    next.delete(stringId);
+                    return next;
+                  });
+                }
+              }
+            }
+          }
+        }
+        if (hasChanges && window.loadDashboardBlogs) await window.loadDashboardBlogs();
+      };
+      
+      checkBlogs();
+    }, 45000); // Check every 45 seconds
+    return () => clearInterval(interval);
+  }, [blogs, uid, publishingIds, failedIds]);
+
   useEffect(() => {
     loadDashboardBlogs();
     window.loadDashboardBlogs = loadDashboardBlogs;
     window.showPublishModal = (id) => {
-        const blogs = JSON.parse(localStorage.getItem('bf_blogs') || '[]');
-        const blog = blogs.find(b => b.id === id);
-        if (blog) {
-            setPublishModalBlog(blog);
-            setPublishStatus('');
-            setPublishingPlatform('wordpress');
-            setIsScheduled(false);
-            setScheduledAt('');
-        }
+      const blogs = JSON.parse(localStorage.getItem('bf_blogs') || '[]');
+      const blog = blogs.find(b => b.id === id);
+      if (blog) {
+        setPublishModalBlog(blog);
+        setPublishStatus('');
+        setPublishingPlatform('wordpress');
+        setIsScheduled(false);
+        setScheduledAt('');
+      }
     };
-    return () => { 
-        delete window.loadDashboardBlogs; 
-        delete window.showPublishModal;
+    return () => {
+      delete window.loadDashboardBlogs;
+      delete window.showPublishModal;
     };
-  }, []);
+  }, [uid]);
 
   useEffect(() => {
     window.updateOverviewStats = function() {
@@ -984,10 +1035,10 @@ const Dashboard = ({ onLogout }) => {
         if (topEl) topEl.textContent = topBlog.title.length > 28 ? topBlog.title.substring(0, 28) + '...' : topBlog.title;
       } else {
         // Authentic demo fallback state when no blogs are created yet
-        if (totalEl) totalEl.textContent = '152';
-        if (avgEl) avgEl.textContent = '94';
-        if (trafficEl) trafficEl.textContent = '+14,250';
-        if (topEl) topEl.textContent = '10 AI Martech Tools Disrupting India';
+        if (totalEl) totalEl.textContent = '0';
+        if (avgEl) avgEl.textContent = '0';
+        if (trafficEl) trafficEl.textContent = '0';
+        if (topEl) topEl.textContent = 'No blogs yet';
       }
 
       const usageBar = document.getElementById('plan-usage-bar');
@@ -1026,8 +1077,9 @@ const Dashboard = ({ onLogout }) => {
           tableBody.innerHTML = blogs.map(blog => {
             const wc = blog.body ? blog.body.split(/\s+/).filter(w => w).length : 0;
             const traffic = Math.floor((parseInt(blog.seoScore) || 0) * 1.6);
+            const dateStr = blog.createdAt ? new Date(blog.createdAt).toLocaleString('en-IN', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : '—';
             return '<tr style="border-top:1px solid rgba(255,255,255,0.04); transition:background 0.15s;" onmouseover="this.style.background=\'rgba(124,58,237,0.05)\'" onmouseout="this.style.background=\'transparent\'">' +
-              '<td style="padding:14px 20px; font-size:14px; color:white; font-weight:500; max-width:280px;">' + blog.title + '</td>' +
+              '<td style="padding:14px 20px; font-size:14px; color:white; font-weight:500; max-width:280px;"><div>' + blog.title + '</div><div style="font-size:11px; color:#64748B; margin-top:4px;">' + dateStr + '</div></td>' +
               '<td style="padding:14px 20px; text-align:center;"><span style="color:' + sc(blog.seoScore) + '; font-weight:700; font-size:14px;">' + (blog.seoScore || '—') + '/100</span></td>' +
               '<td style="padding:14px 20px; text-align:center; font-size:13px; color:#94A3B8;">' + (wc > 0 ? wc.toLocaleString() : '—') + '</td>' +
               '<td style="padding:14px 20px; text-align:center; font-size:13px; color:#10B981; font-weight:600;">+' + traffic + '</td>' +
@@ -1171,73 +1223,70 @@ Use clear headings and keep it actionable. Write in a professional consulting to
     window.viewBlog = function(id) {
       const blogs = JSON.parse(localStorage.getItem('bf_blogs') || '[]');
       const blog = blogs.find(b => b.id == id);
-      if (blog && window.loadMyBlogs) {
-        // We can't easily open the modal of MyBlogsSection from here if we're not in that section,
-        // so we'll just switch to the section and hope it handles it, or implement a global modal.
-        // For now, let's just alert or log as a placeholder if we're not in MyBlogsSection.
-        window.showDashboardSection('myblogs');
-        // If MyBlogsSection is already mounted, it might have its own modal state.
-        // This is a bit tricky with React vs Globals.
-        console.log("Viewing blog:", blog);
-      }
-    };
-
-    window.copyBlog = function(id, e) {
-      const blogs = JSON.parse(localStorage.getItem('bf_blogs') || '[]');
-      const blog = blogs.find(b => b.id == id);
-      if (blog) {
-        const text = (blog.title || '') + '\n\n' + (blog.metaDescription || '') + '\n\n' + (blog.body || '');
-        navigator.clipboard.writeText(text).then(() => {
-          window.showToast('Content copied to clipboard!');
-        });
-      }
-      const menu = e.target.closest('.action-dropdown');
-      if (menu) menu.classList.remove('open');
-    };
-
-    window.publishBlog = function(id) {
-      if (window.showPublishModal) window.showPublishModal(id);
-    };
-
-    window.viewBlog = function(id) {
-      const blogs = JSON.parse(localStorage.getItem('bf_blogs') || '[]');
-      const blog = blogs.find(b => b.id == id);
       if (blog) setPublishModalBlog(blog);
     };
 
-    window.scheduleBlog = function(id, e) {
-      const blogs = JSON.parse(localStorage.getItem('bf_blogs') || '[]');
-      const idx = blogs.findIndex(b => b.id == id);
-      if (idx !== -1) {
-        blogs[idx].status = 'scheduled';
-        localStorage.setItem('bf_blogs', JSON.stringify(blogs));
-        window.showToast('Blog scheduled for tomorrow.');
+
+    window.scheduleBlog = async function(id, e) {
+      if (!uid) return;
+      try {
+        const stringId = String(id);
+        await updateBlog(uid, stringId, { status: 'scheduled' });
+        // sync to localStorage cache
+        const blogs = JSON.parse(localStorage.getItem('bf_blogs') || '[]');
+        const idx = blogs.findIndex(b => String(b.id) === stringId);
+        if (idx !== -1) { blogs[idx].status = 'scheduled'; localStorage.setItem('bf_blogs', JSON.stringify(blogs)); }
+        window.showToast('Blog scheduled!');
+        if (window.loadDashboardBlogs) await window.loadDashboardBlogs();
         if (window.loadMyBlogs) window.loadMyBlogs();
         if (window.updateOverviewStats) window.updateOverviewStats();
         if (window.loadROIDashboard) window.loadROIDashboard();
-      }
-      const menu = e.target.closest('.action-dropdown');
+      } catch(err) { window.showToast('Error: ' + err.message, 'error'); }
+      const menu = e && e.target && e.target.closest ? e.target.closest('.action-dropdown') : null;
       if (menu) menu.classList.remove('open');
     };
 
-    window.confirmDeleteBlog = function(id, e) {
+
+    window.confirmDeleteBlog = async function(id, e) {
+      if (!uid) return;
       if (!confirm('Are you sure you want to delete this blog? This action cannot be undone.')) return;
       
-      const blogs = JSON.parse(localStorage.getItem('bf_blogs') || '[]');
-      const updated = blogs.filter(b => b.id != id);
-      localStorage.setItem('bf_blogs', JSON.stringify(updated));
-      
-      window.showToast('Blog deleted.', 'warning');
-      
-      if (window.loadMyBlogs) window.loadMyBlogs();
-      if (window.updateOverviewStats) window.updateOverviewStats();
-      if (window.loadROIDashboard) window.loadROIDashboard();
-      
+      const stringId = String(id);
+      try {
+        // 1. Optimistic Update: Remove from React state immediately
+        setBlogs(prev => prev.filter(b => String(b.id) !== stringId));
+
+        // 2. Remove from localStorage immediately
+        const blogsLocal = JSON.parse(localStorage.getItem('bf_blogs') || '[]');
+        const updated = blogsLocal.filter(b => String(b.id) !== stringId);
+        localStorage.setItem('bf_blogs', JSON.stringify(updated));
+
+        // 3. Trigger UI refreshes for pure-DOM sections
+        if (window.loadMyBlogs) window.loadMyBlogs();
+        if (window.updateOverviewStats) window.updateOverviewStats();
+        if (window.loadROIDashboard) window.loadROIDashboard();
+
+        // 4. Perform actual Firestore deletion
+        await deleteBlog(uid, stringId);
+        window.showToast('Blog deleted from database.', 'warning');
+
+        // 5. Final sync after a short delay (to let Firestore index catch up)
+        setTimeout(async () => {
+          if (window.loadDashboardBlogs) await window.loadDashboardBlogs();
+        }, 1500);
+
+      } catch(err) { 
+        window.showToast('Error during deletion: ' + err.message, 'error');
+        // Rollback? Usually not needed if the user reloads anyway, but let's refresh to be safe
+        if (window.loadDashboardBlogs) await window.loadDashboardBlogs();
+      }
+
       if (e && e.target && e.target.closest) {
         const menu = e.target.closest('.action-dropdown');
         if (menu) menu.classList.remove('open');
       }
     };
+
 
     window.showDashboardSection = function(section) {
       document.querySelectorAll('.dash-section').forEach(s => { s.style.display = 'none'; s.classList.remove('section-entering'); });
@@ -1300,9 +1349,12 @@ Use clear headings and keep it actionable. Write in a professional consulting to
         </div>
 
         <div className="sidebar-user">
-          <img src="https://i.pravatar.cc/100?img=11" alt="User" className="user-avatar" />
+          {currentUser?.photoURL
+            ? <img src={currentUser.photoURL} alt="User" className="user-avatar" style={{width:'36px',height:'36px',borderRadius:'50%',objectFit:'cover'}} />
+            : <div className="user-avatar-fallback" style={{width:'36px',height:'36px',borderRadius:'50%',background:'linear-gradient(135deg,#7C3AED,#06B6D4)',display:'flex',alignItems:'center',justifyContent:'center',color:'white',fontWeight:700,fontSize:'14px',flexShrink:0}}>{firstName.charAt(0).toUpperCase()}</div>
+          }
           <div className="user-info">
-            <span className="user-name">My Workspace</span>
+            <span className="user-name">{firstName}'s Workspace</span>
             <span className="user-plan">Growth Plan</span>
           </div>
         </div>
@@ -1370,7 +1422,14 @@ Use clear headings and keep it actionable. Write in a professional consulting to
               Upgrade to Scale
             </button>
           </div>
-          <button className="logout-btn" onClick={() => { if(window.signOut) window.signOut(); else onLogout(); }}><LogOut size={16}/> Sign Out</button>
+          <button className="logout-btn" onClick={async () => {
+            try { await logOut(); } catch(e) { console.error(e); }
+            const da = document.getElementById('dashboard-app');
+            const ms = document.getElementById('marketing-site');
+            if (da) da.style.display = 'none';
+            if (ms) ms.style.display = 'block';
+            if (window.showPage) window.showPage('home');
+          }}><LogOut size={16}/> Sign Out</button>
         </div>
       </aside>
 
@@ -1458,18 +1517,22 @@ Use clear headings and keep it actionable. Write in a professional consulting to
                   </thead>
                   <tbody>
                     {blogs.map((blog, idx) => (
-                      <tr key={idx}>
-                        <td className="font-medium text-white">{blog.title}</td>
+                      <tr key={blog.id} onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.02)'} onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}>
+                        <td style={{fontWeight: 600, color: 'white'}}>{blog.title}</td>
                         <td>
                           <div className="score-badge">
-                            <span className={`dot ${blog.score >= 90 ? 'green' : 'amber'}`}></span>
-                            {blog.score}/100
+                            <span className={`dot ${(blog.seoScore || blog.score) >= 90 ? 'green' : 'amber'}`}></span>
+                            {blog.seoScore || blog.score || 0}/100
                           </div>
                         </td>
                         <td>
-                          <span className={`status-badge ${blog.statusColor}`}>{blog.status}</span>
+                          {publishingIds.has(String(blog.id)) ? (
+                            <span className="status-badge amber" style={{animation: 'pulse 1.5s infinite'}}>Publishing...</span>
+                          ) : (
+                            <span className={`status-badge ${blog.statusColor || (blog.status === 'published' ? 'green' : blog.status === 'scheduled' ? 'amber' : 'gray')}`}>{blog.status || 'draft'}</span>
+                          )}
                         </td>
-                        <td className="text-muted">{blog.date}</td>
+                        <td className="text-muted" style={{fontSize: '11px'}}>{blog.createdAt ? new Date(blog.createdAt).toLocaleString('en-IN', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : '—'}</td>
                         <td>{blog.traffic}</td>
                         <td className="actions-cell">
                           <div style={{display: 'flex', gap: '8px'}}>
@@ -1511,16 +1574,22 @@ Use clear headings and keep it actionable. Write in a professional consulting to
                     
                     for (let d = 1; d <= daysInMonth; d++) {
                       const dayBlogs = blogs.filter(b => {
-                        const date = new Date(b.status === 'scheduled' ? b.scheduledAt : b.createdAt);
-                        return date.getDate() === d && date.getMonth() === month && date.getFullYear() === year && (b.status === 'published' || b.status === 'scheduled');
+                        const dateStr = b.status === 'scheduled' ? b.scheduledAt : (b.createdAt || new Date().toISOString());
+                        if (!dateStr) return false;
+                        const date = new Date(dateStr);
+                        return date.getDate() === d && date.getMonth() === month && date.getFullYear() === year;
                       });
                       const hasPublished = dayBlogs.some(b => b.status === 'published');
                       const hasScheduled = dayBlogs.some(b => b.status === 'scheduled');
+                      const hasDraft = dayBlogs.some(b => b.status === 'draft' || !b.status);
                       
+                      const bgColorClass = dayBlogs.length > 0 ? (hasPublished ? 'active-blue' : hasScheduled ? 'active-amber' : 'active-gray') : '';
+                      const dotColorClass = hasPublished ? 'green' : hasScheduled ? 'amber' : 'gray';
+
                       cells.push(
-                        <div key={d} className={`cal-cell ${dayBlogs.length > 0 ? (hasPublished ? 'active-blue' : 'active-amber') : ''}`}>
+                        <div key={d} className={`cal-cell ${bgColorClass}`}>
                           {d}
-                          {dayBlogs.length > 0 && <div className={`cal-dot ${hasPublished ? 'green' : 'amber'}`}></div>}
+                          {dayBlogs.length > 0 && <div className={`cal-dot ${dotColorClass}`}></div>}
                         </div>
                       );
                     }
@@ -1530,13 +1599,14 @@ Use clear headings and keep it actionable. Write in a professional consulting to
                 <div className="cal-legend">
                   <div className="legend-item"><span className="dot green"></span> Published</div>
                   <div className="legend-item"><span className="dot amber"></span> Scheduled</div>
+                  <div className="legend-item"><span className="dot gray" style={{background:'#94A3B8'}}></span> Draft</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <BlogEditor callGemini={callGemini} publishBlog={publishBlog} />
+        <BlogEditor callGemini={callGemini} publishBlog={publishBlog} uid={uid} />
         <MyBlogsSection />
         <SerpGapSection />
         <SeoScoresSection />
@@ -1572,19 +1642,21 @@ Use clear headings and keep it actionable. Write in a professional consulting to
                     }
                     for (let d = 1; d <= daysInMonth; d++) {
                       const dayBlogs = blogs.filter(b => {
-                        const date = new Date(b.status === 'scheduled' ? b.scheduledAt : b.createdAt);
-                        return date.getDate() === d && date.getMonth() === month && date.getFullYear() === year && (b.status === 'published' || b.status === 'scheduled');
+                        const dateStr = b.status === 'scheduled' ? b.scheduledAt : (b.createdAt || new Date().toISOString());
+                        if (!dateStr) return false;
+                        const date = new Date(dateStr);
+                        return date.getDate() === d && date.getMonth() === month && date.getFullYear() === year;
                       });
                       cells.push(
-                        <div key={d} style={{background: '#0D1526', border: '1px solid rgba(255,255,255,0.04)', minHeight: '80px', borderRadius: '8px', padding: '8px', display: 'flex', flexDirection: 'column', gap: '4px'}}>
+                        <div key={d} style={{background: '#0D1526', border: '1px solid rgba(255,255,255,0.04)', minHeight: '80px', borderRadius: '8px', padding: '8px', display: 'flex', flexDirection: 'column', gap: '4px', overflowY: 'auto'}}>
                           <span style={{color: 'white', fontSize:'12px'}}>{d}</span>
                           {dayBlogs.map(b => (
                               <div key={b.id} style={{
-                                 background: b.status === 'published' ? 'rgba(16,185,129,0.1)' : 'rgba(245,158,11,0.1)', 
-                                 color: b.status === 'published' ? '#10B981' : '#F59E0B', 
+                                 background: b.status === 'published' ? 'rgba(16,185,129,0.1)' : b.status === 'scheduled' ? 'rgba(245,158,11,0.1)' : 'rgba(148,163,184,0.1)', 
+                                 color: b.status === 'published' ? '#10B981' : b.status === 'scheduled' ? '#F59E0B' : '#94A3B8', 
                                  fontSize:'10px', padding:'2px 4px', borderRadius:'4px', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis'
                               }} title={b.title}>
-                                 {b.status === 'published' ? 'Live: ' : 'Sch: '}{b.title}
+                                 {b.status === 'published' ? 'Live: ' : b.status === 'scheduled' ? 'Sch: ' : 'Draft: '}{b.title}
                               </div>
                            ))}
                         </div>
@@ -1693,26 +1765,34 @@ Use clear headings and keep it actionable. Write in a professional consulting to
               <div style={{background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px'}}>
                 {(typeof blogs !== 'undefined' ? blogs : []).filter(b => b.status === 'scheduled').length === 0 ? (
                     <div style={{textAlign:'center', padding:'40px', color:'#64748B'}}>No upcoming scheduled blogs.</div>
-                 ) : (
-                    blogs.filter(b => b.status === 'scheduled').map(blog => {
-                      const sDate = new Date(blog.scheduledAt);
-                      return (
-                        <div key={blog.id} style={{display:'flex', alignItems:'center', gap:'16px', padding:'16px', background:'#0D1526', borderRadius:'12px', marginBottom:'12px'}}>
-                          <div style={{background:'rgba(124,58,237,0.1)', color:'#A78BFA', padding:'10px', borderRadius:'8px', textAlign:'center', minWidth:'50px'}}>
-                             <div style={{fontSize:'11px', textTransform:'uppercase'}}>{sDate.toLocaleDateString('en-IN', {month:'short'})}</div>
-                             <div style={{fontSize:'20px', fontWeight:'bold'}}>{sDate.getDate()}</div>
-                          </div>
-                          <div style={{flex:1}}>
-                            <h4 style={{margin:'0 0 4px', color:'white', fontSize:'15px'}}>{blog.title}</h4>
-                            <p style={{margin:0, color:'#64748B', fontSize:'13px'}}>
-                               Scheduled for {sDate.toLocaleString('en-IN', { day:'numeric', month:'short', year:'numeric', hour:'numeric', minute:'numeric', hour12:true })}
-                            </p>
-                          </div>
-                          <div style={{fontSize:'12px', color:'#10B981', background:'rgba(16,185,129,0.1)', padding:'4px 10px', borderRadius:'99px', textTransform:'capitalize'}}>{blog.platform}</div>
+                  ) : (
+                    <>
+                      {failedIds.size > 0 && (
+                        <div style={{marginBottom: '20px', padding: '12px', background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                          <span style={{fontSize: '13px', color: '#EF4444', fontWeight: 500}}>⚠️ {failedIds.size} blogs failed to publish.</span>
+                          <button onClick={() => setFailedIds(new Set())} style={{background: '#EF4444', border: 'none', color: 'white', fontSize: '11px', fontWeight: 600, padding: '6px 12px', borderRadius: '8px', cursor: 'pointer'}}>Retry All</button>
                         </div>
-                      );
-                    })
-                 )}
+                      )}
+                      {blogs.filter(b => b.status === 'scheduled').map(blog => {
+                        const sDate = new Date(blog.scheduledAt || blog.createdAt);
+                        return (
+                          <div key={blog.id} style={{display:'flex', alignItems:'center', gap:'16px', padding:'16px', background:'#0D1526', borderRadius:'12px', marginBottom:'12px', border: '1px solid rgba(255,255,255,0.03)'}}>
+                            <div style={{background:'rgba(124,58,237,0.1)', color:'#A78BFA', padding:'10px', borderRadius:'8px', textAlign:'center', minWidth:'50px'}}>
+                               <div style={{fontSize:'11px', textTransform:'uppercase'}}>{sDate.toLocaleDateString('en-IN', {month:'short'})}</div>
+                               <div style={{fontSize:'20px', fontWeight:'bold'}}>{sDate.getDate()}</div>
+                            </div>
+                            <div style={{flex:1}}>
+                              <h4 style={{margin:'0 0 4px', color:'white', fontSize:'15px'}}>{blog.title}</h4>
+                              <p style={{margin:0, color:'#64748B', fontSize:'13px'}}>
+                                Scheduled for {sDate.toLocaleString('en-IN', { day:'numeric', month:'short', year:'numeric', hour:'numeric', minute:'numeric', hour12:true })}
+                              </p>
+                            </div>
+                            <div style={{fontSize:'12px', color:'#10B981', background:'rgba(16,185,129,0.1)', padding:'4px 10px', borderRadius:'99px', textTransform:'capitalize'}}>{blog.platform}</div>
+                          </div>
+                        );
+                      })}
+                    </>
+                  )}
               </div>
             );
           } else if (sec.id === 'traffic' || sec.id === 'roi') {
@@ -1721,18 +1801,18 @@ Use clear headings and keep it actionable. Write in a professional consulting to
                 <div style={{display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap:'20px', marginBottom:'20px'}}>
                    <div style={{background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px'}}>
                      <div style={{color:'#94A3B8', fontSize:'13px', marginBottom:'8px'}}>{sec.id === 'roi' ? 'Est. Traffic Value' : 'Total Sessions'}</div>
-                     <div style={{color:'white', fontSize:'28px', fontWeight:'bold'}}>{sec.id === 'roi' ? '₹4,520' : '45.2K'}</div>
-                     <div style={{color:'#10B981', fontSize:'13px', marginTop:'8px'}}>+12.4% vs last month</div>
+                     <div style={{color:'white', fontSize:'28px', fontWeight:'bold'}}>{sec.id === 'roi' ? '₹0' : '0'}</div>
+                     <div style={{color:'#10B981', fontSize:'13px', marginTop:'8px'}}>+0% vs last month</div>
                    </div>
                    <div style={{background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px'}}>
                      <div style={{color:'#94A3B8', fontSize:'13px', marginBottom:'8px'}}>{sec.id === 'roi' ? 'Content Cost Saved' : 'Avg. Duration'}</div>
-                     <div style={{color:'white', fontSize:'28px', fontWeight:'bold'}}>{sec.id === 'roi' ? '₹12,400' : '2m 14s'}</div>
-                     <div style={{color:'#10B981', fontSize:'13px', marginTop:'8px'}}>+5.2% vs last month</div>
+                     <div style={{color:'white', fontSize:'28px', fontWeight:'bold'}}>{sec.id === 'roi' ? '₹0' : '0m 0s'}</div>
+                     <div style={{color:'#10B981', fontSize:'13px', marginTop:'8px'}}>+0% vs last month</div>
                    </div>
                    <div style={{background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px'}}>
                      <div style={{color:'#94A3B8', fontSize:'13px', marginBottom:'8px'}}>{sec.id === 'roi' ? 'Leads Generated' : 'Bounce Rate'}</div>
-                     <div style={{color:'white', fontSize:'28px', fontWeight:'bold'}}>{sec.id === 'roi' ? '242' : '42.1%'}</div>
-                     <div style={{color:'#10B981', fontSize:'13px', marginTop:'8px'}}>{sec.id === 'roi' ? '+18.1%' : '-2.4%'} vs last month</div>
+                     <div style={{color:'white', fontSize:'28px', fontWeight:'bold'}}>{sec.id === 'roi' ? '0' : '0%'}</div>
+                     <div style={{color:'#10B981', fontSize:'13px', marginTop:'8px'}}>{sec.id === 'roi' ? '+0%' : '0%'} vs last month</div>
                    </div>
                 </div>
                 <div style={{background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '40px', textAlign:'center', color:'#64748B'}}>

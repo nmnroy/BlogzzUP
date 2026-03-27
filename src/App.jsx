@@ -41,6 +41,7 @@ import {
 } from 'lucide-react';
 import './index.css';
 import './interactions.css';
+import { useAuth } from './AuthContext';
 
 
 const AnimatedCounter = ({ endValue, suffix = "" }) => {
@@ -177,7 +178,7 @@ const TabContent = () => (
             <div className="mock-wave-bar" style={{animationDelay: '0.3s'}}></div>
           </div>
           <div style={{color: '#EF4444', fontSize: '12px', fontWeight: 'bold', marginBottom: '16px'}}>● Recording... 0:23</div>
-          <button className="btn btn-primary" style={{padding: '8px 16px', fontSize: '13px'}}>Generate Blog</button>
+          <button className="btn btn-primary" style={{padding: '8px 16px', fontSize: '13px'}} onClick={() => window.showPage('auth')}>Generate Blog</button>
         </div>
       }
     />
@@ -364,17 +365,17 @@ const TabAnalytics = () => (
           <div className="mock-competitor-row">
             <span style={{fontWeight: 'bold'}}>seoblues.com</span>
             <span style={{color: '#94A3B8'}}>2d ago</span>
-            <button className="mock-comp-btn">Beat This</button>
+            <button className="mock-comp-btn" onClick={() => window.showPage('auth')}>Beat This</button>
           </div>
           <div className="mock-competitor-row">
             <span style={{fontWeight: 'bold'}}>contentai.io</span>
             <span style={{color: '#94A3B8'}}>5d ago</span>
-            <button className="mock-comp-btn">Beat This</button>
+            <button className="mock-comp-btn" onClick={() => window.showPage('auth')}>Beat This</button>
           </div>
           <div className="mock-competitor-row" style={{border: 'none'}}>
             <span style={{fontWeight: 'bold'}}>rankmaker.in</span>
             <span style={{color: '#94A3B8'}}>1w ago</span>
-            <button className="mock-comp-btn">Beat This</button>
+            <button className="mock-comp-btn" onClick={() => window.showPage('auth')}>Beat This</button>
           </div>
         </div>
       }
@@ -649,7 +650,7 @@ const DemoPage = () => {
               ))}
             </div>
 
-            <button style={{marginTop: 'auto', width: '100%', background: 'linear-gradient(135deg,#7C3AED,#6D28D9)', color: '#fff', borderRadius: '10px', padding: '13px', fontWeight: 600, fontSize: '14px', border: 'none', cursor: 'pointer', transition: 'all 0.2s', className: 'hover-brighten'}}>
+            <button onClick={() => window.showPage('auth')} style={{marginTop: 'auto', width: '100%', background: 'linear-gradient(135deg,#7C3AED,#6D28D9)', color: '#fff', borderRadius: '10px', padding: '13px', fontWeight: 600, fontSize: '14px', border: 'none', cursor: 'pointer', transition: 'all 0.2s', className: 'hover-brighten'}}>
               Generate Full Blog →
             </button>
           </div>
@@ -794,7 +795,7 @@ const PricingPage = () => {
              <li className="pc-feat"><span className="pc-feat-check">✓</span> SLA + Priority support</li>
              <li className="pc-feat"><span className="pc-feat-check">✓</span> Advanced analytics</li>
           </ul>
-          <button className="pc-btn-outline-cyan">Contact Sales →</button>
+          <button className="pc-btn-outline-cyan" onClick={() => window.showPage('auth')}>Contact Sales →</button>
         </div>
       </div>
 
@@ -1169,19 +1170,29 @@ const HomeFeaturesSection = () => {
 };
 
 function App() {
+  const { currentUser, signInWithGoogle, signIn, signUp, logOut, resendVerification } = useAuth();
 
+  // Redirect to dashboard automatically if already logged in
+  useEffect(() => {
+    if (currentUser) {
+      const ms = document.getElementById('marketing-site');
+      const da = document.getElementById('dashboard-app');
+      if (ms) ms.style.display = 'none';
+      if (da) da.style.display = 'flex';
+      window.updateUserInDashboard && window.updateUserInDashboard(currentUser);
+      if (window.showDashboardSection) window.showDashboardSection('overview');
+    }
+  }, [currentUser]);
 
-  
   // Navigation Utilities
   useEffect(() => {
     window.updateUserInDashboard = function(user) {
+      if (!user) return;
       const firstName = (user.displayName || 'User').split(' ')[0];
       const hour = new Date().getHours();
       const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
-      
       const greetingEl = document.querySelector('.dashboard-greeting');
       if (greetingEl) greetingEl.textContent = greeting + ', ' + firstName + ' 👋';
-      
       const avatarEl = document.querySelector('.user-avatar');
       if (avatarEl && user.photoURL) {
         avatarEl.src = user.photoURL;
@@ -1189,34 +1200,13 @@ function App() {
         const fallback = document.querySelector('.user-avatar-fallback');
         if (fallback) fallback.style.display = 'none';
       }
-      
       const nameEl = document.querySelector('.user-name');
       if (nameEl) nameEl.textContent = firstName + "'s Workspace";
     };
 
+    // Redirect to auth page — real login happens in the auth form
     window.showDashboard = function() {
-      if (typeof auth !== 'undefined' && firebaseConfig.apiKey !== "PASTE_FIREBASE_API_KEY") {
-        auth.signInWithPopup(googleProvider)
-          .then((result) => {
-            window.updateUserInDashboard(result.user);
-            document.getElementById('marketing-site').style.display = 'none';
-            document.getElementById('dashboard-app').style.display = 'flex';
-            if (window.showDashboardSection) window.showDashboardSection('overview');
-            window.scrollTo(0, 0);
-          })
-          .catch((error) => {
-            if (error.code !== 'auth/popup-closed-by-user') {
-              alert('Sign in failed: ' + error.message);
-            }
-          });
-      } else {
-        // Fallback if API key not set, let them see dashboard anyway for dev
-        console.warn("Firebase API key not set or auth undefined. Skipping sign-in.");
-        document.getElementById('marketing-site').style.display = 'none';
-        document.getElementById('dashboard-app').style.display = 'flex';
-        if (window.showDashboardSection) window.showDashboardSection('overview');
-        window.scrollTo(0, 0);
-      }
+      if (window.showPage) window.showPage('auth');
     };
 
     window.showMarketingSite = function() {
@@ -1226,21 +1216,6 @@ function App() {
       if (ms) ms.style.display = 'block';
       if (window.showPage) window.showPage('home');
       window.scrollTo(0, 0);
-    };
-
-    window.signOut = function() {
-      if (typeof auth !== 'undefined' && firebaseConfig.apiKey !== "PASTE_FIREBASE_API_KEY") {
-        auth.signOut().then(() => {
-          localStorage.removeItem('bf_user');
-          document.getElementById('dashboard-app').style.display = 'none';
-          document.getElementById('marketing-site').style.display = 'block';
-          if (window.showPage) window.showPage('home');
-        });
-      } else {
-          document.getElementById('dashboard-app').style.display = 'none';
-          document.getElementById('marketing-site').style.display = 'block';
-          if (window.showPage) window.showPage('home');
-      }
     };
   }, []);
 
@@ -1253,6 +1228,9 @@ function App() {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [isLogin, setIsLogin] = useState(true);
+  const [authLoading, setAuthLoading] = useState(false);
+  const [authMsg, setAuthMsg] = useState({ type: '', text: '' });
+  const [showResend, setShowResend] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -1718,23 +1696,15 @@ function App() {
             <div className="glass-card auth-hero-content stagger-in-item">
               <h2 className="auth-welcome-title">India's largest brands trust BlogzzUP</h2>
               <p className="auth-welcome-desc">Join 500+ startups saving 92% of their content creation time.</p>
-              
               <div className="auth-quotes stagger-in-item">
                 <div className="auth-quote">
                   "BlogzzUP replaced our entire content agency. We're now publishing 4x more for 1/10th the cost."
                   <div className="auth-author">— Founder, Delhi.AI</div>
                 </div>
               </div>
-
               <div className="auth-stats-grid stagger-in-item">
-                <div className="auth-stat">
-                  <div className="auth-stat-val">94%</div>
-                  <div className="auth-stat-lab">Avg. SEO Score</div>
-                </div>
-                <div className="auth-stat">
-                  <div className="auth-stat-val">10/10</div>
-                  <div className="auth-stat-lab">Human Feel</div>
-                </div>
+                <div className="auth-stat"><div className="auth-stat-val">94%</div><div className="auth-stat-lab">Avg. SEO Score</div></div>
+                <div className="auth-stat"><div className="auth-stat-val">10/10</div><div className="auth-stat-lab">Human Feel</div></div>
               </div>
             </div>
           </div>
@@ -1746,16 +1716,52 @@ function App() {
                 <p className="auth-subtitle">{isLogin ? 'Sign in to your BlogzzUP Workspace' : 'Get started with BlogzzUP'}</p>
               </div>
 
+              {/* Error / Success Message */}
+              {authMsg.text && (
+                <div style={{
+                  padding: '12px 16px', borderRadius: '10px', marginBottom: '16px', fontSize: '14px',
+                  background: authMsg.type === 'error' ? 'rgba(239,68,68,0.1)' : 'rgba(16,185,129,0.1)',
+                  border: `1px solid ${authMsg.type === 'error' ? 'rgba(239,68,68,0.3)' : 'rgba(16,185,129,0.3)'}`,
+                  color: authMsg.type === 'error' ? '#EF4444' : '#10B981',
+                }}>
+                  {authMsg.text}
+                  {showResend && (
+                    <button
+                      onClick={async () => {
+                        try { await resendVerification(email, password); setAuthMsg({ type: 'success', text: 'Verification email resent! Check your inbox.' }); setShowResend(false); }
+                        catch(e) { setAuthMsg({ type: 'error', text: 'Could not resend: ' + e.message }); }
+                      }}
+                      style={{ display: 'block', marginTop: '8px', background: 'transparent', border: '1px solid currentColor', borderRadius: '6px', padding: '4px 10px', cursor: 'pointer', fontSize: '12px', color: 'inherit' }}
+                    >Resend verification email</button>
+                  )}
+                </div>
+              )}
+
+              {/* Google Sign-In */}
               <div className="auth-google-btn-wrap">
-                <button className="btn btn-outline btn-lg w-full" onClick={() => window.showDashboard()}>
+                <button
+                  className="btn btn-outline btn-lg w-full"
+                  disabled={authLoading}
+                  onClick={async () => {
+                    setAuthLoading(true); setAuthMsg({ type: '', text: '' });
+                    try {
+                      const user = await signInWithGoogle();
+                      window.updateUserInDashboard && window.updateUserInDashboard(user);
+                      document.getElementById('marketing-site').style.display = 'none';
+                      document.getElementById('dashboard-app').style.display = 'flex';
+                      if (window.showDashboardSection) window.showDashboardSection('overview');
+                      window.scrollTo(0, 0);
+                    } catch(e) {
+                      if (e.code !== 'auth/popup-closed-by-user') setAuthMsg({ type: 'error', text: e.message });
+                    } finally { setAuthLoading(false); }
+                  }}
+                >
                   <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" width="18" alt="" />
-                  Continue with Google
+                  {authLoading ? 'Signing in…' : 'Continue with Google'}
                 </button>
               </div>
 
-              <div className="auth-divider">
-                <span>or continue with email</span>
-              </div>
+              <div className="auth-divider"><span>or continue with email</span></div>
 
               <div className="auth-fields">
                 {!isLogin && (
@@ -1770,19 +1776,49 @@ function App() {
                 </div>
                 <div className="input-group">
                   <label>Password</label>
-                  <input type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} />
+                  <input type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') document.getElementById('auth-submit-btn').click(); }} />
                 </div>
               </div>
 
-              <button className="btn btn-primary btn-lg w-full" onClick={() => window.showDashboard()}>
-                {isLogin ? 'Sign In' : 'Sign Up'}
+              <button
+                id="auth-submit-btn"
+                className="btn btn-primary btn-lg w-full"
+                disabled={authLoading}
+                onClick={async () => {
+                  setAuthLoading(true); setAuthMsg({ type: '', text: '' }); setShowResend(false);
+                  try {
+                    if (isLogin) {
+                      const user = await signIn(email, password);
+                      window.updateUserInDashboard && window.updateUserInDashboard(user);
+                      document.getElementById('marketing-site').style.display = 'none';
+                      document.getElementById('dashboard-app').style.display = 'flex';
+                      if (window.showDashboardSection) window.showDashboardSection('overview');
+                      window.scrollTo(0, 0);
+                    } else {
+                      if (!name.trim()) { setAuthMsg({ type: 'error', text: 'Please enter your full name.' }); setAuthLoading(false); return; }
+                      if (password.length < 6) { setAuthMsg({ type: 'error', text: 'Password must be at least 6 characters.' }); setAuthLoading(false); return; }
+                      await signUp(name.trim(), email, password);
+                      setAuthMsg({ type: 'success', text: '✅ Account created! We sent a verification email to ' + email + '. Please verify your email then sign in.' });
+                      setIsLogin(true); setPassword('');
+                    }
+                  } catch(e) {
+                    const msg = e.message || '';
+                    if (msg.includes('verify your email')) { setShowResend(true); setAuthMsg({ type: 'error', text: msg }); }
+                    else if (e.code === 'auth/user-not-found' || e.code === 'auth/wrong-password' || e.code === 'auth/invalid-credential') setAuthMsg({ type: 'error', text: 'Invalid email or password.' });
+                    else if (e.code === 'auth/email-already-in-use') setAuthMsg({ type: 'error', text: 'An account with this email already exists. Sign in instead.' });
+                    else if (e.code === 'auth/invalid-email') setAuthMsg({ type: 'error', text: 'Please enter a valid email address.' });
+                    else setAuthMsg({ type: 'error', text: msg });
+                  } finally { setAuthLoading(false); }
+                }}
+              >
+                {authLoading ? (isLogin ? 'Signing in…' : 'Creating account…') : (isLogin ? 'Sign In' : 'Sign Up')}
               </button>
 
               <div className="auth-footer">
                 {isLogin ? (
-                  <>Don't have an account? <span className="auth-link" onClick={() => setIsLogin(false)}>Sign Up</span></>
+                  <>Don't have an account? <span className="auth-link" onClick={() => { setIsLogin(false); setAuthMsg({ type: '', text: '' }); }}>Sign Up</span></>
                 ) : (
-                  <>Already have an account? <span className="auth-link" onClick={() => setIsLogin(true)}>Sign In</span></>
+                  <>Already have an account? <span className="auth-link" onClick={() => { setIsLogin(true); setAuthMsg({ type: '', text: '' }); }}>Sign In</span></>
                 )}
               </div>
             </div>

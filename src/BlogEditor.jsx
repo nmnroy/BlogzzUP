@@ -15,6 +15,7 @@
  */
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { createBlog, updateBlog } from './utils/blogStorage';
 
 // ─── Icons (inline SVG to avoid extra deps) ────────────────────────────────
 const Icon = ({ d, size = 16 }) => (
@@ -139,7 +140,7 @@ const SaveBanner = ({ message, type = 'success', onDismiss }) => (
 );
 
 // ─── Main Component ──────────────────────────────────────────────────────────
-const BlogEditor = ({ callGemini, publishBlog }) => {
+const BlogEditor = ({ callGemini, publishBlog, uid }) => {
   // ── Form state ──
   const [keyword, setKeyword]         = useState('');
   const [tone, setTone]               = useState('professional');
@@ -187,13 +188,21 @@ const BlogEditor = ({ callGemini, publishBlog }) => {
   useEffect(() => {
     if (stage !== 'review' || !output) return;
     setAutoSaveStatus('saving');
-    const t = setTimeout(() => {
+    const t = setTimeout(async () => {
       // Persist edits to draft in localStorage
       const blogs = JSON.parse(localStorage.getItem('bf_blogs') || '[]');
       const idx = blogs.findIndex(b => b.id === output.id);
       if (idx !== -1) {
         blogs[idx] = { ...blogs[idx], title: editableTitle, body: editableBody, metaDescription: editableMeta };
         localStorage.setItem('bf_blogs', JSON.stringify(blogs));
+
+        // Also update Firestore if uid exists and blog has a Firestore ID
+        if (uid && output.firestoreId) {
+          try {
+            await updateBlog(uid, output.firestoreId, { title: editableTitle, body: editableBody, metaDescription: editableMeta });
+          } catch(e) { console.error('Auto-save to Firestore failed:', e); }
+        }
+
         setAutoSaveStatus('saved');
         setTimeout(() => setAutoSaveStatus(null), 2200);
       } else {
@@ -351,22 +360,48 @@ STRICT RULES for the body field:
   };
 
   // ── Actions ──────────────────────────────────────────────────────────────
-  const handleSaveDraft = useCallback(() => {
+  const handleSaveDraft = useCallback(async () => {
     if (!output) return;
-    const blogs  = JSON.parse(localStorage.getItem('bf_blogs') || '[]');
-    const exists = blogs.findIndex(b => b.id === output.id);
-    const entry  = {
+    const entry = {
       id: output.id, title: editableTitle, metaDescription: editableMeta,
       body: editableBody, seoScore: output.seoScore, keyword: output.keyword,
       status: 'draft', createdAt: output.createdAt,
     };
+
+    // Save to localStorage for real-time UI updates
+    const blogs = JSON.parse(localStorage.getItem('bf_blogs') || '[]');
+    const exists = blogs.findIndex(b => b.id === output.id);
     if (exists !== -1) blogs[exists] = entry; else blogs.unshift(entry);
     localStorage.setItem('bf_blogs', JSON.stringify(blogs));
+
+    // Save to Firestore if uid is available
+    if (uid) {
+      try {
+        if (output.firestoreId || typeof output.id === 'string') {
+          const fid = output.firestoreId || output.id;
+          await updateBlog(uid, fid, entry);
+        } else {
+          const fid = await createBlog(uid, entry);
+          // Standardize: use Firestore ID as the primary id
+          setOutput(prev => ({ ...prev, id: fid, firestoreId: fid }));
+          entry.id = fid;
+          // Update localStorage with the new ID
+          const latestBlogs = JSON.parse(localStorage.getItem('bf_blogs') || '[]');
+          const oldIdx = latestBlogs.findIndex(b => b.id === output.id);
+          if (oldIdx !== -1) {
+            latestBlogs[oldIdx] = entry;
+            localStorage.setItem('bf_blogs', JSON.stringify(latestBlogs));
+          }
+        }
+      } catch(e) { console.error('Firestore save failed:', e); }
+    }
+
+    if (window.loadDashboardBlogs) await window.loadDashboardBlogs();
     if (window.updateOverviewStats) window.updateOverviewStats();
     if (window.loadMyBlogs) window.loadMyBlogs();
     setSaveBanner({ message: 'Draft saved to My Blogs!', type: 'success' });
     setTimeout(() => setSaveBanner(null), 3500);
-  }, [output, editableTitle, editableMeta, editableBody]);
+  }, [output, editableTitle, editableMeta, editableBody, uid]);
 
   const handleCopy = useCallback(() => {
     if (!output) return;
@@ -421,10 +456,26 @@ STRICT RULES for the body field:
         platform: pubPlatform
       };
 
+      if (uid) {
+        try {
+          let fid = output.firestoreId;
+          if (!fid) {
+            fid = await createBlog(uid, entry);
+            setOutput(prev => ({ ...prev, firestoreId: fid }));
+          } else {
+            await updateBlog(uid, fid, { ...entry, status: 'scheduled' });
+          }
+        } catch (err) {
+          setPubStatus('Error: Failed to save to database. ' + err.message);
+          return;
+        }
+      }
+
       if (bIdx !== -1) blogs[bIdx] = entry; else blogs.unshift(entry);
       localStorage.setItem('bf_blogs', JSON.stringify(blogs));
       
       setPubStatus('✓ Blog scheduled!');
+      if (window.loadDashboardBlogs) await window.loadDashboardBlogs();
       if (window.loadMyBlogs) window.loadMyBlogs();
       if (window.updateOverviewStats) window.updateOverviewStats();
 
@@ -445,14 +496,33 @@ STRICT RULES for the body field:
       });
       setPubStatus('✓ Published successfully!');
       
-      // Update status to published in localStorage
       const blogs = JSON.parse(localStorage.getItem('bf_blogs') || '[]');
       const bIdx = blogs.findIndex(b => b.id === output.id);
-      if (bIdx !== -1) {
-        blogs[bIdx].status = 'published';
-        localStorage.setItem('bf_blogs', JSON.stringify(blogs));
-        if (window.loadMyBlogs) window.loadMyBlogs();
+      const entry = {
+        id: output.id, title: editableTitle, metaDescription: editableMeta,
+        body: editableBody, seoScore: output.seoScore, keyword: output.keyword,
+        status: 'published', createdAt: output.createdAt,
+        platform: pubPlatform
+      };
+
+      if (uid) {
+        try {
+          let fid = output.firestoreId;
+          if (!fid) {
+            fid = await createBlog(uid, entry);
+            setOutput(prev => ({ ...prev, firestoreId: fid }));
+          } else {
+            await updateBlog(uid, fid, { ...entry, status: 'published' });
+          }
+        } catch (err) {
+          console.error("Failed to update status to published in Firestore:", err);
+        }
       }
+
+      if (bIdx !== -1) blogs[bIdx] = entry; else blogs.unshift(entry);
+      localStorage.setItem('bf_blogs', JSON.stringify(blogs));
+      if (window.loadDashboardBlogs) await window.loadDashboardBlogs();
+      if (window.loadMyBlogs) window.loadMyBlogs();
 
       setTimeout(() => {
         setShowPubModal(false);

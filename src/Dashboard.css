@@ -538,7 +538,7 @@
 }
 .status-badge.gray {
   background: rgba(148, 163, 184, 0.1);
-  color: var(--text-muted);
+  color: #94A3B8;
   border-color: rgba(148, 163, 184, 0.2);
 }
 
@@ -645,6 +645,13 @@
   border: 1px solid rgba(251, 191, 36, 0.3);
 }
 
+.cal-cell.active-gray {
+  background: rgba(148, 163, 184, 0.08) !important;
+  color: #94A3B8;
+  font-weight: var(--font-medium);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
 .cal-cell.today {
   background: rgba(124, 58, 237, 0.12);
   color: var(--color-primary-300);
@@ -658,6 +665,10 @@
   position: absolute;
   bottom: 3px;
 }
+
+.cal-dot.green { background: #10B981; }
+.cal-dot.amber { background: #F59E0B; }
+.cal-dot.gray { background: #94A3B8; }
 
 .cal-legend {
   display: flex;
