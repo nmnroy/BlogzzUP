@@ -37,5 +37,3 @@ error.log
 # Environment variables
 .env
 
-.env
-.env.*
