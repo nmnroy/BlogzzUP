@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BlogzzUP</title>
+      <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script>
+      const firebaseConfig = {
+        apiKey: "PASTE_FIREBASE_API_KEY",
+        authDomain: "PASTE_AUTH_DOMAIN",
+        projectId: "PASTE_PROJECT_ID",
+        storageBucket: "PASTE_STORAGE_BUCKET",
+        messagingSenderId: "PASTE_SENDER_ID",
+        appId: "PASTE_APP_ID"
+      };
+      if (!firebase.apps.length) {
+          firebase.initializeApp(firebaseConfig);
+      }
+      const auth = firebase.auth();
+      const googleProvider = new firebase.auth.GoogleAuthProvider();
+      
+      auth.onAuthStateChanged((user) => {
+        if (user && window.updateUserInDashboard) window.updateUserInDashboard(user);
+      });
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
