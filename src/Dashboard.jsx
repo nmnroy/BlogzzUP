@@ -445,32 +445,40 @@ const SeoScoresSection = () => {
     setScores(null);
     setError(null);
 
-    const escapedKeyword = keyword.toLowerCase().replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
-    const kwCount = (content.toLowerCase().match(new RegExp(escapedKeyword, 'g')) || []).length;
+    const escapedKeyword = keyword.trim().toLowerCase().replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+    const kwCount = (content.toLowerCase().match(new RegExp(`\\b${escapedKeyword}\\b`, 'g')) || 
+                    content.toLowerCase().match(new RegExp(escapedKeyword, 'g')) || []).length;
     const kwDensity = wordCount > 0 ? ((kwCount / wordCount) * 100).toFixed(2) : 0;
 
-    const prompt = `You are an expert SEO analyst. Analyze this blog content for SEO quality.
+    const prompt = `You are an expert SEO auditor specializing in high-performance content for Indian and global markets. 
+Analyze the provided blog content against modern SEO standards (Google E-E-A-T, NLP entities, and semantic relevance).
 
 Target keyword: "${keyword.trim()}"
 Word count: ${wordCount}
 Keyword density: ${kwDensity}%
-Content preview: ${content.substring(0, 800)}
+Full Content (clipped if too long): ${content.substring(0, 6000)}
 
-Return ONLY a valid JSON object:
+Return ONLY a valid JSON object with detailed scoring (0-100):
 {
-  "overallScore": <integer 0-100>,
-  "titleOptimization": <integer 0-100>,
-  "metaDescription": <integer 0-100>,
-  "keywordDensityScore": <integer 0-100>,
-  "contentDepth": <integer 0-100>,
-  "readabilityScore": <integer 0-100>,
-  "internalLinks": <integer 0-100>,
-  "snippetEligibility": <integer 0-100>,
-  "aiDetectionRisk": <integer 0-100>,
-  "nlpEntities": <integer 0-100>,
-  "schemaMarkup": <integer 0-100>,
-  "fleschScore": <integer 0-100>,
-  "recommendations": ["specific actionable recommendation 1", "rec 2", "rec 3", "rec 4", "rec 5"]
+  "overallScore": <integer>,
+  "titleOptimization": <integer 0-100 based on keyword placement and CTR appeal>,
+  "metaDescription": <integer 0-100 based on CTA and length optimization>,
+  "keywordDensityScore": <integer 0-100 based on natural integration vs keyword stuffing>,
+  "contentDepth": <integer 0-100 based on topic coverage and depth of research>,
+  "readabilityScore": <integer 0-100 based on sentence complexity and flow>,
+  "internalLinks": <integer 0-100 based on contextually relevant linking opportunities found>,
+  "snippetEligibility": <integer 0-100 based on lists, tables, and direct answer formatting>,
+  "aiDetectionRisk": <integer 0-100 (100 means very safe/human-like, 0 means robotic)>,
+  "nlpEntities": <integer 0-100 based on the presence of related LSI keywords and entities>,
+  "schemaMarkup": <integer 0-100 based on structured data potential>,
+  "fleschScore": <integer 0-100 (Flesch-Kincaid Reading Ease equivalent balance)>,
+  "recommendations": [
+    "actionable recommendation for title/meta",
+    "recommendation for content structure/headings",
+    "specific LSI keyword or entity to add",
+    "formatting tip for featured snippets",
+    "internal link or CTA suggestion"
+  ]
 }`;
 
     try {
