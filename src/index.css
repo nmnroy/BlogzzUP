@@ -3985,6 +3985,12 @@ html {
   white-space: nowrap;
 }
 
+[data-theme="light"] .home-marquee-pill {
+  background: #FDFBF7 !important;
+  color: #5C4A3A !important;
+  border: 1px solid rgba(180, 150, 110, 0.2) !important;
+}
+
 @keyframes marquee {
   from {
     transform: translateX(0);
@@ -6518,3 +6524,180 @@ html {
   color: #5C4A3A !important;
 }
 
+/* =============================================
+   NUCLEAR LIGHT MODE - FORCES ALL DARK CARDS
+   Targets background colors directly, not class names
+   ============================================= */
+
+/* Force ALL dark navy backgrounds to white in light mode */
+[data-theme="light"] *[class*="card"],
+[data-theme="light"] *[class*="Card"],
+[data-theme="light"] *[class*="container"],
+[data-theme="light"] *[class*="Container"],
+[data-theme="light"] *[class*="wrapper"],
+[data-theme="light"] *[class*="Wrapper"],
+[data-theme="light"] *[class*="panel"],
+[data-theme="light"] *[class*="Panel"],
+[data-theme="light"] *[class*="section"],
+[data-theme="light"] *[class*="Section"],
+[data-theme="light"] *[class*="box"],
+[data-theme="light"] *[class*="Box"],
+[data-theme="light"] *[class*="grid"],
+[data-theme="light"] *[class*="Grid"],
+[data-theme="light"] *[class*="calendar"],
+[data-theme="light"] *[class*="Calendar"],
+[data-theme="light"] *[class*="table"],
+[data-theme="light"] *[class*="Table"],
+[data-theme="light"] *[class*="modal"],
+[data-theme="light"] *[class*="Modal"],
+[data-theme="light"] *[class*="content"],
+[data-theme="light"] *[class*="Content"],
+[data-theme="light"] *[class*="layout"],
+[data-theme="light"] *[class*="Layout"],
+[data-theme="light"] *[class*="integrations"],
+[data-theme="light"] *[class*="Integrations"],
+[data-theme="light"] *[class*="publisher"],
+[data-theme="light"] *[class*="Publisher"],
+[data-theme="light"] *[class*="competitor"],
+[data-theme="light"] *[class*="Competitor"],
+[data-theme="light"] *[class*="team"],
+[data-theme="light"] *[class*="Team"],
+[data-theme="light"] *[class*="billing"],
+[data-theme="light"] *[class*="Billing"],
+[data-theme="light"] *[class*="brand"],
+[data-theme="light"] *[class*="Brand"],
+[data-theme="light"] *[class*="cluster"],
+[data-theme="light"] *[class*="Cluster"],
+[data-theme="light"] *[class*="schedule"],
+[data-theme="light"] *[class*="Schedule"],
+[data-theme="light"] *[class*="queue"],
+[data-theme="light"] *[class*="Queue"],
+[data-theme="light"] *[class*="tracker"],
+[data-theme="light"] *[class*="Tracker"],
+[data-theme="light"] *[class*="roi"],
+[data-theme="light"] *[class*="Roi"],
+[data-theme="light"] *[class*="overview"],
+[data-theme="light"] *[class*="Overview"],
+[data-theme="light"] *[class*="member"],
+[data-theme="light"] *[class*="Member"],
+[data-theme="light"] *[class*="integration"],
+[data-theme="light"] *[class*="Integration"],
+[data-theme="light"] *[class*="panel"],
+[data-theme="light"] *[class*="Panel"] {
+  background-color: #FFFFFF !important;
+  border-color: rgba(180, 150, 110, 0.18) !important;
+  color: #2C1A0E !important;
+}
+
+/* Force ALL text inside to dark brown */
+[data-theme="light"] *[class*="card"] *,
+[data-theme="light"] *[class*="Card"] *,
+[data-theme="light"] *[class*="container"] *,
+[data-theme="light"] *[class*="Container"] *,
+[data-theme="light"] *[class*="panel"] *,
+[data-theme="light"] *[class*="Panel"] *,
+[data-theme="light"] *[class*="calendar"] *,
+[data-theme="light"] *[class*="Calendar"] * {
+  color: #2C1A0E !important;
+  border-color: rgba(180, 150, 110, 0.15) !important;
+}
+
+/* Keep buttons their proper colors */
+[data-theme="light"] button[class*="primary"],
+[data-theme="light"] button[class*="Primary"],
+[data-theme="light"] *[class*="btn-primary"],
+[data-theme="light"] *[class*="connectBtn"],
+[data-theme="light"] *[class*="saveBtn"],
+[data-theme="light"] *[class*="generateBtn"],
+[data-theme="light"] *[class*="analyzeBtn"] {
+  background: linear-gradient(135deg, #C4974A, #A67C3A) !important;
+  color: #FAF7F0 !important;
+}
+
+/* Keep connected/success buttons green */
+[data-theme="light"] *[class*="connected"],
+[data-theme="light"] *[class*="Connected"],
+[data-theme="light"] *[class*="success"],
+[data-theme="light"] *[class*="Success"] {
+  background: rgba(74, 124, 89, 0.12) !important;
+  color: #4A7C59 !important;
+  border-color: rgba(74, 124, 89, 0.25) !important;
+}
+
+/* Calendar cells specifically */
+[data-theme="light"] *[class*="day"],
+[data-theme="light"] *[class*="Day"],
+[data-theme="light"] *[class*="cell"],
+[data-theme="light"] *[class*="Cell"] {
+  background-color: #FDFAF5 !important;
+  border-color: rgba(180, 150, 110, 0.12) !important;
+  color: #5C4A3A !important;
+}
+
+/* Table rows */
+[data-theme="light"] tr,
+[data-theme="light"] td,
+[data-theme="light"] th {
+  border-color: rgba(180, 150, 110, 0.12) !important;
+}
+
+[data-theme="light"] th {
+  background-color: #F5F0E8 !important;
+  color: #5C4A3A !important;
+}
+
+[data-theme="light"] td {
+  color: #5C4A3A !important;
+}
+
+[data-theme="light"] tr:hover td {
+  background-color: rgba(196, 151, 74, 0.04) !important;
+}
+
+/* Input fields everywhere */
+[data-theme="light"] input,
+[data-theme="light"] textarea,
+[data-theme="light"] select {
+  background-color: #FFFFFF !important;
+  border-color: rgba(180, 150, 110, 0.25) !important;
+  color: #2C1A0E !important;
+}
+
+[data-theme="light"] input::placeholder,
+[data-theme="light"] textarea::placeholder {
+  color: rgba(92, 74, 58, 0.4) !important;
+}
+
+/* Select dropdowns */
+[data-theme="light"] select option {
+  background-color: #FFFFFF !important;
+  color: #2C1A0E !important;
+}
+
+/* Heading gold accents */
+[data-theme="light"] h1,
+[data-theme="light"] h2,
+[data-theme="light"] h3 {
+  color: #2C1A0E !important;
+}
+
+/* Gold accent headings inside cards */
+[data-theme="light"] *[class*="card"] h2,
+[data-theme="light"] *[class*="card"] h3,
+[data-theme="light"] *[class*="Card"] h2,
+[data-theme="light"] *[class*="Card"] h3 {
+  color: #C4974A !important;
+}
+
+/* Fix any remaining dark overlays */
+[data-theme="light"] *[class*="overlay"],
+[data-theme="light"] *[class*="Overlay"],
+[data-theme="light"] *[class*="backdrop"],
+[data-theme="light"] *[class*="Backdrop"] {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Mockup Skeletons */
+[data-theme="light"] *[class*="mockup-skeleton"] {
+  background-color: #E2E8F0 !important;
+}

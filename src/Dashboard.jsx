@@ -174,10 +174,10 @@ const MyBlogsSection = () => {
       </div>
 
       {/* Table */}
-      <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', overflow: 'hidden' }}>
+      <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', overflow: 'hidden' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
-            <tr style={{ background: '#0D1526' }}>
+            <tr className="dummy-cell dummy-cell" style={{ background: '#0D1526' }}>
               <th style={{ textAlign: 'left', padding: '14px 20px', fontSize: '12px', color: '#64748B', fontWeight: 600, letterSpacing: '0.5px' }}>TITLE</th>
               <th style={{ textAlign: 'left', padding: '14px 20px', fontSize: '12px', color: '#64748B', fontWeight: 600 }}>SEO SCORE</th>
               <th style={{ textAlign: 'left', padding: '14px 20px', fontSize: '12px', color: '#64748B', fontWeight: 600 }}>STATUS</th>
@@ -227,10 +227,10 @@ const MyBlogsSection = () => {
       {/* Modal */}
       {modalBlog && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, overflowY: 'auto', padding: '40px 20px', display: 'block' }}>
-          <div style={{ maxWidth: '800px', margin: '0 auto', background: '#141B2D', border: '1px solid rgba(124,58,237,0.3)', borderRadius: '20px', padding: '32px', position: 'relative' }}>
+          <div className="dummy-panel dummy-panel" style={{ maxWidth: '800px', margin: '0 auto', background: '#141B2D', border: '1px solid rgba(124,58,237,0.3)', borderRadius: '20px', padding: '32px', position: 'relative' }}>
             <button onClick={() => setModalBlog(null)} style={{ position: 'absolute', top: '16px', right: '16px', background: 'rgba(255,255,255,0.05)', border: 'none', color: 'white', width: '32px', height: '32px', borderRadius: '50%', cursor: 'pointer', fontSize: '16px' }}>✕</button>
             <h2 style={{ fontSize: '22px', fontWeight: 700, color: 'white', marginBottom: '8px' }}>{modalBlog.title}</h2>
-            <p style={{ fontSize: '13px', color: '#64748B', background: '#0D1526', borderRadius: '8px', padding: '10px 14px', marginBottom: '20px' }}>{modalBlog.metaDescription}</p>
+            <p className="dummy-cell dummy-cell" style={{ fontSize: '13px', color: '#64748B', background: '#0D1526', borderRadius: '8px', padding: '10px 14px', marginBottom: '20px' }}>{modalBlog.metaDescription}</p>
             <div style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
               <span style={{ background: 'rgba(16,185,129,0.1)', color: '#10B981', borderRadius: '8px', padding: '6px 14px', fontSize: '12px', fontWeight: 600 }}>SEO: {modalBlog.seoScore}/100</span>
               <span style={{ background: 'rgba(124,58,237,0.1)', color: '#A78BFA', borderRadius: '8px', padding: '6px 14px', fontSize: '12px', fontWeight: 600 }}>🔑 {modalBlog.keyword}</span>
@@ -328,7 +328,7 @@ Return ONLY a valid JSON object with exactly this structure, no explanation:
         <p style={{ fontSize: '14px', color: '#64748B', marginTop: '4px' }}>Find content gaps your competitors aren't covering</p>
       </div>
 
-      <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '28px', marginBottom: '24px' }}>
+      <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '28px', marginBottom: '24px' }}>
         <div style={{ marginBottom: '16px' }}>
           <label style={{ fontSize: '13px', color: '#94A3B8', fontWeight: 500, display: 'block', marginBottom: '8px' }}>Target Keyword *</label>
           <input id="serp-keyword" type="text" placeholder="e.g. project management tools India"
@@ -361,28 +361,28 @@ Return ONLY a valid JSON object with exactly this structure, no explanation:
       {results && (
         <div id="serp-results">
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '16px', marginBottom: '24px' }}>
-            <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '20px', textAlign: 'center' }}>
+            <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '20px', textAlign: 'center' }}>
               <div style={{ fontSize: '12px', color: '#64748B', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Search Volume</div>
               <div style={{ fontSize: '24px', fontWeight: 700, color: '#A78BFA' }}>{results.searchVolume}</div>
             </div>
-            <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '20px', textAlign: 'center' }}>
+            <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '20px', textAlign: 'center' }}>
               <div style={{ fontSize: '12px', color: '#64748B', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Difficulty</div>
               <div style={{ fontSize: '24px', fontWeight: 700, color: diffColor(results.difficulty) }}>{results.difficulty}</div>
             </div>
-            <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '20px', textAlign: 'center' }}>
+            <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '20px', textAlign: 'center' }}>
               <div style={{ fontSize: '12px', color: '#64748B', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Gaps Found</div>
               <div style={{ fontSize: '24px', fontWeight: 700, color: '#06B6D4' }}>{results.topicGaps.length}</div>
             </div>
           </div>
 
-          <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', overflow: 'hidden', marginBottom: '24px' }}>
+          <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', overflow: 'hidden', marginBottom: '24px' }}>
             <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
               <h3 style={{ fontSize: '15px', fontWeight: 600, color: 'white', margin: 0 }}>📊 Content Gap Opportunities</h3>
             </div>
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '600px' }}>
                 <thead>
-                  <tr style={{ background: '#0D1526' }}>
+                  <tr className="dummy-cell dummy-cell" style={{ background: '#0D1526' }}>
                     <th style={{ textAlign: 'left', padding: '12px 20px', fontSize: '11px', color: '#64748B', fontWeight: 600, letterSpacing: '0.5px' }}>TOPIC GAP</th>
                     <th style={{ padding: '12px 20px', fontSize: '11px', color: '#64748B', fontWeight: 600, textAlign: 'center' }}>COVERAGE</th>
                     <th style={{ padding: '12px 20px', fontSize: '11px', color: '#64748B', fontWeight: 600, textAlign: 'center' }}>OPPORTUNITY</th>
@@ -406,13 +406,13 @@ Return ONLY a valid JSON object with exactly this structure, no explanation:
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-            <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '20px' }}>
+            <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '20px' }}>
               <h4 style={{ fontSize: '13px', fontWeight: 600, color: 'white', margin: '0 0 14px' }}>⭐ Featured Snippet Opportunities</h4>
               {results.featuredSnippetOpportunities.map((s, i) => (
                 <div key={i} style={{ fontSize: '13px', color: '#94A3B8', padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.04)', display: 'flex', gap: '10px', alignItems: 'flex-start' }}><span style={{ color: '#7C3AED', flexShrink: 0, marginTop: '1px' }}>✦</span>{s}</div>
               ))}
             </div>
-            <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '20px' }}>
+            <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', padding: '20px' }}>
               <h4 style={{ fontSize: '13px', fontWeight: 600, color: 'white', margin: '0 0 14px' }}>🔑 Recommended LSI Keywords</h4>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                 {results.recommendedLSI.map((k, i) => (
@@ -514,7 +514,7 @@ Return ONLY a valid JSON object with detailed scoring (0-100):
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', alignItems: 'start' }}>
-        <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
+        <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
           <div style={{ marginBottom: '16px' }}>
             <label style={{ fontSize: '13px', color: '#94A3B8', fontWeight: 500, display: 'block', marginBottom: '8px' }}>Target Keyword *</label>
             <input id="seo-target-kw" type="text" placeholder="e.g. AI tools for startups"
@@ -541,7 +541,7 @@ Return ONLY a valid JSON object with detailed scoring (0-100):
 
         <div id="seo-score-results">
           {isAnalyzing && (
-            <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '32px', textAlign: 'center' }}>
+            <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '32px', textAlign: 'center' }}>
               <div style={{ width: '48px', height: '48px', border: '3px solid #7C3AED', borderTopColor: 'transparent', borderRadius: '50%', margin: '0 auto 16px', animation: 'spin 1s linear infinite' }}></div>
               <div style={{ fontSize: '14px', color: '#94A3B8' }}>Running 10-metric analysis...</div>
               <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
@@ -549,7 +549,7 @@ Return ONLY a valid JSON object with detailed scoring (0-100):
           )}
 
           {!isAnalyzing && !scores && !error && (
-            <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '32px', textAlign: 'center', color: '#4B5563' }}>
+            <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '32px', textAlign: 'center', color: '#4B5563' }}>
               <div style={{ fontSize: '48px', marginBottom: '16px' }}>📊</div>
               <div style={{ fontSize: '15px', fontWeight: 500, color: '#64748B' }}>Score will appear here</div>
               <div style={{ fontSize: '13px', marginTop: '8px', color: '#4B5563' }}>Paste content and click Analyze</div>
@@ -563,10 +563,10 @@ Return ONLY a valid JSON object with detailed scoring (0-100):
           )}
 
           {scores && (
-            <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
+            <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '24px', paddingBottom: '20px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
                 <div style={{ width: '100px', height: '100px', borderRadius: '50%', background: `conic-gradient(${sc(scores.overallScore)} 0% ${scores.overallScore}%, #1E293B ${scores.overallScore}% 100%)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, position: 'relative' }}>
-                  <div style={{ width: '76px', height: '76px', background: '#141B2D', borderRadius: '50%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                  <div className="dummy-panel dummy-panel" style={{ width: '76px', height: '76px', background: '#141B2D', borderRadius: '50%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                     <span style={{ fontSize: '26px', fontWeight: 800, color: 'white', lineHeight: 1 }}>{scores.overallScore}</span>
                     <span style={{ fontSize: '11px', color: '#64748B' }}>/100</span>
                   </div>
@@ -581,7 +581,7 @@ Return ONLY a valid JSON object with detailed scoring (0-100):
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '20px' }}>
                 {metrics.map((m, i) => (
-                  <div key={i} style={{ background: '#0D1526', borderRadius: '10px', padding: '12px 14px' }}>
+                  <div className="dummy-cell dummy-cell" key={i} style={{ background: '#0D1526', borderRadius: '10px', padding: '12px 14px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '7px' }}>
                       <span style={{ fontSize: '12px', color: '#94A3B8' }}>{m.icon} {m.label}</span>
                       <span style={{ fontSize: '13px', fontWeight: 700, color: sc(scores[m.key]) }}>{scores[m.key]}</span>
@@ -592,7 +592,7 @@ Return ONLY a valid JSON object with detailed scoring (0-100):
                   </div>
                 ))}
               </div>
-              <div style={{ background: '#0D1526', borderRadius: '12px', padding: '18px' }}>
+              <div className="dummy-cell dummy-cell" style={{ background: '#0D1526', borderRadius: '12px', padding: '18px' }}>
                 <h4 style={{ fontSize: '13px', fontWeight: 600, color: 'white', margin: '0 0 14px' }}>💡 Recommendations</h4>
                 {scores.recommendations.map((r, i) => (
                   <div key={i} style={{ fontSize: '13px', color: '#94A3B8', padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.04)', display: 'flex', gap: '10px', alignItems: 'flex-start' }}><span style={{ color: '#7C3AED', flexShrink: 0 }}>→</span>{r}</div>
@@ -622,34 +622,34 @@ const RoidashboardSection = () => {
 
       {/* KPI Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '16px', marginBottom: '28px' }}>
-        <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
+        <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
           <div style={{ fontSize: '12px', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '12px' }}>Total Blogs</div>
           <div id="roi-total-blogs" style={{ fontSize: '32px', fontWeight: '700', color: 'white' }}>0</div>
         </div>
-        <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
+        <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
           <div style={{ fontSize: '12px', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '12px' }}>Avg SEO Score</div>
           <div id="roi-avg-seo" style={{ fontSize: '32px', fontWeight: '700', color: '#06B6D4' }}>—</div>
         </div>
-        <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
+        <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
           <div style={{ fontSize: '12px', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '12px' }}>Est. Monthly Traffic</div>
           <div id="roi-traffic" style={{ fontSize: '32px', fontWeight: '700', color: '#10B981' }}>0</div>
           <div style={{ fontSize: '12px', color: '#64748B', marginTop: '4px' }}>visits</div>
         </div>
-        <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
+        <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
           <div style={{ fontSize: '12px', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '12px' }}>Content Health</div>
           <div id="roi-health" style={{ fontSize: '32px', fontWeight: '700', color: '#A78BFA' }}>—</div>
         </div>
       </div>
 
       {/* Performance Table */}
-      <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', overflow: 'hidden', marginBottom: '28px' }}>
+      <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', overflow: 'hidden', marginBottom: '28px' }}>
         <div style={{ padding: '18px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h3 style={{ fontSize: '15px', fontWeight: '600', color: 'white', margin: 0 }}>📊 Blog Performance Breakdown</h3>
         </div>
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '600px' }}>
             <thead>
-              <tr style={{ background: '#0D1526' }}>
+              <tr className="dummy-cell dummy-cell" style={{ background: '#0D1526' }}>
                 <th style={{ textAlign: 'left', padding: '12px 20px', fontSize: '11px', color: '#64748B', fontWeight: '600', letterSpacing: '0.5px' }}>BLOG TITLE</th>
                 <th style={{ padding: '12px 20px', fontSize: '11px', color: '#64748B', fontWeight: '600', textAlign: 'center' }}>SEO SCORE</th>
                 <th style={{ padding: '12px 20px', fontSize: '11px', color: '#64748B', fontWeight: '600', textAlign: 'center' }}>WORD COUNT</th>
@@ -669,7 +669,7 @@ const RoidashboardSection = () => {
       </div>
 
       {/* AI Report Area */}
-      <div id="roi-report-area" style={{ display: 'none', background: '#141B2D', border: '1px solid rgba(124,58,237,0.3)', borderRadius: '16px', padding: '24px' }}>
+      <div className="dummy-panel dummy-panel" id="roi-report-area" style={{ display: 'none', background: '#141B2D', border: '1px solid rgba(124,58,237,0.3)', borderRadius: '16px', padding: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
           <h3 style={{ fontSize: '15px', fontWeight: '600', color: 'white', margin: 0 }}>🤖 AI Performance Report</h3>
           <button onClick={(e) => window.copyReport && window.copyReport(e)} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#94A3B8', borderRadius: '8px', padding: '6px 14px', fontSize: '12px', cursor: 'pointer' }}>Copy Report</button>
@@ -733,7 +733,7 @@ const AutoPublisherSection = () => {
   };
 
   return (
-    <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '32px', maxWidth: '800px' }}>
+    <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '32px', maxWidth: '800px' }}>
       <h3 style={{ color: 'white', fontSize: '22px', marginBottom: '8px', fontWeight: 700 }}>Platform Connections</h3>
       <p style={{ color: '#64748B', fontSize: '14px', marginBottom: '28px' }}>Configure your external blogging platforms to enable one-click publishing.</p>
 
@@ -1452,12 +1452,12 @@ Use clear headings and keep it actionable. Write in a professional consulting to
             <div style={{ fontSize: '11px', color: 'var(--text-subtle)' }}>Gemini 2.5 Flash</div>
           </div>
 
-          <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', padding: '14px', margin: '8px' }}>
+          <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', padding: '14px', margin: '8px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
               <span style={{ fontSize: '12px', fontWeight: 600, color: '#A78BFA' }}>Growth Plan</span>
               <span id="plan-usage-count" style={{ fontSize: '11px', color: '#64748B' }}>0/50 blogs</span>
             </div>
-            <div style={{ background: '#0D1526', borderRadius: '999px', height: '5px', overflow: 'hidden', marginBottom: '10px' }}>
+            <div className="dummy-cell dummy-cell" style={{ background: '#0D1526', borderRadius: '999px', height: '5px', overflow: 'hidden', marginBottom: '10px' }}>
               <div id="plan-usage-bar" style={{ height: '100%', background: 'linear-gradient(90deg,#7C3AED,#06B6D4)', width: '0%', borderRadius: '999px', transition: 'width 0.5s ease' }}></div>
             </div>
             <button onClick={() => window.showDashboardSection && window.showDashboardSection('billing')} style={{ width: '100%', background: 'rgba(124,58,237,0.15)', border: '1px solid rgba(124,58,237,0.3)', color: '#A78BFA', borderRadius: '8px', padding: '7px', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}>
@@ -1683,7 +1683,7 @@ Use clear headings and keep it actionable. Write in a professional consulting to
             const daysInMonth = new Date(year, month + 1, 0).getDate();
 
             content = (
-              <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
+              <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
                   <h3 style={{ margin: 0, color: 'white', fontSize: '16px' }}>{viewDate.toLocaleString('default', { month: 'long', year: 'numeric' })}</h3>
                   <div style={{ display: 'flex', gap: '8px' }}>
@@ -1708,7 +1708,7 @@ Use clear headings and keep it actionable. Write in a professional consulting to
                         return date.getDate() === d && date.getMonth() === month && date.getFullYear() === year;
                       });
                       cells.push(
-                        <div key={d} style={{ background: '#0D1526', border: '1px solid rgba(255,255,255,0.04)', minHeight: '80px', borderRadius: '8px', padding: '8px', display: 'flex', flexDirection: 'column', gap: '4px', overflowY: 'auto' }}>
+                        <div className="dummy-cell dummy-cell" key={d} style={{ background: '#0D1526', border: '1px solid rgba(255,255,255,0.04)', minHeight: '80px', borderRadius: '8px', padding: '8px', display: 'flex', flexDirection: 'column', gap: '4px', overflowY: 'auto' }}>
                           <span style={{ color: 'white', fontSize: '12px' }}>{d}</span>
                           {dayBlogs.map(b => (
                             <div key={b.id} style={{
@@ -1729,7 +1729,7 @@ Use clear headings and keep it actionable. Write in a professional consulting to
             );
           } else if (sec.id === 'clustermap') {
             content = (
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '60px', position: 'relative' }}>
+              <div className="dummy-panel dummy-panel" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '60px', position: 'relative' }}>
                 <div style={{ background: 'linear-gradient(135deg,#7C3AED,#5B21B6)', padding: '16px 32px', borderRadius: '12px', color: 'white', fontWeight: 'bold', fontSize: '18px', zIndex: 2 }}>Pillar: Artificial Intelligence</div>
                 <div style={{ height: '40px', width: '2px', background: 'rgba(255,255,255,0.1)' }}></div>
                 <div style={{ width: '600px', height: '2px', background: 'rgba(255,255,255,0.1)', display: 'flex', justifyContent: 'space-between' }}>
@@ -1738,17 +1738,17 @@ Use clear headings and keep it actionable. Write in a professional consulting to
                   <div style={{ width: '2px', height: '40px', background: 'rgba(255,255,255,0.1)' }}></div>
                 </div>
                 <div style={{ width: '640px', display: 'flex', justifyContent: 'space-between', marginTop: '40px' }}>
-                  <div style={{ background: '#0D1526', border: '1px solid rgba(16,185,129,0.3)', padding: '12px 16px', borderRadius: '8px', color: '#10B981', fontSize: '13px' }}>Generative AI Tools</div>
-                  <div style={{ background: '#0D1526', border: '1px solid rgba(245,158,11,0.3)', padding: '12px 16px', borderRadius: '8px', color: '#F59E0B', fontSize: '13px' }}>AI Content Detection</div>
-                  <div style={{ background: '#0D1526', border: '1px dashed rgba(255,255,255,0.2)', padding: '12px 16px', borderRadius: '8px', color: '#94A3B8', fontSize: '13px' }}>+ Add Cluster</div>
+                  <div className="dummy-cell dummy-cell" style={{ background: '#0D1526', border: '1px solid rgba(16,185,129,0.3)', padding: '12px 16px', borderRadius: '8px', color: '#10B981', fontSize: '13px' }}>Generative AI Tools</div>
+                  <div className="dummy-cell dummy-cell" style={{ background: '#0D1526', border: '1px solid rgba(245,158,11,0.3)', padding: '12px 16px', borderRadius: '8px', color: '#F59E0B', fontSize: '13px' }}>AI Content Detection</div>
+                  <div className="dummy-cell dummy-cell" style={{ background: '#0D1526', border: '1px dashed rgba(255,255,255,0.2)', padding: '12px 16px', borderRadius: '8px', color: '#94A3B8', fontSize: '13px' }}>+ Add Cluster</div>
                 </div>
               </div>
             );
           } else if (sec.id === 'keywords') {
             content = (
-              <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
+              <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
                 <div style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
-                  <input type="text" placeholder="Seed keyword..." style={{ flex: 1, background: '#0D1526', border: '1px solid rgba(255,255,255,0.1)', color: 'white', padding: '10px 16px', borderRadius: '8px', outline: 'none' }} />
+                  <input className="dummy-cell dummy-cell" type="text" placeholder="Seed keyword..." style={{ flex: 1, background: '#0D1526', border: '1px solid rgba(255,255,255,0.1)', color: 'white', padding: '10px 16px', borderRadius: '8px', outline: 'none' }} />
                   <button style={{ background: '#7C3AED', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer' }}>Discover</button>
                 </div>
                 <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
@@ -1774,12 +1774,12 @@ Use clear headings and keep it actionable. Write in a professional consulting to
           } else if (sec.id === 'competitor') {
             content = (
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-                <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
+                <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
                   <h3 style={{ marginTop: 0, color: 'white', fontSize: '16px' }}>Spy on Competitor</h3>
-                  <input type="text" placeholder="https://competitor.com" style={{ width: '100%', background: '#0D1526', border: '1px solid rgba(255,255,255,0.1)', color: 'white', padding: '12px 16px', borderRadius: '8px', outline: 'none', marginBottom: '16px', boxSizing: 'border-box' }} />
+                  <input className="dummy-cell dummy-cell" type="text" placeholder="https://competitor.com" style={{ width: '100%', background: '#0D1526', border: '1px solid rgba(255,255,255,0.1)', color: 'white', padding: '12px 16px', borderRadius: '8px', outline: 'none', marginBottom: '16px', boxSizing: 'border-box' }} />
                   <button style={{ width: '100%', background: '#06B6D4', color: 'white', border: 'none', padding: '12px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}>Analyze Domain</button>
                 </div>
-                <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '12px' }}>
                     <span style={{ color: '#94A3B8', fontSize: '13px' }}>Domain Authority</span><span style={{ color: 'white', fontWeight: 'bold' }}>78</span>
                   </div>
@@ -1796,7 +1796,7 @@ Use clear headings and keep it actionable. Write in a professional consulting to
             content = <AutoPublisherSection />;
           } else if (sec.id === 'integrations') {
             content = (
-              <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
+              <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '20px', marginBottom: '20px' }}>
                   <div>
                     <h3 style={{ color: 'white', margin: '0 0 4px', fontSize: '16px' }}>Google Analytics 4</h3>
@@ -1822,7 +1822,7 @@ Use clear headings and keep it actionable. Write in a professional consulting to
             );
           } else if (sec.id === 'schedule') {
             content = (
-              <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
+              <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
                 {(typeof blogs !== 'undefined' ? blogs : []).filter(b => b.status === 'scheduled').length === 0 ? (
                   <div style={{ textAlign: 'center', padding: '40px', color: '#64748B' }}>No upcoming scheduled blogs.</div>
                 ) : (
@@ -1836,7 +1836,7 @@ Use clear headings and keep it actionable. Write in a professional consulting to
                     {blogs.filter(b => b.status === 'scheduled').map(blog => {
                       const sDate = new Date(blog.scheduledAt || blog.createdAt);
                       return (
-                        <div key={blog.id} style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '16px', background: '#0D1526', borderRadius: '12px', marginBottom: '12px', border: '1px solid rgba(255,255,255,0.03)' }}>
+                        <div className="dummy-cell dummy-cell" key={blog.id} style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '16px', background: '#0D1526', borderRadius: '12px', marginBottom: '12px', border: '1px solid rgba(255,255,255,0.03)' }}>
                           <div style={{ background: 'rgba(124,58,237,0.1)', color: '#A78BFA', padding: '10px', borderRadius: '8px', textAlign: 'center', minWidth: '50px' }}>
                             <div style={{ fontSize: '11px', textTransform: 'uppercase' }}>{sDate.toLocaleDateString('en-IN', { month: 'short' })}</div>
                             <div style={{ fontSize: '20px', fontWeight: 'bold' }}>{sDate.getDate()}</div>
@@ -1859,23 +1859,23 @@ Use clear headings and keep it actionable. Write in a professional consulting to
             content = (
               <div>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '20px' }}>
-                  <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
+                  <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
                     <div style={{ color: '#94A3B8', fontSize: '13px', marginBottom: '8px' }}>{sec.id === 'roi' ? 'Est. Traffic Value' : 'Total Sessions'}</div>
                     <div style={{ color: 'white', fontSize: '28px', fontWeight: 'bold' }}>{sec.id === 'roi' ? '₹0' : '0'}</div>
                     <div style={{ color: '#10B981', fontSize: '13px', marginTop: '8px' }}>+0% vs last month</div>
                   </div>
-                  <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
+                  <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
                     <div style={{ color: '#94A3B8', fontSize: '13px', marginBottom: '8px' }}>{sec.id === 'roi' ? 'Content Cost Saved' : 'Avg. Duration'}</div>
                     <div style={{ color: 'white', fontSize: '28px', fontWeight: 'bold' }}>{sec.id === 'roi' ? '₹0' : '0m 0s'}</div>
                     <div style={{ color: '#10B981', fontSize: '13px', marginTop: '8px' }}>+0% vs last month</div>
                   </div>
-                  <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
+                  <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
                     <div style={{ color: '#94A3B8', fontSize: '13px', marginBottom: '8px' }}>{sec.id === 'roi' ? 'Leads Generated' : 'Bounce Rate'}</div>
                     <div style={{ color: 'white', fontSize: '28px', fontWeight: 'bold' }}>{sec.id === 'roi' ? '0' : '0%'}</div>
                     <div style={{ color: '#10B981', fontSize: '13px', marginTop: '8px' }}>{sec.id === 'roi' ? '+0%' : '0%'} vs last month</div>
                   </div>
                 </div>
-                <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '40px', textAlign: 'center', color: '#64748B' }}>
+                <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '40px', textAlign: 'center', color: '#64748B' }}>
                   <div style={{ fontSize: '40px', marginBottom: '16px' }}>📈</div>
                   <h3>Interactive Chart Data Loading...</h3>
                   <p>Connect Google Analytics to visualize your daily metrics.</p>
@@ -1884,10 +1884,10 @@ Use clear headings and keep it actionable. Write in a professional consulting to
             );
           } else if (sec.id === 'brandvoice') {
             content = (
-              <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
+              <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
                 <div style={{ marginBottom: '20px' }}>
                   <label style={{ display: 'block', color: '#94A3B8', fontSize: '13px', marginBottom: '8px' }}>Tone of Voice</label>
-                  <select style={{ width: '100%', background: '#0D1526', border: '1px solid rgba(255,255,255,0.1)', color: 'white', padding: '12px', borderRadius: '8px', outline: 'none' }}>
+                  <select className="dummy-cell dummy-cell" style={{ width: '100%', background: '#0D1526', border: '1px solid rgba(255,255,255,0.1)', color: 'white', padding: '12px', borderRadius: '8px', outline: 'none' }}>
                     <option>Professional & Authoritative</option>
                     <option>Conversational & Friendly</option>
                     <option>Humorous & Witty</option>
@@ -1896,23 +1896,23 @@ Use clear headings and keep it actionable. Write in a professional consulting to
                 </div>
                 <div style={{ marginBottom: '20px' }}>
                   <label style={{ display: 'block', color: '#94A3B8', fontSize: '13px', marginBottom: '8px' }}>Custom Core Directives (System Prompt Injections)</label>
-                  <textarea rows="4" placeholder="Always write in first-person plural ('we'). Never use exclamation marks. Keep sentences under 20 words where possible." style={{ width: '100%', background: '#0D1526', border: '1px solid rgba(255,255,255,0.1)', color: 'white', padding: '12px', borderRadius: '8px', outline: 'none', resize: 'vertical', boxSizing: 'border-box' }}></textarea>
+                  <textarea className="dummy-cell dummy-cell" rows="4" placeholder="Always write in first-person plural ('we'). Never use exclamation marks. Keep sentences under 20 words where possible." style={{ width: '100%', background: '#0D1526', border: '1px solid rgba(255,255,255,0.1)', color: 'white', padding: '12px', borderRadius: '8px', outline: 'none', resize: 'vertical', boxSizing: 'border-box' }}></textarea>
                 </div>
                 <div style={{ marginBottom: '20px' }}>
                   <label style={{ display: 'block', color: '#94A3B8', fontSize: '13px', marginBottom: '8px' }}>Forbidden Words (Comma separated)</label>
-                  <input type="text" placeholder="e.g. cheap, guarantee, magic" style={{ width: '100%', background: '#0D1526', border: '1px solid rgba(255,255,255,0.1)', color: 'white', padding: '12px', borderRadius: '8px', outline: 'none', boxSizing: 'border-box' }} />
+                  <input className="dummy-cell dummy-cell" type="text" placeholder="e.g. cheap, guarantee, magic" style={{ width: '100%', background: '#0D1526', border: '1px solid rgba(255,255,255,0.1)', color: 'white', padding: '12px', borderRadius: '8px', outline: 'none', boxSizing: 'border-box' }} />
                 </div>
                 <button style={{ background: 'linear-gradient(135deg,#7C3AED,#5B21B6)', color: 'white', border: 'none', padding: '12px 24px', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}>Save Brand Voice</button>
               </div>
             );
           } else if (sec.id === 'team') {
             content = (
-              <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
+              <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '24px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
                   <h3 style={{ color: 'white', margin: 0 }}>Workspace Members</h3>
                   <button style={{ background: 'rgba(255,255,255,0.05)', color: 'white', border: '1px solid rgba(255,255,255,0.1)', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer' }}>+ Invite Member</button>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', background: '#0D1526', borderRadius: '12px', marginBottom: '12px' }}>
+                <div className="dummy-cell dummy-cell" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', background: '#0D1526', borderRadius: '12px', marginBottom: '12px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <img src="https://i.pravatar.cc/100?img=11" style={{ width: '40px', height: '40px', borderRadius: '50%' }} />
                     <div>
@@ -1922,7 +1922,7 @@ Use clear headings and keep it actionable. Write in a professional consulting to
                   </div>
                   <span style={{ color: '#10B981', background: 'rgba(16,185,129,0.1)', padding: '4px 12px', borderRadius: '99px', fontSize: '12px', fontWeight: 'bold' }}>Owner</span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', background: '#0D1526', borderRadius: '12px' }}>
+                <div className="dummy-cell dummy-cell" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', background: '#0D1526', borderRadius: '12px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#7C3AED', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>S</div>
                     <div>
@@ -1969,7 +1969,7 @@ Use clear headings and keep it actionable. Write in a professional consulting to
                 </div>
               </header>
               {content || (
-                <div style={{ background: '#141B2D', border: '1px dashed rgba(255,255,255,0.2)', padding: '60px', textAlign: 'center', borderRadius: '16px' }}>
+                <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px dashed rgba(255,255,255,0.2)', padding: '60px', textAlign: 'center', borderRadius: '16px' }}>
                   <h2 style={{ fontSize: '24px', marginBottom: '16px' }}>{sec.title} Content</h2>
                   <p style={{ color: '#94A3B8' }}>This section is currently under development. Soon you'll be able to access all {sec.title.toLowerCase()} features here.</p>
                 </div>
@@ -1981,7 +1981,7 @@ Use clear headings and keep it actionable. Write in a professional consulting to
       {/* Global Publish Modal */}
       {publishModalBlog && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ background: '#141B2D', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '20px', padding: '32px', width: '400px', position: 'relative' }}>
+          <div className="dummy-panel dummy-panel" style={{ background: '#141B2D', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '20px', padding: '32px', width: '400px', position: 'relative' }}>
             <button onClick={() => setPublishModalBlog(null)} style={{ position: 'absolute', top: '16px', right: '16px', background: 'transparent', border: 'none', color: 'white', cursor: 'pointer', fontSize: '16px' }}>✕</button>
             <h2 style={{ fontSize: '20px', fontWeight: 700, color: 'white', marginBottom: '8px' }}>Publish Blog</h2>
             <p style={{ fontSize: '13px', color: '#94A3B8', marginBottom: '20px' }}>{publishModalBlog.title}</p>
