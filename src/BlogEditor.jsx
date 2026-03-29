@@ -859,18 +859,17 @@ Return ONLY a valid JSON object:
                   </span>
                 </label>
                 <div className="be-range-wrapper">
-                  <span className="be-range-label">800</span>
                   <input
                     id="be-wordcount"
                     type="range" min={800} max={3000} step={100}
                     value={wordCount}
                     onChange={e => setWordCount(Number(e.target.value))}
                     className="be-range"
+                    style={{ '--val': wordCount }}
                     aria-valuemin={800} aria-valuemax={3000}
                     aria-valuenow={wordCount}
                     aria-valuetext={`${wordCount} words`}
                   />
-                  <span className="be-range-label">3,000</span>
                 </div>
                 <div className="be-range-marks">
                   {[800, 1500, 2000, 2500, 3000].map(v => (

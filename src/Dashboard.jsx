@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   Home, Plus, FileText, Calendar, Network, Search, Key, Target,
   UploadCloud, Link as LinkIcon, List, BarChart3, TrendingUp, PieChart,
-  Settings, Users, CreditCard, Sparkles, MoreVertical, LogOut
+  Settings, Users, CreditCard, Sparkles, MoreVertical, LogOut, Mic, MicOff
 } from 'lucide-react';
 import './Dashboard.css';
 import './BlogEditor.css';
@@ -249,6 +249,458 @@ const MyBlogsSection = () => {
 
 // NewBlogSection replaced by BlogEditor component (see BlogEditor.jsx)
 // BlogEditor is rendered directly in the Dashboard JSX below
+
+
+const VoiceToBlogSection = () => {
+  const { currentUser } = useAuth();
+  const uid = currentUser?.uid;
+
+  const [title, setTitle] = useState('');
+  const [transcript, setTranscript] = useState('');
+  const [interimText, setInterimText] = useState('');
+  const [isRecording, setIsRecording] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [seoResult, setSeoResult] = useState(null);
+  const [seoError, setSeoError] = useState(null);
+  const [saveStatus, setSaveStatus] = useState('');
+  const [savedBlogId, setSavedBlogId] = useState(null);
+  const recognitionRef = useRef(null);
+  const transcriptRef = useRef('');
+
+  const wordCount = (transcript + ' ' + interimText).trim().split(/\s+/).filter(w => w).length;
+
+  const startRecording = () => {
+    if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
+      alert('Sorry, your browser does not support speech recognition. Please use Chrome or Edge.');
+      return;
+    }
+    if (!title.trim()) {
+      const el = document.getElementById('vtb-title-input');
+      if (el) { el.style.borderColor = '#EF4444'; el.focus(); }
+      return;
+    }
+    setSeoResult(null);
+    setSeoError(null);
+    setSaveStatus('');
+    setSavedBlogId(null);
+    setTranscript('');
+    setInterimText('');
+    transcriptRef.current = '';
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+
+    recognition.onresult = (event) => {
+      let interimTranscript = '';
+      let finalTranscript = '';
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const text = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalTranscript += text + ' ';
+        } else {
+          interimTranscript += text;
+        }
+      }
+      if (finalTranscript) {
+        transcriptRef.current += finalTranscript;
+        setTranscript(transcriptRef.current);
+      }
+      setInterimText(interimTranscript);
+    };
+
+    recognition.onerror = (event) => {
+      if (event.error !== 'aborted') {
+        setSeoError('Microphone error: ' + event.error);
+        setIsRecording(false);
+        setInterimText('');
+      }
+    };
+
+    recognition.onend = () => {
+      if (isRecording) {
+        // Auto-restart if still supposed to be recording (browser timeout)
+        try { recognition.start(); } catch(e) {}
+      }
+    };
+
+    recognitionRef.current = recognition;
+    recognition.start();
+    setIsRecording(true);
+  };
+
+  const stopRecording = () => {
+    setIsRecording(false);
+    setInterimText('');
+    if (recognitionRef.current) {
+      try { recognitionRef.current.stop(); } catch(e) {}
+      recognitionRef.current = null;
+    }
+    // After stopping, auto-trigger SEO analysis if there's content
+    const finalText = transcriptRef.current.trim();
+    if (finalText) {
+      setTimeout(() => runSeoAnalysis(finalText), 400);
+    }
+  };
+
+  const runSeoAnalysis = async (text) => {
+    setIsAnalyzing(true);
+    setSeoResult(null);
+    setSeoError(null);
+
+    // Compute metrics locally — do NOT send raw transcript to Gemini
+    const words = text.trim().split(/\s+/).filter(w => w);
+    const wordCount = words.length;
+    const sentenceCount = (text.match(/[.!?]+/g) || []).length || 1;
+    const avgSentLen = Math.round(wordCount / sentenceCount);
+    const uniqueWords = new Set(words.map(w => w.toLowerCase().replace(/[^a-z]/g, ''))).size;
+    const vocabRichness = Math.round((uniqueWords / Math.max(wordCount, 1)) * 100);
+    const safeTitle = title.trim().replace(/[^\w\s-]/g, ' ').substring(0, 100);
+
+    // Tiny prompt — only metadata, no transcript content
+    const prompt = `SEO audit for a voice-recorded blog post. Return compact JSON only, no extra text.
+
+Title: ${safeTitle}
+Word count: ${wordCount}
+Avg sentence length: ${avgSentLen} words
+Vocabulary richness: ${vocabRichness}%
+
+JSON schema (all numbers 0-100, recommendations max 60 chars each):
+{"overallScore":0,"titleOptimization":0,"contentDepth":0,"readabilityScore":0,"keywordDensityScore":0,"snippetEligibility":0,"aiDetectionRisk":0,"suggestedKeyword":"","rec1":"","rec2":"","rec3":""}`;
+
+    try {
+      const raw = await callGemini(prompt, 600);
+
+      // Robust JSON repair before parsing
+      const repairJSON = (str) => {
+        // Strip markdown fences
+        let s = str.replace(/```json\s*/gi, '').replace(/```\s*/gi, '').trim();
+        // Extract {...} block
+        const m = s.match(/\{[\s\S]*\}/);
+        s = m ? m[0] : s;
+        // Remove literal control chars inside strings (newlines, tabs)
+        s = s.replace(/[\x00-\x1F\x7F]/g, ' ');
+        // Try to close an unterminated string by finding unmatched "
+        // Count unescaped quotes to detect odd count
+        const quoteCount = (s.match(/(?<!\\)"/g) || []).length;
+        if (quoteCount % 2 !== 0) s = s + '"';
+        // Try to close unterminated array/object
+        const opens = (s.match(/[\[{]/g) || []).length;
+        const closes = (s.match(/[\]\}]/g) || []).length;
+        for (let i = closes; i < opens; i++) s = s + (s.lastIndexOf('[') > s.lastIndexOf('{') ? ']' : '}');
+        return s;
+      };
+
+      const jsonStr = repairJSON(raw);
+      const res = JSON.parse(jsonStr);
+
+      // Normalise flat rec1/rec2/rec3 → recommendations array
+      if (!res.recommendations) {
+        res.recommendations = [res.rec1, res.rec2, res.rec3].filter(Boolean);
+        delete res.rec1; delete res.rec2; delete res.rec3;
+      }
+      setSeoResult(res);
+    } catch (err) {
+      setSeoError('SEO analysis failed: ' + err.message);
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
+  const handleSave = async () => {
+    const body = transcriptRef.current.trim();
+    if (!body || !title.trim()) return;
+    setSaveStatus('Saving...');
+    const blogData = {
+      id: Date.now().toString(),
+      title: title.trim(),
+      keyword: seoResult?.suggestedKeyword || '',
+      body,
+      metaDescription: body.substring(0, 160),
+      seoScore: seoResult?.overallScore || 0,
+      status: 'draft',
+      source: 'voice',
+      createdAt: new Date().toISOString()
+    };
+    // Save to localStorage
+    const blogs = JSON.parse(localStorage.getItem('bf_blogs') || '[]');
+    blogs.unshift(blogData);
+    localStorage.setItem('bf_blogs', JSON.stringify(blogs));
+    // Save to Firestore
+    if (uid) {
+      try { await createBlog(uid, blogData); } catch (e) { console.error(e); }
+    }
+    setSavedBlogId(blogData.id);
+    setSaveStatus('✓ Saved as draft!');
+    if (window.loadMyBlogs) window.loadMyBlogs();
+    if (window.updateOverviewStats) window.updateOverviewStats();
+    setTimeout(() => setSaveStatus(''), 3000);
+  };
+
+  const handlePublish = async () => {
+    const body = transcriptRef.current.trim();
+    if (!body || !title.trim()) return;
+    // Save first if not already saved
+    if (!savedBlogId) {
+      const blogData = {
+        id: Date.now().toString(),
+        title: title.trim(),
+        keyword: seoResult?.suggestedKeyword || '',
+        body,
+        metaDescription: body.substring(0, 160),
+        seoScore: seoResult?.overallScore || 0,
+        status: 'draft',
+        source: 'voice',
+        createdAt: new Date().toISOString()
+      };
+      const blogs = JSON.parse(localStorage.getItem('bf_blogs') || '[]');
+      blogs.unshift(blogData);
+      localStorage.setItem('bf_blogs', JSON.stringify(blogs));
+      if (uid) {
+        try { await createBlog(uid, blogData); } catch (e) { console.error(e); }
+      }
+      setSavedBlogId(blogData.id);
+      if (window.loadMyBlogs) window.loadMyBlogs();
+      if (window.updateOverviewStats) window.updateOverviewStats();
+      if (window.showPublishModal) window.showPublishModal(blogData.id);
+    } else {
+      if (window.showPublishModal) window.showPublishModal(savedBlogId);
+    }
+  };
+
+  const sc = (s) => s >= 85 ? '#10B981' : s >= 65 ? '#F59E0B' : '#EF4444';
+  const seoMetrics = seoResult ? [
+    { label: 'Title Optimization', key: 'titleOptimization', icon: '📌' },
+    { label: 'Content Depth', key: 'contentDepth', icon: '📖' },
+    { label: 'Readability', key: 'readabilityScore', icon: '👁️' },
+    { label: 'Keyword Density', key: 'keywordDensityScore', icon: '🔑' },
+    { label: 'Snippet Eligibility', key: 'snippetEligibility', icon: '⭐' },
+    { label: 'Human-like Score', key: 'aiDetectionRisk', icon: '🤖' },
+  ] : [];
+
+  return (
+    <div id="dash-voicetoblog" className="dash-section" style={{ display: 'none', padding: '40px', color: '#fff' }}>
+      <style>{`
+        @keyframes voicePulse {
+          0%, 100% { transform: scale(1); opacity: 1; }
+          50% { transform: scale(1.12); opacity: 0.8; }
+        }
+        @keyframes waveBar {
+          0%, 100% { height: 6px; }
+          50% { height: 22px; }
+        }
+        .vtb-wave-bar { display: inline-block; width: 4px; background: #A78BFA; border-radius: 2px; margin: 0 2px; animation: waveBar 0.7s ease-in-out infinite; }
+        .vtb-wave-bar:nth-child(2) { animation-delay: 0.1s; }
+        .vtb-wave-bar:nth-child(3) { animation-delay: 0.2s; }
+        .vtb-wave-bar:nth-child(4) { animation-delay: 0.3s; }
+        .vtb-wave-bar:nth-child(5) { animation-delay: 0.15s; }
+      `}</style>
+
+      {/* Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '32px' }}>
+        <div>
+          <h2 style={{ fontSize: '26px', fontWeight: 700, color: 'white', margin: 0, display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ background: 'linear-gradient(135deg,#7C3AED,#06B6D4)', padding: '8px', borderRadius: '12px', display: 'flex' }}><Mic size={22} color="white" /></span>
+            Voice to Blog
+          </h2>
+          <p style={{ fontSize: '14px', color: '#64748B', marginTop: '6px' }}>Speak your ideas — we'll transcribe, analyze SEO, and save your blog instantly.</p>
+        </div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+        {/* LEFT COLUMN */}
+        <div>
+          {/* Title Input */}
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ fontSize: '13px', color: '#94A3B8', fontWeight: 500, display: 'block', marginBottom: '8px' }}>Blog Title *</label>
+            <input
+              id="vtb-title-input"
+              type="text"
+              placeholder="Enter your blog title before recording..."
+              value={title}
+              onChange={e => { setTitle(e.target.value); e.target.style.borderColor = 'rgba(255,255,255,0.1)'; }}
+              disabled={isRecording}
+              style={{ width: '100%', background: '#141B2D', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '14px 16px', color: 'white', fontSize: '15px', outline: 'none', boxSizing: 'border-box', fontWeight: 500, opacity: isRecording ? 0.6 : 1 }}
+              onFocus={e => e.target.style.borderColor = '#7C3AED'}
+              onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
+            />
+          </div>
+
+          {/* Recording Controls */}
+          <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '28px', marginBottom: '20px', textAlign: 'center' }}>
+            {!isRecording ? (
+              <div>
+                <div style={{ marginBottom: '20px' }}>
+                  <div style={{ width: '72px', height: '72px', borderRadius: '50%', background: 'linear-gradient(135deg,#7C3AED,#5B21B6)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px', cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 0 0 0 rgba(124,58,237,0)' }}
+                    onClick={startRecording}
+                    onMouseOver={e => { e.currentTarget.style.transform = 'scale(1.05)'; e.currentTarget.style.boxShadow = '0 0 0 8px rgba(124,58,237,0.15)'; }}
+                    onMouseOut={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 0 0 0 rgba(124,58,237,0)'; }}
+                  >
+                    <Mic size={28} color="white" />
+                  </div>
+                  <p style={{ fontSize: '14px', color: '#64748B', margin: 0 }}>{transcript ? 'Click to continue recording' : 'Click the mic to start recording'}</p>
+                </div>
+                <button onClick={startRecording} style={{ background: 'linear-gradient(135deg,#7C3AED,#06B6D4)', color: 'white', border: 'none', borderRadius: '10px', padding: '12px 32px', fontSize: '15px', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s' }}
+                  onMouseOver={e => e.target.style.opacity = '0.9'} onMouseOut={e => e.target.style.opacity = '1'}>
+                  🎙️ {transcript ? 'Resume Recording' : 'Start Recording'}
+                </button>
+              </div>
+            ) : (
+              <div>
+                <div style={{ marginBottom: '16px' }}>
+                  <div style={{ width: '72px', height: '72px', borderRadius: '50%', background: 'linear-gradient(135deg,#EF4444,#DC2626)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px', animation: 'voicePulse 1.5s ease-in-out infinite', boxShadow: '0 0 0 12px rgba(239,68,68,0.15)' }}>
+                    <MicOff size={28} color="white" />
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', height: '28px', marginBottom: '8px' }}>
+                    <span className="vtb-wave-bar" /><span className="vtb-wave-bar" /><span className="vtb-wave-bar" /><span className="vtb-wave-bar" /><span className="vtb-wave-bar" />
+                  </div>
+                  <p style={{ fontSize: '13px', color: '#EF4444', fontWeight: 600, margin: 0 }}>● Recording in progress...</p>
+                  <p style={{ fontSize: '12px', color: '#64748B', margin: '4px 0 0' }}>{wordCount} words captured</p>
+                </div>
+                <button onClick={stopRecording} style={{ background: 'rgba(239,68,68,0.15)', color: '#EF4444', border: '1px solid rgba(239,68,68,0.3)', borderRadius: '10px', padding: '12px 32px', fontSize: '15px', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s' }}
+                  onMouseOver={e => { e.target.style.background = 'rgba(239,68,68,0.25)'; }} onMouseOut={e => { e.target.style.background = 'rgba(239,68,68,0.15)'; }}>
+                  ⏹ End Recording
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Live Transcript */}
+          <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', overflow: 'hidden' }}>
+            <div style={{ padding: '14px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h3 style={{ fontSize: '14px', fontWeight: 600, color: 'white', margin: 0 }}>📝 Live Transcript</h3>
+              <span style={{ fontSize: '12px', color: '#64748B' }}>{wordCount} words</span>
+            </div>
+            <div style={{ padding: '20px', minHeight: '200px', maxHeight: '320px', overflowY: 'auto' }}>
+              {!transcript && !interimText ? (
+                <div style={{ textAlign: 'center', padding: '40px 0', color: '#4B5563' }}>
+                  <div style={{ fontSize: '36px', marginBottom: '12px' }}>🎤</div>
+                  <div style={{ fontSize: '14px' }}>Your spoken words will appear here in real-time...</div>
+                </div>
+              ) : (
+                <div style={{ fontSize: '15px', lineHeight: 1.8, color: '#CBD5E1' }}>
+                  <span style={{ color: '#E2E8F0' }}>{transcript}</span>
+                  {interimText && <span style={{ color: '#64748B', fontStyle: 'italic' }}>{interimText}</span>}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN — SEO Results */}
+        <div>
+          {/* SEO Analysis Panel */}
+          {(isAnalyzing || seoResult || seoError) ? (
+            <div style={{ background: '#141B2D', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', overflow: 'hidden', marginBottom: '20px' }}>
+              <div style={{ padding: '14px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                <h3 style={{ fontSize: '14px', fontWeight: 600, color: 'white', margin: 0 }}>📊 SEO Analysis</h3>
+              </div>
+              <div style={{ padding: '24px' }}>
+                {isAnalyzing && (
+                  <div style={{ textAlign: 'center', padding: '32px 0' }}>
+                    <div style={{ width: '44px', height: '44px', border: '3px solid #7C3AED', borderTopColor: 'transparent', borderRadius: '50%', margin: '0 auto 16px', animation: 'spin 1s linear infinite' }} />
+                    <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+                    <div style={{ fontSize: '14px', color: '#94A3B8' }}>Analyzing SEO for your spoken content...</div>
+                  </div>
+                )}
+                {seoError && (
+                  <div style={{ color: '#EF4444', fontSize: '14px', padding: '16px', background: 'rgba(239,68,68,0.1)', borderRadius: '10px' }}>❌ {seoError}</div>
+                )}
+                {seoResult && !isAnalyzing && (
+                  <div>
+                    {/* Score Ring */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '24px', paddingBottom: '20px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                      <div style={{ width: '90px', height: '90px', borderRadius: '50%', background: `conic-gradient(${sc(seoResult.overallScore)} 0% ${seoResult.overallScore}%, #1E293B ${seoResult.overallScore}% 100%)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <div style={{ width: '68px', height: '68px', background: '#141B2D', borderRadius: '50%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                          <span style={{ fontSize: '22px', fontWeight: 800, color: 'white', lineHeight: 1 }}>{seoResult.overallScore}</span>
+                          <span style={{ fontSize: '11px', color: '#64748B' }}>/100</span>
+                        </div>
+                      </div>
+                      <div>
+                        <div style={{ fontSize: '18px', fontWeight: 700, color: 'white', marginBottom: '4px' }}>
+                          {seoResult.overallScore >= 90 ? '🏆 Excellent' : seoResult.overallScore >= 80 ? '✅ Great' : seoResult.overallScore >= 70 ? '👍 Good' : seoResult.overallScore >= 55 ? '⚠️ Needs Work' : '❌ Poor'}
+                        </div>
+                        {seoResult.suggestedKeyword && (
+                          <div style={{ fontSize: '12px', color: '#A78BFA', background: 'rgba(124,58,237,0.1)', padding: '4px 10px', borderRadius: '999px', display: 'inline-block' }}>🔑 {seoResult.suggestedKeyword}</div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Metric Bars */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '20px' }}>
+                      {seoMetrics.map((m, i) => (
+                        <div key={i} style={{ background: '#0D1526', borderRadius: '10px', padding: '12px 14px' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '7px' }}>
+                            <span style={{ fontSize: '11px', color: '#94A3B8' }}>{m.icon} {m.label}</span>
+                            <span style={{ fontSize: '13px', fontWeight: 700, color: sc(seoResult[m.key]) }}>{seoResult[m.key]}</span>
+                          </div>
+                          <div style={{ background: '#1E293B', borderRadius: '999px', height: '4px', overflow: 'hidden' }}>
+                            <div style={{ height: '100%', background: sc(seoResult[m.key]), width: seoResult[m.key] + '%', borderRadius: '999px' }} />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Recommendations */}
+                    <div style={{ background: '#0D1526', borderRadius: '12px', padding: '16px', marginBottom: '20px' }}>
+                      <h4 style={{ fontSize: '13px', fontWeight: 600, color: 'white', margin: '0 0 12px' }}>💡 Recommendations</h4>
+                      {seoResult.recommendations.map((r, i) => (
+                        <div key={i} style={{ fontSize: '13px', color: '#94A3B8', padding: '7px 0', borderBottom: i < seoResult.recommendations.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none', display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                          <span style={{ color: '#7C3AED', flexShrink: 0 }}>→</span>{r}
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Save / Publish Buttons */}
+                    <div style={{ display: 'flex', gap: '12px' }}>
+                      <button onClick={handleSave} style={{ flex: 1, background: '#141B2D', border: '1px solid rgba(255,255,255,0.15)', color: '#94A3B8', borderRadius: '10px', padding: '12px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s' }}
+                        onMouseOver={e => { e.target.style.borderColor = '#7C3AED'; e.target.style.color = '#A78BFA'; }}
+                        onMouseOut={e => { e.target.style.borderColor = 'rgba(255,255,255,0.15)'; e.target.style.color = '#94A3B8'; }}>
+                        💾 Save as Draft
+                      </button>
+                      <button onClick={handlePublish} style={{ flex: 1, background: 'linear-gradient(135deg,#10B981,#059669)', color: 'white', border: 'none', borderRadius: '10px', padding: '12px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s' }}
+                        onMouseOver={e => e.target.style.opacity = '0.9'} onMouseOut={e => e.target.style.opacity = '1'}>
+                        🚀 Publish
+                      </button>
+                    </div>
+                    {saveStatus && (
+                      <div style={{ marginTop: '12px', fontSize: '13px', color: '#10B981', textAlign: 'center', fontWeight: 500 }}>{saveStatus}</div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : (
+            /* Placeholder before recording */
+            <div style={{ background: '#141B2D', border: '1px dashed rgba(124,58,237,0.3)', borderRadius: '16px', padding: '60px 32px', textAlign: 'center', color: '#4B5563', marginBottom: '20px' }}>
+              <div style={{ fontSize: '52px', marginBottom: '16px' }}>🎙️</div>
+              <div style={{ fontSize: '16px', fontWeight: 600, color: '#64748B', marginBottom: '8px' }}>SEO Analysis Awaits</div>
+              <div style={{ fontSize: '13px', color: '#4B5563', lineHeight: 1.6 }}>Enter a title, start speaking, and click <strong style={{ color: '#94A3B8' }}>End Recording</strong> to get your instant SEO score and recommendations.</div>
+            </div>
+          )}
+
+          {/* Tips Card */}
+          <div style={{ background: 'linear-gradient(135deg, rgba(124,58,237,0.1), rgba(6,182,212,0.08))', border: '1px solid rgba(124,58,237,0.2)', borderRadius: '16px', padding: '20px' }}>
+            <h4 style={{ fontSize: '13px', fontWeight: 600, color: '#A78BFA', margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: '6px' }}>✨ Tips for Better Voice Blogs</h4>
+            {[
+              'Speak naturally — the AI handles formatting.',
+              'Start with your main point, then elaborate.',
+              'Mention your target keyword naturally 2-3 times.',
+              'Aim for 300+ words for better SEO depth.',
+              'Pause briefly between sentences for accuracy.',
+            ].map((tip, i) => (
+              <div key={i} style={{ fontSize: '12px', color: '#64748B', padding: '6px 0', borderBottom: i < 4 ? '1px solid rgba(255,255,255,0.04)' : 'none', display: 'flex', gap: '8px' }}>
+                <span style={{ color: '#7C3AED', flexShrink: 0 }}>•</span>{tip}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 
 
@@ -1397,6 +1849,7 @@ Use clear headings and keep it actionable. Write in a professional consulting to
           <div className="nav-group">
             <h4 className="nav-label" id="nav-label-content">Content</h4>
             <a role="button" tabIndex={0} className="nav-item sidebar-link" data-section="newblog" onClick={() => window.showDashboardSection('newblog')} onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && window.showDashboardSection('newblog')} style={{ cursor: 'pointer' }}><Plus size={18} aria-hidden="true" /> New Blog</a>
+            <a role="button" tabIndex={0} className="nav-item sidebar-link" data-section="voicetoblog" onClick={() => window.showDashboardSection('voicetoblog')} onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && window.showDashboardSection('voicetoblog')} style={{ cursor: 'pointer' }}><Mic size={18} aria-hidden="true" /> Voice to Blog</a>
             <a role="button" tabIndex={0} className="nav-item sidebar-link" data-section="myblogs" onClick={() => window.showDashboardSection('myblogs')} onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && window.showDashboardSection('myblogs')} style={{ cursor: 'pointer' }}><FileText size={18} aria-hidden="true" /> My Blogs</a>
             <a role="button" tabIndex={0} className="nav-item sidebar-link" data-section="calendar" onClick={() => window.showDashboardSection('calendar')} onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && window.showDashboardSection('calendar')} style={{ cursor: 'pointer' }}><Calendar size={18} aria-hidden="true" /> Content Calendar</a>
             <a role="button" tabIndex={0} className="nav-item sidebar-link" data-section="clustermap" onClick={() => window.showDashboardSection('clustermap')} onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && window.showDashboardSection('clustermap')} style={{ cursor: 'pointer' }}><Network size={18} aria-hidden="true" /> Cluster Map</a>
@@ -1655,6 +2108,7 @@ Use clear headings and keep it actionable. Write in a professional consulting to
         </div>
 
         <BlogEditor callGemini={callGemini} publishBlog={publishBlog} uid={uid} />
+        <VoiceToBlogSection />
         <MyBlogsSection />
         <SerpGapSection />
         <SeoScoresSection />

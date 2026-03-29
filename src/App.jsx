@@ -492,6 +492,13 @@ const FeaturesPage = () => {
                 <td><span className="comp-mark-no">✗</span></td>
                 <td><span className="comp-mark-no">✗</span></td>
               </tr>
+              <tr>
+                <td>Blog Generation using AI</td>
+                <td><span className="comp-mark-yes">✓</span></td>
+                <td><span className="comp-mark-no">✗</span></td>
+                <td><span className="comp-mark-yes">✓</span></td>
+                <td><span className="comp-mark-no">✗</span></td>
+              </tr>
             </tbody>
           </table>
         </div>
