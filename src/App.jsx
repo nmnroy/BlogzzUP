@@ -42,6 +42,7 @@ import {
 import './index.css';
 import './interactions.css';
 import { useAuth } from './AuthContext';
+import { callGemini } from './utils/gemini';
 
 
 const AnimatedCounter = ({ endValue, suffix = "" }) => {
@@ -572,7 +573,7 @@ window.sendDemoMessage = async function() {
   const prompt = `You are BlogForge AI, an expert SEO content engine assistant. \nThe user just typed: "${keyword}"\n\nRespond in 3-4 short lines as if you are an AI engine processing their request. \nShow a realistic step-by-step processing response like:\n- Analyzing SERP gap for "${keyword}"... Found X low-competition keywords ✓\n- Identifying content gaps vs top 10 competitors... ✓  \n- Drafting SEO blog outline with XX% optimization score... ✓\n- Structuring for featured snippet eligibility... ✓\n\nKeep it short, punchy, technical. Show specific numbers related to "${keyword}". \nDo NOT write a blog. Just show the processing steps.`;
 
   try {
-    const raw = await window.callGemini(prompt, 300);
+    const raw = await callGemini(prompt, 300, 'text/plain');
     thinkingDiv.remove();
     container.appendChild(window.renderDemoMessage({ role: 'ai', text: raw }));
   } catch(err) {
@@ -598,9 +599,6 @@ window.generateSampleBlog = async function() {
   const inputEl = document.getElementById('tiy-keyword-input');
   const btn = document.getElementById('tiy-generate-btn');
   const resultsEl = document.getElementById('tiy-results');
-  const titleEl = document.getElementById('tiy-title-output');
-  const metaEl = document.getElementById('tiy-meta-output');
-  const paraEl = document.getElementById('tiy-para-output');
 
   if (!inputEl) { console.error('tiy-keyword-input not found'); return; }
 
@@ -624,59 +622,86 @@ window.generateSampleBlog = async function() {
 
   if (resultsEl) {
     resultsEl.style.display = 'block';
-    if (titleEl) titleEl.textContent = '✍️ Writing title...';
-    if (metaEl) metaEl.textContent = '';
-    if (paraEl) paraEl.textContent = '';
+    resultsEl.innerHTML = '<div style="text-align:center;padding:40px 0;color:#94A3B8;font-size:15px;"><div style="margin-bottom:16px;font-size:28px;">✨</div>Generating your blog on <strong style="color:#A78BFA;">' + keyword + '</strong>...<br/><span style="font-size:12px;color:#64748B;margin-top:8px;display:inline-block;">This may take a few seconds</span></div>';
   }
 
-  const prompt = `You are an expert SEO content writer for Indian businesses.
+  const prompt = `You are an expert SEO content writer. Write a short but complete blog post about "${keyword}".
 
-Generate a blog preview specifically for the keyword: "${keyword}"
-
-Return ONLY a valid JSON object — no markdown, no explanation, just raw JSON:
+Return ONLY valid JSON with this exact structure:
 {
-  "title": "An SEO blog title specifically about ${keyword}. Include the keyword, make it compelling, under 65 chars.",
-  "metaDescription": "Meta description under 155 chars specifically about ${keyword} with a subtle CTA.",
-  "firstParagraph": "A 3-4 sentence opening paragraph specifically about ${keyword}. Hook the reader. Include ${keyword} in the first sentence. Write for Indian audience."
+  "title": "compelling blog title about ${keyword}, under 65 chars",
+  "metaDescription": "meta description under 155 chars about ${keyword}",
+  "sections": [
+    {"heading": "Introduction", "content": "2-3 sentence introduction about ${keyword}. Hook the reader."},
+    {"heading": "section heading", "content": "2-3 sentences about this aspect of ${keyword}."},
+    {"heading": "section heading", "content": "2-3 sentences about this aspect of ${keyword}."},
+    {"heading": "Conclusion", "content": "2-3 sentence conclusion with a call to action."}
+  ]
 }`;
 
   try {
-    const raw = await window.callGemini(prompt, 600);
-    const cleaned = raw.replace(/```json|```/g, '').trim();
-    const data = JSON.parse(cleaned);
+    const raw = await callGemini(prompt, 2000, 'application/json');
+    let cleaned = raw.replace(/```json|```/g, '').trim();
 
-    if (titleEl) titleEl.textContent = '';
-    if (metaEl) metaEl.textContent = '';
-    if (paraEl) paraEl.textContent = '';
-
-    function typeIt(el, text, speed, onDone) {
-      if (!el) { if(onDone) onDone(); return; }
-      let i = 0;
-      function next() {
-        if (i < text.length) {
-          el.textContent += text.charAt(i++);
-          setTimeout(next, speed);
-        } else if (onDone) onDone();
-      }
-      next();
+    // Robust JSON repair
+    const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+    if (jsonMatch) cleaned = jsonMatch[0];
+    // Fix unterminated strings
+    const quoteCount = (cleaned.match(/(?<!\\)"/g) || []).length;
+    if (quoteCount % 2 !== 0) cleaned += '"';
+    // Fix unterminated brackets
+    const opens = (cleaned.match(/[\[{]/g) || []).length;
+    const closes = (cleaned.match(/[\]\}]/g) || []).length;
+    for (let k = closes; k < opens; k++) {
+      cleaned += cleaned.lastIndexOf('[') > cleaned.lastIndexOf('{') ? ']' : '}';
     }
 
-    typeIt(titleEl, data.title || '', 30, () => {
-      setTimeout(() => {
-        typeIt(metaEl, data.metaDescription || '', 18, () => {
-          setTimeout(() => {
-            typeIt(paraEl, data.firstParagraph || '', 12, null);
-          }, 200);
-        });
-      }, 300);
-    });
+    const data = JSON.parse(cleaned);
+
+    // Build blog HTML
+    let blogHTML = '';
+    blogHTML += '<div style="margin-bottom:24px;">';
+    blogHTML += '<div style="font-size:11px;color:#7C3AED;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">📌 Blog Title</div>';
+    blogHTML += '<h2 style="font-size:22px;color:#fff;font-weight:700;margin:0;line-height:1.3;">' + (data.title || keyword) + '</h2>';
+    blogHTML += '</div>';
+
+    blogHTML += '<div style="margin-bottom:24px;padding:12px 16px;background:rgba(124,58,237,0.08);border-left:3px solid #7C3AED;border-radius:0 8px 8px 0;">';
+    blogHTML += '<div style="font-size:11px;color:#7C3AED;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">📝 Meta Description</div>';
+    blogHTML += '<div style="font-size:13px;color:#94A3B8;line-height:1.5;">' + (data.metaDescription || '') + '</div>';
+    blogHTML += '</div>';
+
+    if (data.sections && data.sections.length > 0) {
+      data.sections.forEach(function(sec, idx) {
+        blogHTML += '<div style="margin-bottom:20px;">';
+        blogHTML += '<h3 style="font-size:16px;color:#E2E8F0;font-weight:600;margin:0 0 8px;display:flex;align-items:center;gap:8px;"><span style="color:#7C3AED;">§</span> ' + (sec.heading || 'Section ' + (idx + 1)) + '</h3>';
+        blogHTML += '<p style="font-size:14px;color:#94A3B8;line-height:1.8;margin:0;">' + (sec.content || '') + '</p>';
+        blogHTML += '</div>';
+      });
+    }
+
+    blogHTML += '<div style="margin-top:24px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06);display:flex;gap:12px;flex-wrap:wrap;">';
+    blogHTML += '<span style="font-size:11px;background:rgba(16,185,129,0.1);color:#10B981;padding:4px 12px;border-radius:999px;font-weight:500;">✓ AI Generated</span>';
+    blogHTML += '<span style="font-size:11px;background:rgba(124,58,237,0.1);color:#A78BFA;padding:4px 12px;border-radius:999px;font-weight:500;">🔑 ' + keyword + '</span>';
+    blogHTML += '<span style="font-size:11px;background:rgba(6,182,212,0.1);color:#06B6D4;padding:4px 12px;border-radius:999px;font-weight:500;">📊 SEO Optimized</span>';
+    blogHTML += '</div>';
+
+    if (resultsEl) {
+      resultsEl.style.display = 'block';
+      resultsEl.innerHTML = blogHTML;
+    }
 
   } catch(err) {
-    const cap = keyword.charAt(0).toUpperCase() + keyword.slice(1);
-    if (titleEl) titleEl.textContent = 'Complete Guide to ' + cap + ' in 2026';
-    if (metaEl) metaEl.textContent = 'Everything you need to know about ' + keyword + '. Expert tips and actionable strategies to master ' + keyword + ' today.';
-    if (paraEl) paraEl.textContent = cap + ' is one of the most in-demand skills in 2026. Whether you are a beginner or looking to advance your expertise, this guide covers everything about ' + keyword + ' from fundamentals to advanced strategies.';
     console.error('Gemini error:', err.message);
+    // Show error with retry option instead of hardcoded fallback
+    if (resultsEl) {
+      resultsEl.style.display = 'block';
+      resultsEl.innerHTML = '<div style="text-align:center;padding:32px 0;">' +
+        '<div style="font-size:28px;margin-bottom:12px;">⚠️</div>' +
+        '<div style="font-size:15px;color:#F59E0B;font-weight:600;margin-bottom:8px;">AI is busy — please try again</div>' +
+        '<div style="font-size:13px;color:#64748B;margin-bottom:20px;">Our API keys are cooling down. Click below to retry.</div>' +
+        '<button onclick="window.generateSampleBlog()" style="background:linear-gradient(135deg,#7C3AED,#06B6D4);color:white;border:none;border-radius:10px;padding:12px 28px;font-size:14px;font-weight:600;cursor:pointer;">🔄 Retry Generation</button>' +
+        '</div>';
+    }
   }
 
   if (btn) {
@@ -808,13 +833,13 @@ const DemoPage = () => {
 
       <div style={{marginTop: '64px'}}>
         <h2 style={{fontSize: '32px', color: '#fff', textAlign: 'center', margin: 0, fontWeight: 700}}>Try It Yourself</h2>
-        <p style={{color: '#94A3B8', textAlign: 'center', marginBottom: '32px', marginTop: '12px'}}>Enter any keyword and watch the AI work</p>
+        <p style={{color: '#94A3B8', textAlign: 'center', marginBottom: '32px', marginTop: '12px'}}>Enter any topic and get an AI-generated blog post instantly</p>
         
         <div style={{maxWidth: '600px', margin: '0 auto', display: 'flex', gap: '12px'}}>
           <input 
             id="tiy-keyword-input"
             type="text" 
-            placeholder="Enter any keyword, e.g. data science, SaaS tools, fitness apps..."
+            placeholder="Enter any topic, e.g. data science, SaaS tools, fitness apps..."
             onKeyDown={(e) => { if (e.key === 'Enter') window.generateSampleBlog(); }}
             style={{flex: 1, background: '#141B2D', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '14px 20px', color: 'white', fontSize: '15px', outline: 'none'}}
             onFocus={(e) => e.target.style.borderColor='#7C3AED'}
@@ -831,16 +856,7 @@ const DemoPage = () => {
           </button>
         </div>
 
-        <div id="tiy-results" style={{display: 'none', background: '#141B2D', border: '1px solid rgba(124,58,237,0.3)', borderRadius: '16px', padding: '28px', marginTop: '20px', maxWidth: '700px', marginLeft: 'auto', marginRight: 'auto'}}>
-          <div style={{fontSize: '11px', color: '#7C3AED', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px'}}>📌 Blog Title</div>
-          <div id="tiy-title-output" style={{fontSize: '18px', color: '#fff', fontWeight: 600, marginBottom: '20px', minHeight: '27px'}}></div>
-          
-          <div style={{fontSize: '11px', color: '#7C3AED', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px'}}>📝 Meta Description</div>
-          <div id="tiy-meta-output" style={{fontSize: '14px', color: '#94A3B8', marginBottom: '20px', minHeight: '42px'}}></div>
-          
-          <div style={{fontSize: '11px', color: '#7C3AED', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px'}}>✍️ First Paragraph</div>
-          <div id="tiy-para-output" style={{fontSize: '14px', color: '#94A3B8', lineHeight: 1.7, minHeight: '100px'}}></div>
-        </div>
+        <div id="tiy-results" style={{display: 'none', background: '#141B2D', border: '1px solid rgba(124,58,237,0.3)', borderRadius: '16px', padding: '28px', marginTop: '20px', maxWidth: '700px', marginLeft: 'auto', marginRight: 'auto'}}></div>
       </div>
 
       <div style={{marginTop: '64px', textAlign: 'center'}}>
