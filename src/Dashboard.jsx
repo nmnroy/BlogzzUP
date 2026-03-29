@@ -718,7 +718,7 @@ const AutoPublisherSection = () => {
     { id: 'blogger', name: 'Blogger', icon: '🅱️' },
     { id: 'devto', name: 'Dev.to', icon: '👩‍💻' },
     { id: 'hashnode', name: 'Hashnode', icon: '🔗' },
-    { id: 'tumblr', name: 'Tumblr', icon: '🆃' }
+    { id: 'medium', name: 'Medium', icon: 'Ⓜ️' }
   ];
 
   const inputStyle = {
@@ -793,22 +793,10 @@ const AutoPublisherSection = () => {
               <input value={(credentials.hashnode?.publicationId) || ''} onChange={e => updateCred('hashnode', 'publicationId', e.target.value)} placeholder="5fxx..." style={inputStyle} required />
             </div>
           )}
-          {activeTab === 'tumblr' && (
+          {activeTab === 'medium' && (
             <div className="animation-fade-in">
-              <label style={labelStyle}>Blog Identifier</label>
-              <input value={(credentials.tumblr?.blogIdentifier) || ''} onChange={e => updateCred('tumblr', 'blogIdentifier', e.target.value)} placeholder="example.tumblr.com" style={inputStyle} required />
-
-              <label style={labelStyle}>Consumer Key</label>
-              <input value={(credentials.tumblr?.consumerKey) || ''} onChange={e => updateCred('tumblr', 'consumerKey', e.target.value)} type="password" placeholder="from tumblr app" style={inputStyle} required />
-
-              <label style={labelStyle}>Consumer Secret</label>
-              <input value={(credentials.tumblr?.consumerSecret) || ''} onChange={e => updateCred('tumblr', 'consumerSecret', e.target.value)} type="password" placeholder="from tumblr app" style={inputStyle} required />
-
-              <label style={labelStyle}>OAuth Token</label>
-              <input value={(credentials.tumblr?.oauthToken) || ''} onChange={e => updateCred('tumblr', 'oauthToken', e.target.value)} type="password" placeholder="from console auth" style={inputStyle} required />
-
-              <label style={labelStyle}>OAuth Token Secret</label>
-              <input value={(credentials.tumblr?.oauthTokenSecret) || ''} onChange={e => updateCred('tumblr', 'oauthTokenSecret', e.target.value)} type="password" placeholder="from console" style={inputStyle} required />
+              <label style={labelStyle}>Medium Integration Token</label>
+              <input value={(credentials.medium?.integrationToken) || ''} onChange={e => updateCred('medium', 'integrationToken', e.target.value)} type="password" placeholder="Get from Medium Settings > Security and apps" style={inputStyle} required />
             </div>
           )}
 
@@ -1992,7 +1980,7 @@ Use clear headings and keep it actionable. Write in a professional consulting to
               <option value="blogger">Blogger</option>
               <option value="devto">Dev.to</option>
               <option value="hashnode">Hashnode</option>
-              <option value="tumblr">Tumblr</option>
+              <option value="medium">Medium</option>
             </select>
 
             {/* Scheduling Options */}

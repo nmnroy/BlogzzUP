@@ -2,8 +2,24 @@
   command = "npm run build"
   publish = "dist"
 
-[functions]
-  directory = "netlify/functions"
 
 [build.environment]
   SECRETS_SCAN_ENABLED = "false"
+
+[[redirects]]
+  from = "/api/medium/*"
+  to = "https://api.medium.com/v1/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/devto/*"
+  to = "https://dev.to/api/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/hashnode*"
+  to = "https://gql.hashnode.com/:splat"
+  status = 200
+  force = true

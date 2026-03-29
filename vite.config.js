@@ -19,10 +19,10 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/hashnode/, '')
       },
-      '/api/tumblr': {
-        target: 'https://api.tumblr.com/v2',
+      '/api/medium': {
+        target: 'https://api.medium.com/v1',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/tumblr/, '')
+        rewrite: (path) => path.replace(/^\/api\/medium/, '')
       }
     }
   }

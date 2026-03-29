@@ -5,7 +5,7 @@
  * Uses the Web Crypto API (built into all modern browsers) instead of
  * Node's crypto module. No server required.
  *
- * Supports: WordPress, Blogger, Dev.to, Hashnode, Tumblr
+ * Supports: WordPress, Blogger, Dev.to, Hashnode, Medium
  */
 
 import TurndownService from 'turndown';
@@ -56,42 +56,50 @@ function normalizeTags(tags) {
 }
 
 // ─────────────────────────────────────────────
-// Web Crypto Utilities (replaces Node's crypto)
+// Medium
 // ─────────────────────────────────────────────
 
-/**
- * Generates a random hex nonce using the browser's Web Crypto API.
- * Replaces: crypto.randomBytes(16).toString('hex')
- */
-function generateNonce() {
-  const array = new Uint8Array(16);
-  window.crypto.getRandomValues(array);
-  return Array.from(array).map(b => b.toString(16).padStart(2, '0')).join('');
-}
+export async function publishToMedium({ title, content, tags, credentials }) {
+  validateCredentials('Medium', credentials, ['integrationToken']);
+  const { integrationToken } = credentials;
 
-/**
- * Signs a string using HMAC-SHA1 via the Web Crypto API.
- * Replaces: crypto.createHmac('sha1', key).update(data).digest('base64')
- */
-async function hmacSha1Base64(signingKey, data) {
-  const encoder = new TextEncoder();
+  // 1. Get User ID
+  const meResponse = await fetch('/api/medium/me', {
+    headers: { 'Authorization': `Bearer ${integrationToken}` }
+  });
 
-  const keyMaterial = await window.crypto.subtle.importKey(
-    'raw',
-    encoder.encode(signingKey),
-    { name: 'HMAC', hash: 'SHA-1' },
-    false,
-    ['sign']
-  );
+  if (!meResponse.ok) {
+    const err = await meResponse.json();
+    throw new Error(err.errors?.[0]?.message || 'Medium authentication failed');
+  }
+  const meData = await meResponse.json();
+  const userId = meData.data.id;
 
-  const signature = await window.crypto.subtle.sign(
-    'HMAC',
-    keyMaterial,
-    encoder.encode(data)
-  );
+  // 2. Publish Post
+  const htmlContent = ensureHtml(content);
+  const normalizedTags = normalizeTags(tags);
 
-  // Convert ArrayBuffer to Base64
-  return btoa(String.fromCharCode(...new Uint8Array(signature)));
+  const response = await fetch(`/api/medium/users/${userId}/posts`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${integrationToken}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      title,
+      contentFormat: 'html',
+      content: htmlContent,
+      tags: normalizedTags,
+      publishStatus: 'public'
+    })
+  });
+
+  if (!response.ok) {
+    const err = await response.json();
+    throw new Error(err.errors?.[0]?.message || 'Medium publish failed');
+  }
+
+  return response.json();
 }
 
 // ─────────────────────────────────────────────
@@ -289,78 +297,10 @@ export async function publishToHashnode({ title, content, tags, credentials }) {
 }
 
 // ─────────────────────────────────────────────
-// Tumblr — OAuth 1.0a (Browser-safe)
-// ─────────────────────────────────────────────
-
-async function generateOAuthHeader(method, url, bodyParams, credentials) {
-  const { consumerKey, consumerSecret, oauthToken, oauthTokenSecret } = credentials;
-
-  const oauthParams = {
-    oauth_consumer_key:     consumerKey,
-    oauth_nonce:            generateNonce(),        // ✅ Web Crypto nonce
-    oauth_signature_method: 'HMAC-SHA1',
-    oauth_timestamp:        Math.floor(Date.now() / 1000).toString(),
-    oauth_token:            oauthToken,
-    oauth_version:          '1.0'
-  };
-
-  const allParams = { ...oauthParams, ...bodyParams };
-  const paramString = Object.keys(allParams)
-    .sort()
-    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(allParams[key])}`)
-    .join('&');
-
-  const signatureBase = [
-    method.toUpperCase(),
-    encodeURIComponent(url),
-    encodeURIComponent(paramString)
-  ].join('&');
-
-  const signingKey = `${encodeURIComponent(consumerSecret)}&${encodeURIComponent(oauthTokenSecret)}`;
-
-  // ✅ Web Crypto HMAC-SHA1 — replaces Node's crypto.createHmac
-  const signature = await hmacSha1Base64(signingKey, signatureBase);
-
-  const headerParams = { ...oauthParams, oauth_signature: signature };
-
-  return 'OAuth ' + Object.keys(headerParams)
-    .sort()
-    .map(key => `${encodeURIComponent(key)}="${encodeURIComponent(headerParams[key])}"`)
-    .join(', ');
-}
-
-export async function publishToTumblr({ title, content, tags, credentials }) {
-  validateCredentials('Tumblr', credentials, [
-    'blogIdentifier', 'consumerKey', 'consumerSecret', 'oauthToken', 'oauthTokenSecret'
-  ]);
-
-  const htmlContent = ensureHtml(content);
-  const normalizedTags = normalizeTags(tags);
-
-  const response = await fetch('/.netlify/functions/tumblr-publish', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      title,
-      content:     htmlContent,
-      tags:        normalizedTags,
-      credentials
-    })
-  });
-
-  if (!response.ok) {
-    const err = await response.json();
-    throw new Error(err.error || 'Tumblr publish failed');
-  }
-
-  return response.json();
-}
-
-// ─────────────────────────────────────────────
 // Unified Entry Point
 // ─────────────────────────────────────────────
 
-const SUPPORTED_PLATFORMS = ['wordpress', 'blogger', 'devto', 'hashnode', 'tumblr'];
+const SUPPORTED_PLATFORMS = ['wordpress', 'blogger', 'devto', 'hashnode', 'medium'];
 
 export async function publishBlog(platform, data) {
   if (typeof platform !== 'string' || !platform.trim()) {
@@ -390,7 +330,7 @@ export async function publishBlog(platform, data) {
       case 'blogger':   return await publishToBlogger(data);
       case 'devto':     return await publishToDevto(data);
       case 'hashnode':  return await publishToHashnode(data);
-      case 'tumblr':    return await publishToTumblr(data);
+      case 'medium':    return await publishToMedium(data);
     }
   } catch (error) {
     if (error.message.startsWith('[')) throw error;

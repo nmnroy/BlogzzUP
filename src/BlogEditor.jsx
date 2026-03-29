@@ -671,7 +671,7 @@ Return ONLY a valid JSON object:
              </div>
              
              <div className="be-tone-grid" style={{gridTemplateColumns:'repeat(auto-fit, minmax(140px, 1fr))', gap:'12px'}}>
-                {['wordpress', 'blogger', 'devto', 'hashnode', 'tumblr'].map(p => (
+                {['wordpress', 'blogger', 'devto', 'hashnode', 'medium'].map(p => (
                    <label key={p} className={`be-tone-card${pubPlatform === p ? ' selected' : ''}`} style={{padding:'16px', textAlign:'center'}}>
                       <input type="radio" className="sr-only" name="pubPlatform" value={p} onChange={() => setPubPlatform(p)} />
                       <div style={{fontSize:'24px', marginBottom:'8px'}}>
@@ -679,7 +679,7 @@ Return ONLY a valid JSON object:
                         {p === 'blogger' && '🍊'}
                         {p === 'devto' && '📑'}
                         {p === 'hashnode' && '⚡'}
-                        {p === 'tumblr' && '🔵'}
+                        {p === 'medium' && 'Ⓜ️'}
                       </div>
                       <span style={{textTransform:'capitalize', fontWeight:600}}>{p}</span>
                    </label>
