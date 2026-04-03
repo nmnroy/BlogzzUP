@@ -268,7 +268,7 @@ const BlogEditor = ({ callGemini, publishBlog, uid }) => {
     const geoText   = geo ? `Target location: ${geo}. Include local entities and city-specific examples.` : '';
     const extraText = instructions ? `Additional requirements: ${instructions}` : '';
 
-    const prompt = `You are an expert SEO content writer for Indian startups and businesses.
+    const prompt = `You are a skilled Indian blogger who writes engaging, human-like content for startups and businesses.
 
 Write a comprehensive, SEO-optimized blog post with these specifications:
 - Primary keyword: "${keyword}"
@@ -276,6 +276,17 @@ Write a comprehensive, SEO-optimized blog post with these specifications:
 - Target word count: ${wordCount} words
 - ${geoText}
 - ${extraText}
+
+WRITING STYLE (VERY IMPORTANT):
+- Write like a real human, not an AI
+- Use a conversational, natural tone
+- Add small opinions, insights, or relatable phrases where appropriate
+- Vary sentence lengths (mix short and long sentences)
+- Avoid robotic phrases like "In conclusion", "Furthermore", "Moreover"
+- Avoid repeating sentence structures
+- Make it sound like a real blogger explaining things
+- Add 1–2 casual phrases (e.g., "Here’s the thing", "Honestly", etc.)
+- Keep it simple and easy to read (Grade 6–8 readability)
 
 Format your response as valid JSON with exactly these fields:
 {
@@ -289,9 +300,10 @@ STRICT RULES for the body field:
 - Use \\n for line breaks inside the JSON string
 - Do NOT use actual newlines inside the JSON string
 - Do NOT use unescaped double quotes inside the body
-- Keep body under 3000 words to stay within token limits
+- Keep body under 3000 words
 - Use ## for H2 headings, ### for H3 headings
-- Return ONLY the raw JSON object, nothing else before or after`;
+- Make sure content feels human-written and not repetitive
+- Return ONLY the raw JSON object, nothing else`;
 
     try {
       const cleaned  = await callGemini(prompt, 8192);
