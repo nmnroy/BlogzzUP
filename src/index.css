@@ -7476,3 +7476,1984 @@ tbody tr:nth-child(5) { animation-delay: 0.25s; }
 *[class*="clusterNode"]:nth-child(3) { animation-delay: 1s; }
 *[class*="clusterNode"]:nth-child(4) { animation-delay: 1.5s; }
 *[class*="clusterNode"]:nth-child(5) { animation-delay: 2s; }
+
+/* =============================================
+   BILLING PAGE - COMPLETE LIGHT MODE FIX
+   ============================================= */
+
+/* All three plan cards */
+[data-theme="light"] [class*="BillingSection"] [class*="planCard"],
+[data-theme="light"] [class*="billing"] [class*="plan"],
+[data-theme="light"] [class*="Billing"] [class*="Plan"],
+[data-theme="light"] [class*="billingCard"],
+[data-theme="light"] [class*="BillingCard"] {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(180, 150, 110, 0.25) !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07) !important;
+  color: #2C1A0E !important;
+}
+
+/* Specifically target the non-active plan cards that stay dark */
+[data-theme="light"] [class*="plan"]:not([class*="current"]):not([class*="active"]):not([class*="Current"]) {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(180, 150, 110, 0.2) !important;
+}
+
+/* Plan name (Starter, Growth, Scale) */
+[data-theme="light"] [class*="planName"],
+[data-theme="light"] [class*="plan-name"],
+[data-theme="light"] [class*="tierName"],
+[data-theme="light"] [class*="tier-name"] {
+  color: #C4974A !important;
+}
+
+/* Price amount */
+[data-theme="light"] [class*="planPrice"],
+[data-theme="light"] [class*="plan-price"],
+[data-theme="light"] [class*="priceAmount"],
+[data-theme="light"] [class*="price-amount"] {
+  color: #2C1A0E !important;
+}
+
+/* Blogs/mo text */
+[data-theme="light"] [class*="planQuota"],
+[data-theme="light"] [class*="plan-quota"],
+[data-theme="light"] [class*="planLimit"],
+[data-theme="light"] [class*="blogsPerMonth"] {
+  color: #7C3AED !important;
+}
+
+/* Current plan card - keep light purple but refine */
+[data-theme="light"] [class*="currentPlan"],
+[data-theme="light"] [class*="current-plan"],
+[data-theme="light"] [class*="activePlan"] {
+  background: rgba(124, 58, 237, 0.06) !important;
+  border: 2px solid rgba(124, 58, 237, 0.35) !important;
+}
+
+/* Upgrade button on non-active plans */
+[data-theme="light"] [class*="upgradeBtn"],
+[data-theme="light"] [class*="upgrade-btn"],
+[data-theme="light"] button[class*="upgrade"],
+[data-theme="light"] button[class*="Upgrade"] {
+  background: #F5F0E8 !important;
+  border: 1px solid rgba(180, 150, 110, 0.3) !important;
+  color: #5C4A3A !important;
+}
+
+[data-theme="light"] [class*="upgradeBtn"]:hover,
+[data-theme="light"] button[class*="upgrade"]:hover {
+  background: linear-gradient(135deg, #C4974A, #A67C3A) !important;
+  color: #FAF7F0 !important;
+  border-color: transparent !important;
+}
+
+/* Manage Plan button */
+[data-theme="light"] [class*="manageBtn"],
+[data-theme="light"] [class*="manage-btn"],
+[data-theme="light"] button[class*="manage"],
+[data-theme="light"] button[class*="Manage"] {
+  background: transparent !important;
+  border: 1px solid rgba(124, 58, 237, 0.4) !important;
+  color: #7C3AED !important;
+}
+
+/* Current Plan badge */
+[data-theme="light"] [class*="currentBadge"],
+[data-theme="light"] [class*="current-badge"],
+[data-theme="light"] [class*="planBadge"] {
+  background: #7C3AED !important;
+  color: #FFFFFF !important;
+}
+
+/* =============================================
+   AUTO-PUBLISHER - PLATFORM TABS LIGHT FIX
+   ============================================= */
+
+/* Platform tab buttons (WordPress, Blogger, Dev.to etc) */
+[data-theme="light"] [class*="AutoPublisher"] [class*="platformTab"],
+[data-theme="light"] [class*="autoPublisher"] [class*="platform"],
+[data-theme="light"] [class*="AutoPublisher"] button,
+[data-theme="light"] [class*="publisherTabs"] button,
+[data-theme="light"] [class*="platformTabs"] button,
+[data-theme="light"] [class*="platform-tabs"] button {
+  background: #F5F0E8 !important;
+  border: 1px solid rgba(180, 150, 110, 0.2) !important;
+  color: #5C4A3A !important;
+}
+
+[data-theme="light"] [class*="AutoPublisher"] button:hover,
+[data-theme="light"] [class*="platformTabs"] button:hover {
+  background: rgba(196, 151, 74, 0.12) !important;
+  border-color: rgba(196, 151, 74, 0.3) !important;
+  color: #2C1A0E !important;
+}
+
+/* Active/selected platform tab */
+[data-theme="light"] [class*="AutoPublisher"] button[class*="active"],
+[data-theme="light"] [class*="AutoPublisher"] button[class*="selected"],
+[data-theme="light"] [class*="platformTabs"] button[class*="active"],
+[data-theme="light"] [class*="platformTab"][class*="active"] {
+  background: linear-gradient(135deg, #C4974A, #A67C3A) !important;
+  color: #FAF7F0 !important;
+  border-color: transparent !important;
+}
+
+/* Form container inside auto-publisher */
+[data-theme="light"] [class*="AutoPublisher"] [class*="form"],
+[data-theme="light"] [class*="AutoPublisher"] [class*="Form"],
+[data-theme="light"] [class*="platformForm"],
+[data-theme="light"] [class*="publisherForm"] {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(180, 150, 110, 0.18) !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Form field labels */
+[data-theme="light"] [class*="AutoPublisher"] label,
+[data-theme="light"] [class*="platformForm"] label,
+[data-theme="light"] [class*="publisherForm"] label {
+  color: #2C1A0E !important;
+  font-weight: 600 !important;
+}
+
+/* Form inputs */
+[data-theme="light"] [class*="AutoPublisher"] input,
+[data-theme="light"] [class*="platformForm"] input,
+[data-theme="light"] [class*="publisherForm"] input {
+  background: #FDFAF5 !important;
+  border: 1px solid rgba(180, 150, 110, 0.25) !important;
+  color: #2C1A0E !important;
+}
+
+[data-theme="light"] [class*="AutoPublisher"] input::placeholder,
+[data-theme="light"] [class*="platformForm"] input::placeholder {
+  color: rgba(92, 74, 58, 0.4) !important;
+}
+
+[data-theme="light"] [class*="AutoPublisher"] input:focus,
+[data-theme="light"] [class*="platformForm"] input:focus {
+  border-color: #C4974A !important;
+  box-shadow: 0 0 0 3px rgba(196, 151, 74, 0.1) !important;
+}
+
+/* Save/Connect button */
+[data-theme="light"] [class*="AutoPublisher"] button[class*="save"],
+[data-theme="light"] [class*="AutoPublisher"] button[class*="Save"],
+[data-theme="light"] [class*="AutoPublisher"] button[class*="connect"],
+[data-theme="light"] [class*="AutoPublisher"] button[class*="Connect"],
+[data-theme="light"] [class*="platformForm"] button[type="submit"],
+[data-theme="light"] [class*="saveCredentials"],
+[data-theme="light"] [class*="connectBtn"] {
+  background: linear-gradient(135deg, #C4974A, #A67C3A) !important;
+  color: #FAF7F0 !important;
+  border: none !important;
+  box-shadow: 0 4px 14px rgba(196, 151, 74, 0.3) !important;
+}
+
+/* Platform connection wrapper */
+[data-theme="light"] [class*="platformConnections"],
+[data-theme="light"] [class*="platform-connections"],
+[data-theme="light"] [class*="AutoPublisher"] > div {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(180, 150, 110, 0.18) !important;
+}
+
+/* =============================================
+   FEATURES PAGE - MOCK UI PANELS LIGHT FIX
+   These are the dark preview panels on the right
+   side of each feature card
+   ============================================= */
+
+/* All mock/preview panels inside feature cards */
+[data-theme="light"] [class*="mockUI"],
+[data-theme="light"] [class*="mock-ui"],
+[data-theme="light"] [class*="MockUI"],
+[data-theme="light"] [class*="previewPanel"],
+[data-theme="light"] [class*="preview-panel"],
+[data-theme="light"] [class*="PreviewPanel"],
+[data-theme="light"] [class*="featurePreview"],
+[data-theme="light"] [class*="feature-preview"],
+[data-theme="light"] [class*="mockScreen"],
+[data-theme="light"] [class*="mock-screen"],
+[data-theme="light"] [class*="demoPanel"],
+[data-theme="light"] [class*="demo-panel"],
+[data-theme="light"] [class*="visualPanel"],
+[data-theme="light"] [class*="visual-panel"] {
+  background: #F0EBE0 !important;
+  border: 1px solid rgba(180, 150, 110, 0.2) !important;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* 7-stage list items inside mock panel */
+[data-theme="light"] [class*="stageList"],
+[data-theme="light"] [class*="stage-list"],
+[data-theme="light"] [class*="pipelineList"],
+[data-theme="light"] [class*="pipeline-list"] {
+  background: transparent !important;
+}
+
+[data-theme="light"] [class*="stageItem"],
+[data-theme="light"] [class*="stage-item"],
+[data-theme="light"] [class*="pipelineItem"],
+[data-theme="light"] [class*="pipeline-item"] {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(180, 150, 110, 0.15) !important;
+  color: #5C4A3A !important;
+}
+
+[data-theme="light"] [class*="stageNumber"],
+[data-theme="light"] [class*="stage-number"],
+[data-theme="light"] [class*="stageNum"] {
+  color: #C4974A !important;
+  background: rgba(196, 151, 74, 0.1) !important;
+}
+
+[data-theme="light"] [class*="stageName"],
+[data-theme="light"] [class*="stage-name"] {
+  color: #5C4A3A !important;
+}
+
+/* Tone slider mock panel */
+[data-theme="light"] [class*="toneSlider"],
+[data-theme="light"] [class*="tone-slider"],
+[data-theme="light"] [class*="voiceDial"],
+[data-theme="light"] [class*="voice-dial"] {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(180, 150, 110, 0.15) !important;
+}
+
+[data-theme="light"] [class*="sliderTrack"],
+[data-theme="light"] [class*="slider-track"] {
+  background: rgba(180, 150, 110, 0.2) !important;
+}
+
+[data-theme="light"] [class*="sliderThumb"],
+[data-theme="light"] [class*="slider-thumb"] {
+  background: #7C3AED !important;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2) !important;
+}
+
+[data-theme="light"] [class*="sliderLabel"],
+[data-theme="light"] [class*="slider-label"],
+[data-theme="light"] [class*="Casual"],
+[data-theme="light"] [class*="Formal"] {
+  color: #8B7355 !important;
+}
+
+/* Style tags (Conversational, Data-driven, Story-led) */
+[data-theme="light"] [class*="styleTag"],
+[data-theme="light"] [class*="style-tag"],
+[data-theme="light"] [class*="voiceTag"],
+[data-theme="light"] [class*="voice-tag"] {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(180, 150, 110, 0.2) !important;
+  color: #5C4A3A !important;
+}
+
+[data-theme="light"] [class*="styleTag"][class*="active"],
+[data-theme="light"] [class*="voiceTag"][class*="active"],
+[data-theme="light"] [class*="styleTag"][class*="selected"] {
+  background: linear-gradient(135deg, #C4974A, #A67C3A) !important;
+  color: #FAF7F0 !important;
+  border-color: transparent !important;
+}
+
+/* Voice recorder mock panel */
+[data-theme="light"] [class*="waveform"],
+[data-theme="light"] [class*="Waveform"],
+[data-theme="light"] [class*="voiceWave"],
+[data-theme="light"] [class*="recordingBar"] {
+  background: rgba(196, 151, 74, 0.15) !important;
+}
+
+[data-theme="light"] [class*="recordingText"],
+[data-theme="light"] [class*="recording-text"],
+[data-theme="light"] [class*="recordTimer"] {
+  color: #C4974A !important;
+}
+
+/* SERP table mock inside feature card */
+[data-theme="light"] [class*="mockTable"],
+[data-theme="light"] [class*="mock-table"],
+[data-theme="light"] [class*="serpTable"],
+[data-theme="light"] [class*="serpMock"] {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(180, 150, 110, 0.15) !important;
+}
+
+[data-theme="light"] [class*="mockTable"] th,
+[data-theme="light"] [class*="serpTable"] th {
+  background: #F5F0E8 !important;
+  color: #5C4A3A !important;
+  border-bottom: 1px solid rgba(180, 150, 110, 0.15) !important;
+}
+
+[data-theme="light"] [class*="mockTable"] td,
+[data-theme="light"] [class*="serpTable"] td {
+  color: #5C4A3A !important;
+  border-bottom: 1px solid rgba(180, 150, 110, 0.08) !important;
+}
+
+/* Generate Blog button inside mock panel */
+[data-theme="light"] [class*="mockPanel"] button,
+[data-theme="light"] [class*="mock-panel"] button,
+[data-theme="light"] [class*="previewPanel"] button,
+[data-theme="light"] [class*="MockUI"] button {
+  background: linear-gradient(135deg, #C4974A, #A67C3A) !important;
+  color: #FAF7F0 !important;
+  border: none !important;
+}
+
+/* Node graph mock (cluster map preview) */
+[data-theme="light"] [class*="nodeGraph"],
+[data-theme="light"] [class*="node-graph"],
+[data-theme="light"] [class*="mockGraph"] {
+  background: #F5F0E8 !important;
+}
+
+[data-theme="light"] [class*="graphNode"],
+[data-theme="light"] [class*="graph-node"] {
+  background: rgba(196, 151, 74, 0.12) !important;
+  border-color: rgba(196, 151, 74, 0.3) !important;
+  color: #8B6914 !important;
+}
+
+[data-theme="light"] [class*="graphNode"][class*="center"],
+[data-theme="light"] [class*="graph-node"][class*="center"] {
+  background: linear-gradient(135deg, #C4974A, #A67C3A) !important;
+  color: #FAF7F0 !important;
+}
+
+/* Bar chart mock (ROI tracker preview) */
+[data-theme="light"] [class*="mockBar"],
+[data-theme="light"] [class*="mock-bar"],
+[data-theme="light"] [class*="chartBar"] {
+  background: rgba(196, 151, 74, 0.5) !important;
+}
+
+[data-theme="light"] [class*="mockBar"][class*="fill"],
+[data-theme="light"] [class*="barFill"] {
+  background: linear-gradient(180deg, #C4974A, #A67C3A) !important;
+}
+
+/* SEO score ring inside feature card */
+[data-theme="light"] [class*="scoreCircle"],
+[data-theme="light"] [class*="score-circle"],
+[data-theme="light"] [class*="mockRing"] {
+  border-color: #10B981 !important;
+}
+
+/* Right panel input field in voice/blog mock */
+[data-theme="light"] [class*="mockInput"],
+[data-theme="light"] [class*="mock-input"] {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(180, 150, 110, 0.25) !important;
+  color: #2C1A0E !important;
+}
+
+/* Competitor table mock */
+[data-theme="light"] [class*="competitorTable"],
+[data-theme="light"] [class*="competitor-table"] {
+  background: #FFFFFF !important;
+}
+
+[data-theme="light"] [class*="competitorRow"],
+[data-theme="light"] [class*="competitor-row"] {
+  border-bottom: 1px solid rgba(180, 150, 110, 0.1) !important;
+  color: #5C4A3A !important;
+}
+
+[data-theme="light"] [class*="beatBtn"],
+[data-theme="light"] [class*="beat-btn"] {
+  background: rgba(124, 58, 237, 0.1) !important;
+  color: #7C3AED !important;
+  border-color: rgba(124, 58, 237, 0.2) !important;
+}
+
+/* =============================================
+   NUCLEAR FALLBACK - CATCHES REMAINING DARKS
+   ============================================= */
+
+/* Any element with dark background that wasn't caught */
+@media (prefers-color-scheme: light) {
+  [data-theme="light"] {
+    --force-bg: #FFFFFF;
+  }
+}
+
+/* Force remaining dark navy children to white */
+[data-theme="light"] [class*="Section"] > [class*="card"],
+[data-theme="light"] [class*="Section"] > [class*="Card"],
+[data-theme="light"] [class*="section"] > [class*="card"],
+[data-theme="light"] [class*="Page"] > div > [class*="card"],
+[data-theme="light"] [class*="Page"] > div > [class*="Card"],
+[data-theme="light"] main > div > div > [class*="card"],
+[data-theme="light"] main > div > div > [class*="Card"] {
+  background-color: #FFFFFF !important;
+  border: 1px solid rgba(180, 150, 110, 0.18) !important;
+  color: #2C1A0E !important;
+}
+
+/* Any direct children of dashboard main that are containers */
+[data-theme="light"] [class*="dashboardContent"] > div,
+[data-theme="light"] [class*="dashboard-content"] > div,
+[data-theme="light"] [class*="mainContent"] > div,
+[data-theme="light"] [class*="main-content"] > div {
+  color: #2C1A0E;
+}
+
+/* Force ALL remaining text white->dark in light mode */
+[data-theme="light"] [class*="dashboard"] span:not([class*="badge"]):not([class*="Badge"]):not([class*="dot"]):not([class*="Dot"]) {
+  color: inherit;
+}
+
+/* Fix any hardcoded white text in dark cards */
+[data-theme="light"] [style*="color: white"],
+[data-theme="light"] [style*="color:white"],
+[data-theme="light"] [style*="color: #fff"],
+[data-theme="light"] [style*="color:#fff"],
+[data-theme="light"] [style*="color: #FFF"],
+[data-theme="light"] [style*="color: #ffffff"],
+[data-theme="light"] [style*="color:#ffffff"] {
+  color: #2C1A0E !important;
+}
+
+/* Fix any hardcoded dark backgrounds via inline styles */
+[data-theme="light"] [style*="background: #0"],
+[data-theme="light"] [style*="background:#0"],
+[data-theme="light"] [style*="background-color: #0"],
+[data-theme="light"] [style*="background-color:#0"] {
+  background-color: #FFFFFF !important;
+}
+
+[data-theme="light"] [style*="background: #1"],
+[data-theme="light"] [style*="background:#1"],
+[data-theme="light"] [style*="background-color: #1"],
+[data-theme="light"] [style*="background-color:#1"] {
+  background-color: #FFFFFF !important;
+}
+
+/* Exceptions - keep gradient buttons */
+[data-theme="light"] button[style*="background"],
+[data-theme="light"] [class*="btn"][style*="background"],
+[data-theme="light"] [class*="Btn"][style*="background"] {
+  background-color: unset;
+}
+
+/* =============================================
+   TARGETED FIX: dummy-panel & dummy-cell
+   These are the actual classes on ALL dark
+   dashboard sections (Billing, Calendar, Team,
+   Integrations, Schedule, ClusterMap, etc.)
+   They use inline style bg so we use !important
+   ============================================= */
+
+[data-theme="light"] .dummy-panel {
+  background: #FFFFFF !important;
+  border-color: rgba(180, 150, 110, 0.18) !important;
+  color: #2C1A0E !important;
+}
+
+[data-theme="light"] .dummy-cell {
+  background: #F5F0E8 !important;
+  border-color: rgba(180, 150, 110, 0.15) !important;
+  color: #5C4A3A !important;
+}
+
+/* Text nodes inside dummy panels */
+[data-theme="light"] .dummy-panel h1,
+[data-theme="light"] .dummy-panel h2,
+[data-theme="light"] .dummy-panel h3,
+[data-theme="light"] .dummy-panel h4 {
+  color: #2C1A0E !important;
+}
+
+[data-theme="light"] .dummy-panel p,
+[data-theme="light"] .dummy-panel span,
+[data-theme="light"] .dummy-panel div {
+  color: inherit;
+}
+
+/* Inline-styled generic text overrides inside dummy-panel */
+[data-theme="light"] .dummy-panel [style*="color: white"],
+[data-theme="light"] .dummy-panel [style*="color:white"],
+[data-theme="light"] .dummy-panel [style*="color: #fff"],
+[data-theme="light"] .dummy-panel [style*="color:#fff"],
+[data-theme="light"] .dummy-panel [style*="color: #FFF"],
+[data-theme="light"] .dummy-panel [style*="color: #ffffff"],
+[data-theme="light"] .dummy-panel [style*="color:#ffffff"] {
+  color: #2C1A0E !important;
+}
+
+/* Muted gray text inside dummy panels */
+[data-theme="light"] .dummy-panel [style*="color: #94A3B8"],
+[data-theme="light"] .dummy-panel [style*="color: #64748B"],
+[data-theme="light"] .dummy-panel [style*="color: #475569"] {
+  color: #8B7355 !important;
+}
+
+/* Inline dark backgrounds inside dummy-panels */
+[data-theme="light"] .dummy-panel [style*="background: #0D1526"],
+[data-theme="light"] .dummy-panel [style*="background:#0D1526"],
+[data-theme="light"] .dummy-panel [style*="background-color: #0D1526"],
+[data-theme="light"] .dummy-panel [style*="background: #080E1C"],
+[data-theme="light"] .dummy-panel [style*="background:#080E1C"],
+[data-theme="light"] .dummy-panel [style*="background: #141B2D"],
+[data-theme="light"] .dummy-panel [style*="background:#141B2D"] {
+  background: #F5F0E8 !important;
+}
+
+/* Calendar day cells inside dummy-panels */
+[data-theme="light"] .dummy-panel [style*="minHeight: '80px'"],
+[data-theme="light"] .dummy-cell[style*="background: #0D1526"],
+[data-theme="light"] .dummy-cell[style*="background:#0D1526"] {
+  background: #FFFFFF !important;
+  color: #5C4A3A !important;
+}
+
+/* Inline select/input in dummy-panels */
+[data-theme="light"] .dummy-panel select,
+[data-theme="light"] .dummy-panel textarea,
+[data-theme="light"] .dummy-cell input[type="text"],
+[data-theme="light"] .dummy-panel input {
+  background: #FFFFFF !important;
+  border-color: rgba(180, 150, 110, 0.25) !important;
+  color: #2C1A0E !important;
+}
+
+/* =============================================
+   BILLING PLAN CARDS - INLINE STYLE FIX
+   The .map() renders each plan with inline bg
+   (non-active: '#141B2D', active: purple tint)
+   We target the parent grid div + child pattern
+   ============================================= */
+
+/* The billing section wrapper div */
+[data-theme="light"] #dash-billing .dummy-panel,
+[data-theme="light"] #dash-billing > div > div,
+[data-theme="light"] #dash-billing [style*="background: '#141B2D'"] {
+  background: #FFFFFF !important;
+  border-color: rgba(180, 150, 110, 0.2) !important;
+  color: #2C1A0E !important;
+}
+
+/* Non-active plan cards - override the dark bg */
+[data-theme="light"] #dash-billing [style*="background: #141B2D"],
+[data-theme="light"] #dash-billing [style*="background:#141B2D"] {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(180, 150, 110, 0.25) !important;
+  color: #2C1A0E !important;
+}
+
+/* Billing card text — plan name h3 */
+[data-theme="light"] #dash-billing h3 {
+  color: #C4974A !important;
+}
+
+/* Price "white" text override */
+[data-theme="light"] #dash-billing [style*="color: white"],
+[data-theme="light"] #dash-billing [style*="color:white"] {
+  color: #2C1A0E !important;
+}
+
+/* Blogs/mo - currently purple, keep it */
+[data-theme="light"] #dash-billing [style*="color: #A78BFA"] {
+  color: #7C3AED !important;
+}
+
+/* /mo sub-text */
+[data-theme="light"] #dash-billing [style*="color: #94A3B8"] {
+  color: #8B7355 !important;
+}
+
+/* Upgrade button - was dark bg in non-active card */
+[data-theme="light"] #dash-billing button[style*="background: rgba(255,255,255,0.05)"] {
+  background: #F5F0E8 !important;
+  color: #5C4A3A !important;
+  border: 1px solid rgba(180, 150, 110, 0.3) !important;
+}
+
+/* =============================================
+   FEATURES PAGE - MOCK UI CLASSES
+   Actual class names from App.jsx JSX
+   ============================================= */
+
+/* Feature card right panel (mock UI container) */
+[data-theme="light"] .feat-right {
+  background: #F0EBE0 !important;
+  border: 1px solid rgba(180, 150, 110, 0.2) !important;
+  border-radius: 12px;
+}
+
+/* 7-stage mock UI list */
+[data-theme="light"] .mock-ui-stages {
+  background: transparent !important;
+}
+
+[data-theme="light"] .mock-stage {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(180, 150, 110, 0.15) !important;
+  color: #5C4A3A !important;
+}
+
+[data-theme="light"] .mock-stage-num {
+  background: rgba(196, 151, 74, 0.12) !important;
+  color: #C4974A !important;
+}
+
+/* Tone slider */
+[data-theme="light"] .mock-slider-track {
+  background: rgba(180, 150, 110, 0.25) !important;
+}
+
+[data-theme="light"] .mock-slider-thumb {
+  background: #7C3AED !important;
+}
+
+[data-theme="light"] .mock-slider-labels span {
+  color: #8B7355 !important;
+}
+
+[data-theme="light"] .mock-tone-tags {
+  background: transparent !important;
+}
+
+[data-theme="light"] .mock-tone-tag {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(180, 150, 110, 0.2) !important;
+  color: #5C4A3A !important;
+}
+
+/* SERP gap table */
+[data-theme="light"] .mock-table {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(180, 150, 110, 0.15) !important;
+}
+
+[data-theme="light"] .mock-table thead tr,
+[data-theme="light"] .mock-table th {
+  background: #F5F0E8 !important;
+  color: #5C4A3A !important;
+  border-bottom: 1px solid rgba(180, 150, 110, 0.15) !important;
+}
+
+[data-theme="light"] .mock-table td {
+  color: #5C4A3A !important;
+  border-bottom: 1px solid rgba(180, 150, 110, 0.08) !important;
+}
+
+/* SEO score ring */
+[data-theme="light"] .mock-ring {
+  border-color: #10B981 !important;
+  background: rgba(16, 185, 129, 0.05) !important;
+}
+
+[data-theme="light"] .mock-ring-inner {
+  color: #2C1A0E !important;
+}
+
+/* CMS grid (Publishing tab) */
+[data-theme="light"] .mock-cms-grid {
+  background: #F0EBE0 !important;
+}
+
+[data-theme="light"] .mock-cms-pill {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(180, 150, 110, 0.2) !important;
+  color: #5C4A3A !important;
+}
+
+/* Calendar mock */
+[data-theme="light"] .mock-calendar {
+  background: #F0EBE0 !important;
+}
+
+[data-theme="light"] .mock-cal-day {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(180, 150, 110, 0.12) !important;
+}
+
+/* Social split mock */
+[data-theme="light"] .mock-social-split {
+  background: #F0EBE0 !important;
+}
+
+[data-theme="light"] .mock-social-left {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(180, 150, 110, 0.2) !important;
+  color: #5C4A3A !important;
+}
+
+/* Bar chart mock */
+[data-theme="light"] .mock-bar-chart {
+  background: transparent !important;
+}
+
+[data-theme="light"] .mock-bar {
+  background: rgba(196, 151, 74, 0.5) !important;
+}
+
+/* Cluster network mock */
+[data-theme="light"] .mock-cluster-center {
+  background: linear-gradient(135deg, #C4974A, #A67C3A) !important;
+  color: #FAF7F0 !important;
+}
+
+[data-theme="light"] .mock-cluster-node {
+  background: rgba(196, 151, 74, 0.15) !important;
+  border-color: rgba(196, 151, 74, 0.3) !important;
+}
+
+/* Competitor rows */
+[data-theme="light"] .mock-competitor-row {
+  border-bottom: 1px solid rgba(180, 150, 110, 0.12) !important;
+  color: #5C4A3A !important;
+}
+
+[data-theme="light"] .mock-competitor-row span[style*="color: #94A3B8"] {
+  color: #8B7355 !important;
+}
+
+[data-theme="light"] .mock-comp-btn {
+  background: rgba(124, 58, 237, 0.08) !important;
+  color: #7C3AED !important;
+  border: 1px solid rgba(124, 58, 237, 0.2) !important;
+}
+
+/* Waveform bars */
+[data-theme="light"] .mock-waveform-container {
+  background: rgba(196, 151, 74, 0.06) !important;
+  border-radius: 8px;
+}
+
+[data-theme="light"] .mock-wave-bar {
+  background: #C4974A !important;
+}
+
+/* Feature card overall */
+[data-theme="light"] .feat-card {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(180, 150, 110, 0.15) !important;
+}
+
+[data-theme="light"] .feat-title {
+  color: #2C1A0E !important;
+}
+
+[data-theme="light"] .feat-desc {
+  color: #5C4A3A !important;
+}
+
+[data-theme="light"] .feat-bullets li {
+  color: #5C4A3A !important;
+}
+
+/* Feature tab buttons */
+[data-theme="light"] .feature-tab-btn {
+  background: #F5F0E8 !important;
+  color: #5C4A3A !important;
+  border: 1px solid rgba(180, 150, 110, 0.2) !important;
+}
+
+[data-theme="light"] .feature-tab-btn.active {
+  background: linear-gradient(135deg, #C4974A, #A67C3A) !important;
+  color: #FAF7F0 !important;
+  border-color: transparent !important;
+}
+
+/* Comparison table */
+[data-theme="light"] .comp-table thead tr {
+  background: #F5F0E8 !important;
+}
+
+[data-theme="light"] .comp-table th,
+[data-theme="light"] .comp-table td {
+  color: #5C4A3A !important;
+  border-color: rgba(180, 150, 110, 0.1) !important;
+}
+
+[data-theme="light"] .comp-table tr:hover td {
+  background: rgba(196, 151, 74, 0.04) !important;
+}
+
+/* Features page main header text */
+[data-theme="light"] .features-header h1 {
+  color: #2C1A0E !important;
+}
+
+[data-theme="light"] .features-header p {
+  color: #8B7355 !important;
+}
+
+/* Dash section wrapper text */
+[data-theme="light"] .dash-section {
+  color: #2C1A0E !important;
+}
+
+[data-theme="light"] .dash-section header h1,
+[data-theme="light"] .dash-section header p {
+  color: #2C1A0E !important;
+}
+
+/* Sidebar plan usage widget */
+[data-theme="light"] .sidebar-footer .dummy-panel {
+  background: #F5F0E8 !important;
+  border-color: rgba(180, 150, 110, 0.2) !important;
+}
+
+[data-theme="light"] .sidebar-footer .dummy-panel span,
+[data-theme="light"] .sidebar-footer .dummy-panel div {
+  color: inherit !important;
+}
+
+[data-theme="light"] .sidebar-footer .dummy-cell {
+  background: #E8E0D0 !important;
+}
+
+/* =============================================
+   HOW IT WORKS PAGE - LIGHT MODE FIX
+   ============================================= */
+
+/* Page wrapper background */
+[data-theme="light"] #page-howitworks {
+  background: #FAF7F0 !important;
+}
+
+/* Header text */
+[data-theme="light"] .hiw-title {
+  color: #2C1A0E !important;
+}
+
+[data-theme="light"] .hiw-subtitle {
+  color: #8B7355 !important;
+}
+
+/* Center AI Engine node — inline gradient dark bg, no class */
+[data-theme="light"] #page-howitworks [style*="linear-gradient(135deg, #1A1333"],
+[data-theme="light"] #page-howitworks [style*="background: linear-gradient(135deg, #1A1333"],
+[data-theme="light"] #page-howitworks [style*="1A1333, #0D1526"] {
+  background: linear-gradient(135deg, #F0EBE0, #E8E0D0) !important;
+  border-color: rgba(124, 58, 237, 0.3) !important;
+  box-shadow: 0 0 40px rgba(196, 151, 74, 0.15) !important;
+}
+
+/* Text inside the center AI Engine node */
+[data-theme="light"] #page-howitworks [style*="1A1333, #0D1526"] h3,
+[data-theme="light"] #page-howitworks [style*="linear-gradient(135deg, #1A1333"] h3 {
+  color: #2C1A0E !important;
+}
+
+[data-theme="light"] #page-howitworks [style*="1A1333, #0D1526"] p,
+[data-theme="light"] #page-howitworks [style*="linear-gradient(135deg, #1A1333"] p {
+  color: #7C3AED !important;
+}
+
+/* Side glass-card nodes — fix inline white text */
+[data-theme="light"] #page-howitworks .glass-card {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(180, 150, 110, 0.2) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+}
+
+[data-theme="light"] #page-howitworks .glass-card h3 {
+  color: #2C1A0E !important;
+}
+
+[data-theme="light"] #page-howitworks .glass-card p {
+  color: #8B7355 !important;
+}
+
+/* Discovery icon bg */
+[data-theme="light"] #page-howitworks .glass-card [style*="rgba(255,255,255,0.05)"] {
+  background: #F5F0E8 !important;
+  color: #5C4A3A !important;
+}
+
+/* step-cards (timeline section below) */
+[data-theme="light"] .step-card {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(180, 150, 110, 0.15) !important;
+}
+
+[data-theme="light"] .step-title {
+  color: #2C1A0E !important;
+}
+
+[data-theme="light"] .step-desc {
+  color: #8B7355 !important;
+}
+
+[data-theme="light"] .demo-visual-card {
+  background: #F5F0E8 !important;
+  border: 1px solid rgba(180, 150, 110, 0.15) !important;
+}
+
+[data-theme="light"] .pipeline-item {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(180, 150, 110, 0.15) !important;
+  color: #5C4A3A !important;
+}
+
+[data-theme="light"] .cms-connection-demo {
+  background: transparent !important;
+}
+
+[data-theme="light"] .BlogzzUP-node {
+  background: linear-gradient(135deg, #C4974A, #A67C3A) !important;
+  color: #FAF7F0 !important;
+}
+
+/* Connector glow line override in light */
+[data-theme="light"] #page-howitworks [style*="linear-gradient(90deg, rgba(124,58,237,0)"] {
+  background: linear-gradient(90deg, rgba(196,151,74,0) 0%, rgba(196,151,74,0.4) 50%, rgba(196,151,74,0) 100%) !important;
+}
+
+/* Accordion section (7-stage prompt architecture at bottom) */
+[data-theme="light"] .accordion-section-title {
+  color: #2C1A0E !important;
+}
+
+[data-theme="light"] .accordion-subtitle {
+  color: #8B7355 !important;
+}
+
+[data-theme="light"] .accordion-container {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(180, 150, 110, 0.18) !important;
+}
+
+[data-theme="light"] .accordion-container.open {
+  border-color: rgba(124, 58, 237, 0.3) !important;
+}
+
+[data-theme="light"] .accordion-badge {
+  background: rgba(196, 151, 74, 0.12) !important;
+  color: #C4974A !important;
+}
+
+[data-theme="light"] .accordion-title {
+  color: #2C1A0E !important;
+}
+
+[data-theme="light"] .accordion-icon {
+  color: #8B7355 !important;
+}
+
+[data-theme="light"] .accordion-desc {
+  color: #5C4A3A !important;
+}
+
+[data-theme="light"] .accordion-code {
+  background: #F5F0E8 !important;
+  border: 1px solid rgba(180, 150, 110, 0.2) !important;
+  color: #5C4A3A !important;
+}
+
+/* =============================================
+   HOW IT WORKS - CLASS-BASED LIGHT MODE FIX
+   (reliable: targets actual classNames added to JSX)
+   ============================================= */
+
+/* Center AI Engine node */
+[data-theme="light"] .hiw-center-node {
+  background: linear-gradient(135deg, #F0EBE0, #E8E0D0) !important;
+  border-color: rgba(124, 58, 237, 0.3) !important;
+  box-shadow: 0 0 40px rgba(196, 151, 74, 0.12) !important;
+}
+
+[data-theme="light"] .hiw-node-text {
+  color: #2C1A0E !important;
+}
+
+[data-theme="light"] .hiw-node-subtext {
+  color: #7C3AED !important;
+}
+
+/* Side node headings (Discovery, Publishing) */
+[data-theme="light"] .hiw-side-heading {
+  color: #2C1A0E !important;
+}
+
+/* =============================================
+   STEP CARD DEMO VISUALS - PREMIUM REDESIGN
+   ============================================= */
+
+/* --- Card 1: CMS Connection --- */
+
+/* Wider pill-style CMS icons with label */
+.cms-icon {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.06);
+  animation: float 4s ease-in-out infinite;
+  min-width: 130px;
+}
+
+.cms-icon:nth-child(2) { animation-delay: 1s; }
+.cms-icon:nth-child(3) { animation-delay: 2s; }
+.cms-icon:nth-child(4) { animation-delay: 0.5s; }
+
+.cms-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #CBD5E1;
+  letter-spacing: 0.01em;
+}
+
+/* Brand-tinted backgrounds per platform */
+.cms-icon-wp { border-color: rgba(56, 88, 233, 0.25); background: rgba(56,88,233,0.08); }
+.cms-icon-wf { border-color: rgba(20, 110, 245, 0.25); background: rgba(20,110,245,0.08); }
+.cms-icon-sh { border-color: rgba(150, 191, 72, 0.25); background: rgba(150,191,72,0.08); }
+.cms-icon-gh { border-color: rgba(33, 33, 33, 0.2);   background: rgba(60,60,60,0.08); }
+
+/* BlogzzUP destination node - taller with label */
+.BlogzzUP-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 68px;
+  height: 68px;
+  background: linear-gradient(135deg, rgba(124,58,237,0.3), rgba(91,33,182,0.5));
+  border: 1px solid rgba(124,58,237,0.6);
+  border-radius: 16px;
+  box-shadow: 0 0 24px rgba(124,58,237,0.4);
+  animation: pulse-glow 2s infinite alternate;
+  flex-shrink: 0;
+}
+
+.cms-node-label {
+  font-size: 9px;
+  font-weight: 700;
+  color: #C4B5FD;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Light mode overrides for CMS card */
+[data-theme="light"] .cms-icon {
+  background: #FFFFFF !important;
+  border-color: rgba(180,150,110,0.2) !important;
+}
+[data-theme="light"] .cms-label { color: #5C4A3A !important; }
+
+[data-theme="light"] .cms-icon-wp { border-color: rgba(56,88,233,0.3) !important; background: rgba(56,88,233,0.06) !important; }
+[data-theme="light"] .cms-icon-wf { border-color: rgba(20,110,245,0.3) !important; background: rgba(20,110,245,0.06) !important; }
+[data-theme="light"] .cms-icon-sh { border-color: rgba(96,168,48,0.3)  !important; background: rgba(96,168,48,0.06)  !important; }
+[data-theme="light"] .cms-icon-gh { border-color: rgba(33,33,33,0.2)   !important; background: rgba(33,33,33,0.04)   !important; }
+
+[data-theme="light"] .BlogzzUP-node {
+  background: linear-gradient(135deg, #C4974A, #A67C3A) !important;
+  border-color: rgba(196,151,74,0.5) !important;
+  box-shadow: 0 0 24px rgba(196,151,74,0.35) !important;
+}
+[data-theme="light"] .cms-node-label { color: #FAF7F0 !important; }
+[data-theme="light"] .data-packet { background: #C4974A !important; box-shadow: 0 0 8px #C4974A !important; }
+[data-theme="light"] .connection-path {
+  background: repeating-linear-gradient(90deg, rgba(196,151,74,0.3) 0, rgba(196,151,74,0.3) 4px, transparent 4px, transparent 8px) !important;
+}
+
+/* --- Card 2: Pipeline (redesigned) --- */
+
+/* Remove old sequential animation — replaced with state classes */
+.pipeline-item {
+  animation: none !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+/* Dot indicators */
+.pipeline-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot-green  { background: #10B981; box-shadow: 0 0 6px #10B981; }
+.dot-violet { background: #A78BFA; box-shadow: 0 0 6px #A78BFA; animation: pipedot-pulse 1.2s ease-in-out infinite; }
+.dot-gray   { background: #475569; }
+
+@keyframes pipedot-pulse {
+  0%, 100% { opacity: 1; transform: scale(1);   }
+  50%       { opacity: 0.5; transform: scale(0.7); }
+}
+
+.pipeline-emoji { font-size: 14px; flex-shrink: 0; }
+
+/* Done state */
+.pipeline-item-done {
+  background: rgba(16,185,129,0.08);
+  border: 1px solid rgba(16,185,129,0.2);
+  color: #A3E4C8;
+}
+.pipeline-item-done .pipeline-check {
+  margin-left: auto;
+  font-size: 13px;
+  font-weight: 700;
+  color: #10B981;
+}
+
+/* Active/running state */
+.pipeline-item-active {
+  background: rgba(124,58,237,0.12);
+  border: 1px solid rgba(124,58,237,0.4);
+  color: #C4B5FD;
+  box-shadow: 0 0 12px rgba(124,58,237,0.15);
+}
+
+/* Spinning loader for active item */
+.pipeline-spinner {
+  margin-left: auto;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(167,139,250,0.3);
+  border-top-color: #A78BFA;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Pending state */
+.pipeline-item-pending {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  color: #475569;
+  opacity: 0.6;
+}
+
+/* Light mode pipeline */
+[data-theme="light"] .pipeline-item-done {
+  background: rgba(16,185,129,0.08) !important;
+  border-color: rgba(16,185,129,0.25) !important;
+  color: #065F46 !important;
+}
+[data-theme="light"] .pipeline-item-active {
+  background: rgba(124,58,237,0.08) !important;
+  border-color: rgba(124,58,237,0.3) !important;
+  color: #5B21B6 !important;
+}
+[data-theme="light"] .pipeline-item-pending {
+  background: #F5F0E8 !important;
+  border-color: rgba(180,150,110,0.15) !important;
+  color: #8B7355 !important;
+}
+[data-theme="light"] .dot-green  { background: #10B981 !important; }
+[data-theme="light"] .dot-violet { background: #7C3AED !important; box-shadow: 0 0 6px #7C3AED !important; }
+[data-theme="light"] .dot-gray   { background: #94A3B8 !important; }
+[data-theme="light"] .pipeline-spinner { border-color: rgba(124,58,237,0.2) !important; border-top-color: #7C3AED !important; }
+[data-theme="light"] .pipeline-item-done .pipeline-check { color: #10B981 !important; }
+
+/* --- Card 3: Traffic Graph --- */
+
+.graph-demo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.graph-stats {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.graph-stat-chip {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 99px;
+  letter-spacing: 0.02em;
+}
+
+.chip-green {
+  background: rgba(16,185,129,0.15);
+  border: 1px solid rgba(16,185,129,0.3);
+  color: #10B981;
+}
+
+.chip-violet {
+  background: rgba(124,58,237,0.12);
+  border: 1px solid rgba(124,58,237,0.3);
+  color: #A78BFA;
+}
+
+.growth-line {
+  display: block;
+  width: 100%;
+}
+
+.graph-x-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #64748B;
+  padding: 0 4px;
+  letter-spacing: 0.03em;
+}
+
+/* Animated pulse dots on SVG */
+.pulse-dot {
+  animation: dot-pulse 2s ease-in-out infinite;
+}
+.pulse-dot.delay-1 { animation-delay: 0s; }
+.pulse-dot.delay-2 { animation-delay: 0.6s; }
+.pulse-dot.delay-3 { animation-delay: 1.2s; }
+
+@keyframes dot-pulse {
+  0%, 100% { r: 3.5; opacity: 1; }
+  50%       { r: 5;   opacity: 0.7; }
+}
+
+/* Light mode graph */
+[data-theme="light"] .chip-green {
+  background: rgba(16,185,129,0.1) !important;
+  border-color: rgba(16,185,129,0.25) !important;
+  color: #059669 !important;
+}
+[data-theme="light"] .chip-violet {
+  background: rgba(124,58,237,0.08) !important;
+  border-color: rgba(124,58,237,0.25) !important;
+  color: #6D28D9 !important;
+}
+[data-theme="light"] .graph-x-labels { color: #8B7355 !important; }
+
+/* =============================================
+   LIVE TRAFFIC GRAPH - ANIMATIONS & LAYOUT
+   ============================================= */
+
+/* Draw-on animation for the SVG line */
+@keyframes drawTrafficLine {
+  to { stroke-dashoffset: 0; }
+}
+
+/* Pop-in for data point circles */
+@keyframes trafficDotPop {
+  from { opacity: 0; transform: scale(0); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Graph wrapper */
+.live-graph-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+/* X-axis month labels */
+.graph-x-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #64748B;
+  padding: 0 6px;
+  letter-spacing: 0.02em;
+  font-weight: 500;
+}
+
+.graph-x-labels span:last-child {
+  color: #10B981;
+  font-weight: 700;
+}
+
+/* Footer badge - "Live traffic tracking" */
+.graph-footer-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #10B981;
+  letter-spacing: 0.02em;
+  margin-top: 2px;
+}
+
+.gfb-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 6px #10B981;
+  animation: gfb-pulse 1.4s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes gfb-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.65); }
+}
+
+/* Light mode graph elements */
+[data-theme="light"] .gfb-dot {
+  background: #10B981 !important;
+  box-shadow: 0 0 6px rgba(16,185,129,0.6) !important;
+}
+
+[data-theme="light"] .graph-footer-badge {
+  color: #059669 !important;
+}
+
+[data-theme="light"] .graph-x-labels span:last-child {
+  color: #059669 !important;
+}
+
+/* =============================================
+   BILLING PLAN CARDS — CLASS-BASED THEMING
+   ============================================= */
+
+.billing-plan-card {
+  border-radius: 16px;
+  padding: 32px;
+  text-align: center;
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.billing-plan-card:hover { transform: translateY(-4px); }
+
+/* Dark mode defaults */
+.billing-plan-inactive {
+  background: #141B2D;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.billing-plan-active {
+  background: rgba(124,58,237,0.1);
+  border: 1px solid #7C3AED;
+  box-shadow: 0 0 30px rgba(124,58,237,0.15);
+}
+.billing-current-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #7C3AED;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 14px;
+  border-radius: 99px;
+  white-space: nowrap;
+  letter-spacing: 0.03em;
+}
+.billing-plan-name  { color: white;   font-size: 20px; margin: 0 0 8px; font-weight: 700; }
+.billing-plan-price { font-size: 36px; color: white; font-weight: 800; margin-bottom: 16px; letter-spacing: -0.02em; }
+.billing-plan-period { font-size: 14px; color: #94A3B8; font-weight: 400; }
+.billing-plan-quota  { color: #A78BFA; font-weight: 700; font-size: 14px; margin-bottom: 24px; }
+
+.billing-plan-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+.billing-btn-active  { background: transparent; color: #A78BFA; border: 1px solid #A78BFA; }
+.billing-btn-active:hover  { background: rgba(124,58,237,0.1); }
+.billing-btn-upgrade { background: rgba(255,255,255,0.05); color: white; border: none; }
+.billing-btn-upgrade:hover { background: rgba(255,255,255,0.1); }
+
+/* Light mode overrides */
+[data-theme="light"] .billing-plan-inactive {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(180,150,110,0.2) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05) !important;
+}
+[data-theme="light"] .billing-plan-active {
+  background: rgba(124,58,237,0.06) !important;
+  border: 1px solid rgba(124,58,237,0.35) !important;
+  box-shadow: 0 4px 24px rgba(124,58,237,0.12) !important;
+}
+[data-theme="light"] .billing-plan-name   { color: #2C1A0E !important; }
+[data-theme="light"] .billing-plan-price  { color: #2C1A0E !important; }
+[data-theme="light"] .billing-plan-period { color: #8B7355 !important; }
+[data-theme="light"] .billing-plan-quota  { color: #7C3AED !important; }
+[data-theme="light"] .billing-btn-upgrade {
+  background: #F5F0E8 !important;
+  color: #5C4A3A !important;
+  border: 1px solid rgba(180,150,110,0.25) !important;
+}
+[data-theme="light"] .billing-btn-upgrade:hover {
+  background: rgba(196,151,74,0.12) !important;
+  color: #2C1A0E !important;
+  border-color: rgba(196,151,74,0.35) !important;
+}
+[data-theme="light"] .billing-btn-active  { color: #7C3AED !important; border-color: #7C3AED !important; }
+[data-theme="light"] .billing-btn-active:hover { background: rgba(124,58,237,0.06) !important; }
+
+/* =============================================
+   BILLING CARDS v2 — PREMIUM REDESIGN
+   ============================================= */
+
+.billing-section-wrap { padding: 4px 0 8px; }
+
+/* 3-column grid with room at top for no-clip */
+.billing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  padding-top: 0;
+}
+
+/* Base card */
+.billing-plan-card {
+  border-radius: 20px;
+  padding: 28px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  overflow: hidden;
+  position: relative;
+}
+.billing-plan-card:hover { transform: translateY(-6px); }
+
+/* Dark defaults */
+.billing-plan-inactive {
+  background: #141B2D;
+  border: 1px solid rgba(255,255,255,0.07);
+}
+.billing-plan-active {
+  background: linear-gradient(145deg, rgba(124,58,237,0.18), rgba(91,33,182,0.08));
+  border: 1px solid rgba(124,58,237,0.45);
+  box-shadow: 0 0 40px rgba(124,58,237,0.18), inset 0 0 60px rgba(124,58,237,0.04);
+}
+
+/* Badge — IN flow, no absolute position */
+.billing-badge-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.billing-current-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(90deg, #7C3AED, #5B21B6);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 16px;
+  border-radius: 99px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  box-shadow: 0 4px 14px rgba(124,58,237,0.35);
+}
+
+/* Plan header block */
+.billing-plan-header {
+  text-align: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  margin-bottom: 20px;
+}
+.billing-plan-name {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0 0 10px;
+  opacity: 0.7;
+}
+.billing-plan-price {
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.billing-plan-period { font-size: 14px; font-weight: 400; opacity: 0.5; vertical-align: middle; }
+.billing-plan-quota  { font-size: 13px; font-weight: 600; opacity: 0.7; }
+
+/* Accent colors per plan name color */
+.billing-plan-inactive.billing-accent-cyan .billing-plan-name { color: #06B6D4; }
+.billing-plan-inactive.billing-accent-amber .billing-plan-name { color: #F59E0B; }
+.billing-plan-active.billing-accent-violet .billing-plan-name { color: #A78BFA; }
+.billing-plan-inactive .billing-plan-price { color: #F1F5F9; }
+.billing-plan-active .billing-plan-price   { color: #E9D5FF; }
+.billing-plan-inactive .billing-plan-quota { color: #94A3B8; }
+.billing-plan-active .billing-plan-quota   { color: #C4B5FD; }
+
+/* Usage bar (active plan only) */
+.billing-usage-bar-wrap {
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.billing-usage-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #94A3B8;
+}
+.billing-usage-track {
+  height: 6px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.billing-usage-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #7C3AED, #A78BFA);
+  border-radius: 99px;
+  transition: width 1s ease;
+}
+
+/* Feature list */
+.billing-features {
+  list-style: none;
+  margin: 0 0 24px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+.billing-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #94A3B8;
+}
+.billing-plan-active .billing-features li { color: #C4B5FD; }
+.billing-check {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+  background: rgba(16,185,129,0.15);
+  color: #10B981;
+  margin-top: 1px;
+}
+.billing-plan-active .billing-check {
+  background: rgba(124,58,237,0.2);
+  color: #A78BFA;
+}
+
+/* CTA button */
+.billing-plan-btn {
+  width: 100%;
+  padding: 13px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  transition: all 0.2s ease;
+  margin-top: auto;
+}
+.billing-btn-upgrade {
+  background: rgba(255,255,255,0.06);
+  color: #CBD5E1;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.billing-btn-upgrade:hover {
+  background: rgba(255,255,255,0.12);
+  color: white;
+  border-color: rgba(255,255,255,0.2);
+}
+.billing-btn-active {
+  background: linear-gradient(135deg, #7C3AED, #5B21B6);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 18px rgba(124,58,237,0.4);
+}
+.billing-btn-active:hover {
+  box-shadow: 0 6px 24px rgba(124,58,237,0.55);
+  filter: brightness(1.1);
+}
+
+/* Divider inside header block */
+[data-theme="light"] .billing-plan-header {
+  border-bottom-color: rgba(180,150,110,0.12) !important;
+}
+
+/* ---- Light mode overrides ---- */
+[data-theme="light"] .billing-plan-inactive {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(180,150,110,0.2) !important;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.05) !important;
+}
+[data-theme="light"] .billing-plan-active {
+  background: linear-gradient(145deg, rgba(124,58,237,0.06), rgba(91,33,182,0.03)) !important;
+  border: 1px solid rgba(124,58,237,0.3) !important;
+  box-shadow: 0 8px 32px rgba(124,58,237,0.1) !important;
+}
+[data-theme="light"] .billing-plan-inactive .billing-plan-price { color: #2C1A0E !important; }
+[data-theme="light"] .billing-plan-active .billing-plan-price   { color: #3B0764 !important; }
+[data-theme="light"] .billing-plan-inactive .billing-plan-quota { color: #8B7355 !important; }
+[data-theme="light"] .billing-plan-active .billing-plan-quota   { color: #7C3AED !important; }
+[data-theme="light"] .billing-features li { color: #5C4A3A !important; }
+[data-theme="light"] .billing-plan-active .billing-features li  { color: #5B21B6 !important; }
+[data-theme="light"] .billing-check { background: rgba(16,185,129,0.1) !important; color: #059669 !important; }
+[data-theme="light"] .billing-plan-active .billing-check { background: rgba(124,58,237,0.1) !important; color: #7C3AED !important; }
+[data-theme="light"] .billing-usage-label { color: #8B7355 !important; }
+[data-theme="light"] .billing-usage-track { background: rgba(124,58,237,0.08) !important; }
+[data-theme="light"] .billing-btn-upgrade {
+  background: #F5F0E8 !important;
+  color: #5C4A3A !important;
+  border: 1px solid rgba(180,150,110,0.25) !important;
+}
+[data-theme="light"] .billing-btn-upgrade:hover {
+  background: rgba(196,151,74,0.12) !important;
+  color: #2C1A0E !important;
+  border-color: rgba(196,151,74,0.3) !important;
+}
+
+/* =============================================
+   PRICING PAGE — EXACT SCREENSHOT REPLICA
+   Matches the screenshot design precisely.
+   ============================================= */
+
+/* Grid: fix badge clip with top padding */
+.pricing-grid-3 {
+  display: flex;
+  gap: 24px;
+  align-items: stretch;
+  padding-top: 20px;  /* room for the absolute badge */
+}
+
+/* Base card — same for both modes */
+.pc-card {
+  background: #050914;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 32px 28px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 260px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.pc-card:hover { transform: translateY(-5px); }
+
+/* Popular (Growth) card */
+.pc-card.popular {
+  border-color: rgba(124,58,237,0.45);
+  box-shadow: 0 0 40px rgba(124,58,237,0.18);
+  position: relative;
+}
+
+/* "Most Popular" badge — absolutely placed above card */
+.pc-most-pop {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, #7C3AED, #5B21B6);
+  color: white;
+  border-radius: 999px;
+  padding: 5px 18px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+  box-shadow: 0 4px 12px rgba(124,58,237,0.4);
+}
+
+/* Plan name */
+.pc-header {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 14px;
+  letter-spacing: 0.01em;
+}
+
+/* Price block */
+.pc-price-wrap { display: flex; align-items: baseline; gap: 4px; }
+.pc-price { font-size: 40px; font-weight: 800; color: #fff; letter-spacing: -0.03em; }
+.pc-per   { font-size: 14px; font-weight: 400; color: #64748B; }
+
+/* Custom (Scale) price is bigger in screenshot */
+.pc-card:last-child .pc-price { font-size: 44px; }
+
+/* Subtitle text */
+.pc-desc {
+  font-size: 13px;
+  color: #64748B;
+  line-height: 1.5;
+  margin: 10px 0 20px;
+}
+
+/* Divider */
+.pc-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.07);
+  margin-bottom: 20px;
+}
+
+/* Feature list */
+.pc-feat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 28px;
+}
+.pc-feat {
+  font-size: 14px;
+  color: #94A3B8;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  line-height: 1.4;
+}
+.pc-feat-check { color: #10B981; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+
+/* CTA buttons */
+.pc-btn-outline, .pc-btn-outline-cyan, .pc-btn-solid {
+  margin-top: auto;
+  border-radius: 10px;
+  padding: 13px 20px;
+  width: 100%;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.01em;
+}
+.pc-btn-outline {
+  background: transparent;
+  border: 1px solid rgba(124,58,237,0.45);
+  color: #A78BFA;
+}
+.pc-btn-outline:hover { background: rgba(124,58,237,0.1); }
+.pc-btn-solid {
+  background: linear-gradient(135deg, #7C3AED, #5B21B6);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 18px rgba(124,58,237,0.4);
+}
+.pc-btn-solid:hover { filter: brightness(1.1); box-shadow: 0 6px 24px rgba(124,58,237,0.55); }
+.pc-btn-outline-cyan {
+  background: transparent;
+  border: 1px solid rgba(6,182,212,0.4);
+  color: #06B6D4;
+}
+.pc-btn-outline-cyan:hover { background: rgba(6,182,212,0.08); }
+
+/* ---- LIGHT MODE overrides — exact screenshot match ---- */
+
+/* Page background */
+[data-theme="light"] #page-pricing { background: #FAF7F0 !important; }
+
+/* Title */
+[data-theme="light"] #page-pricing h1 { color: #2C1A0E !important; }
+[data-theme="light"] #page-pricing > div > p { color: #8B7355 !important; }
+
+/* Toggle */
+[data-theme="light"] .pt-container {
+  background: #F5F0E8 !important;
+  border: 1px solid rgba(180,150,110,0.15) !important;
+}
+[data-theme="light"] .pt-btn { color: #8B7355 !important; }
+[data-theme="light"] .pt-btn.active {
+  background: #FFFFFF !important;
+  color: #2C1A0E !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07) !important;
+}
+
+/* Plain cards (Starter, Scale) */
+[data-theme="light"] .pc-card {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(220,213,203,0.8) !important;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.04) !important;
+}
+
+/* Growth (popular) card — gold border like screenshot */
+[data-theme="light"] .pc-card.popular {
+  border-color: #C4974A !important;
+  box-shadow: 0 4px 30px rgba(196,151,74,0.14) !important;
+}
+
+/* Plan name */
+[data-theme="light"] .pc-header { color: #2C1A0E !important; }
+
+/* Price */
+[data-theme="light"] .pc-price { color: #2C1A0E !important; }
+[data-theme="light"] .pc-per   { color: #8B7355 !important; }
+
+/* (First month free) green text */
+[data-theme="light"] #page-pricing [style*="color: '#10B981'"],
+[data-theme="light"] #page-pricing [style*="color: #10B981"] { color: #059669 !important; }
+
+/* Description */
+[data-theme="light"] .pc-desc { color: #8B7355 !important; }
+
+/* Divider */
+[data-theme="light"] .pc-divider { background: rgba(180,150,110,0.12) !important; }
+
+/* Features */
+[data-theme="light"] .pc-feat       { color: #5C4A3A !important; }
+[data-theme="light"] .pc-feat-check { color: #059669 !important; }
+
+/* "Everything in Starter" bold row */
+[data-theme="light"] .pc-card.popular .pc-feat-list [style*="color: '#fff'"],
+[data-theme="light"] .pc-card.popular .pc-feat-list div { color: #2C1A0E !important; }
+
+/* CTA buttons — light versions */
+[data-theme="light"] .pc-btn-outline {
+  background: #F5F0E8 !important;
+  border-color: rgba(124,58,237,0.3) !important;
+  color: #7C3AED !important;
+}
+[data-theme="light"] .pc-btn-outline:hover {
+  background: rgba(124,58,237,0.06) !important;
+}
+[data-theme="light"] .pc-btn-solid {
+  background: linear-gradient(135deg, #7C3AED, #5B21B6) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 18px rgba(124,58,237,0.35) !important;
+}
+[data-theme="light"] .pc-btn-outline-cyan {
+  background: #F5F0E8 !important;
+  border-color: rgba(6,182,212,0.3) !important;
+  color: #0891B2 !important;
+}
+[data-theme="light"] .pc-btn-outline-cyan:hover {
+  background: rgba(6,182,212,0.06) !important;
+}
+
+/* Most Popular badge in light mode — keep purple gradient */
+[data-theme="light"] .pc-most-pop {
+  background: linear-gradient(90deg, #7C3AED, #5B21B6) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(124,58,237,0.3) !important;
+}
+
+/* Footer line */
+[data-theme="light"] #page-pricing [style*="color: '#64748B'"] { color: #8B7355 !important; }
+
+/* FAQ section in light mode */
+[data-theme="light"] #page-pricing h2 { color: #2C1A0E !important; }
+[data-theme="light"] .faq-accordion .accordion-container {
+  background: #FFFFFF !important;
+  border-color: rgba(180,150,110,0.15) !important;
+}
+[data-theme="light"] .faq-accordion .accordion-title  { color: #2C1A0E !important; }
+[data-theme="light"] .faq-accordion .accordion-answer { color: #5C4A3A !important; }
+[data-theme="light"] .faq-accordion .accordion-icon  { color: #C4974A !important; }
+
+@keyframes genz-border {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* =============================================
+   GENZ TONE CARD - SPECIAL STYLING
+   ============================================= */
+
+/* GenZ card gradient border animation */
+[class*="toneCard"][class*="genz"],
+[class*="tone-card"][class*="genz"],
+[class*="genzCard"],
+[class*="genz-card"] {
+  position: relative !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 2px !important;
+  border-radius: 12px !important;
+}
+
+/* Rainbow gradient hover on GenZ card */
+[class*="toneCard"][class*="genz"]:hover,
+[class*="genzCard"]:hover {
+  transform: translateY(-4px) scale(1.02) !important;
+  box-shadow: 
+    0 8px 32px rgba(199, 125, 255, 0.3),
+    0 0 0 1px rgba(255, 107, 107, 0.3) !important;
+}
+
+/* GenZ card when selected */
+[class*="toneCard"][class*="genz"][class*="active"],
+[class*="genzCard"][class*="selected"] {
+  animation: genz-border 3s ease infinite !important;
+}
+
+/* GenZ NEW badge */
+.genz-new-badge {
+  font-size: 10px !important;
+  background: linear-gradient(135deg, #FF6B6B, #C77DFF) !important;
+  color: white !important;
+  border-radius: 999px !important;
+  padding: 2px 8px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+  animation: genz-border 2s ease infinite !important;
+  background-size: 200% !important;
+}
+
+/* Pulse effect on GenZ card */
+[class*="genzCard"]::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 13px;
+  background: linear-gradient(135deg, #FF6B6B, #FFD93D, #6BCB77, #4D96FF, #C77DFF);
+  background-size: 300% 300%;
+  animation: genz-border 3s ease infinite;
+  z-index: -1;
+  opacity: 0.6;
+}
+
+/* Light mode GenZ card */
+[data-theme="light"] [class*="genzCard"],
+[data-theme="light"] [class*="toneCard"][class*="genz"] {
+  box-shadow: 0 4px 20px rgba(199, 125, 255, 0.15) !important;
+}
+
+/* Dark mode GenZ extra glow */
+[data-theme="dark"] [class*="genzCard"]:hover,
+[data-theme="dark"] [class*="toneCard"][class*="genz"]:hover {
+  box-shadow: 
+    0 8px 40px rgba(199, 125, 255, 0.4),
+    0 0 60px rgba(255, 107, 107, 0.15) !important;
+}
+
+/* GenZ generated content styling in review panel */
+[class*="genzContent"] h2::after,
+[class*="genz-content"] h2::after {
+  content: ' 🔥';
+}
+
+/* GenZ word highlights in output */
+[class*="genzHighlight"] {
+  background: linear-gradient(135deg, #FF6B6B22, #C77DFF22);
+  border-radius: 4px;
+  padding: 0 3px;
+}
+
+/* Toast notification for GenZ mode */
+.genz-toast {
+  background: linear-gradient(135deg, #FF6B6B, #C77DFF) !important;
+  font-weight: 700 !important;
+}

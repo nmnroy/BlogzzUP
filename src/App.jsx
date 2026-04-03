@@ -1735,20 +1735,20 @@ function App() {
              {/* Node 1 – Discovery */}
              <div className="glass-card" style={{padding: '24px', textAlign: 'center', width: '220px', flexShrink: 0, zIndex: 2}}>
                <div style={{background: 'rgba(255,255,255,0.05)', width: '64px', height: '64px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', color: 'var(--text-muted)'}}><Search size={32}/></div>
-               <h3 style={{color: 'white', fontSize: '18px', margin: '0 0 8px', fontWeight: 700}}>1. Discovery</h3>
+               <h3 className="hiw-side-heading" style={{color: 'white', fontSize: '18px', margin: '0 0 8px', fontWeight: 700}}>1. Discovery</h3>
                <p style={{color: 'var(--text-subtle)', fontSize: '13px', margin: 0, lineHeight: 1.5}}>Keyword & SERP analysis automatically extracts missing competitor topics.</p>
              </div>
              {/* Node 2 – AI Engine (centre, glowing) */}
-             <div style={{background: 'linear-gradient(135deg, #1A1333, #0D1526)', border: '1px solid rgba(124,58,237,0.4)', borderRadius: '24px', padding: '32px', textAlign: 'center', width: '240px', flexShrink: 0, zIndex: 2, boxShadow: '0 0 40px rgba(124,58,237,0.25)', position: 'relative'}}>
+             <div className="hiw-center-node" style={{background: 'linear-gradient(135deg, #1A1333, #0D1526)', border: '1px solid rgba(124,58,237,0.4)', borderRadius: '24px', padding: '32px', textAlign: 'center', width: '240px', flexShrink: 0, zIndex: 2, boxShadow: '0 0 40px rgba(124,58,237,0.25)', position: 'relative'}}>
                <div style={{position: 'absolute', inset: 0, borderRadius: '24px', boxShadow: '0 0 0 0 rgba(124,58,237,0.4)', animation: 'pulseBorderGlow 2s infinite', pointerEvents: 'none'}}></div>
                <div style={{background: 'linear-gradient(135deg, #7C3AED, #5B21B6)', width: '80px', height: '80px', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', color: 'white', boxShadow: '0 10px 20px rgba(124,58,237,0.4)'}}><Brain size={40}/></div>
-               <h3 style={{color: 'white', fontSize: '22px', margin: '0 0 6px', fontWeight: 800}}>AI Engine</h3>
-               <p style={{color: '#A78BFA', fontSize: '13px', margin: 0}}>Generates, scores & optimises NLP content in real time.</p>
+               <h3 className="hiw-node-text" style={{color: 'white', fontSize: '22px', margin: '0 0 6px', fontWeight: 800}}>AI Engine</h3>
+               <p className="hiw-node-subtext" style={{color: '#A78BFA', fontSize: '13px', margin: 0}}>Generates, scores & optimises NLP content in real time.</p>
              </div>
              {/* Node 3 – Publishing */}
              <div className="glass-card" style={{padding: '24px', textAlign: 'center', width: '220px', flexShrink: 0, zIndex: 2}}>
                <div style={{background: 'rgba(6,182,212,0.1)', width: '64px', height: '64px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', color: '#06B6D4'}}><Globe2 size={32}/></div>
-               <h3 style={{color: 'white', fontSize: '18px', margin: '0 0 8px', fontWeight: 700}}>3. Publishing</h3>
+               <h3 className="hiw-side-heading" style={{color: 'white', fontSize: '18px', margin: '0 0 8px', fontWeight: 700}}>3. Publishing</h3>
                <p style={{color: 'var(--text-subtle)', fontSize: '13px', margin: 0, lineHeight: 1.5}}>One-click sync to major CMS platforms like WordPress or Ghost.</p>
              </div>
              <style dangerouslySetInnerHTML={{__html: `
@@ -1787,15 +1787,30 @@ function App() {
               <div className="demo-visual-card">
                 <div className="cms-connection-demo">
                   <div className="cms-icons">
-                    <div className="cms-icon"><img src="https://cdn.simpleicons.org/wordpress/white" alt="WP" style={{width: 20}}/></div>
-                    <div className="cms-icon"><img src="https://cdn.simpleicons.org/webflow/white" alt="WF" style={{width: 20}}/></div>
-                    <div className="cms-icon"><img src="https://cdn.simpleicons.org/shopify/white" alt="SH" style={{width: 20}}/></div>
+                    <div className="cms-icon cms-icon-wp">
+                      <img src="https://cdn.simpleicons.org/wordpress/3858E9" alt="WordPress" style={{width: 18}}/>
+                      <span className="cms-label">WordPress</span>
+                    </div>
+                    <div className="cms-icon cms-icon-wf">
+                      <img src="https://cdn.simpleicons.org/webflow/146EF5" alt="Webflow" style={{width: 18}}/>
+                      <span className="cms-label">Webflow</span>
+                    </div>
+                    <div className="cms-icon cms-icon-sh">
+                      <img src="https://cdn.simpleicons.org/shopify/96BF48" alt="Shopify" style={{width: 18}}/>
+                      <span className="cms-label">Shopify</span>
+                    </div>
+                    <div className="cms-icon cms-icon-gh">
+                      <img src="https://cdn.simpleicons.org/ghost/212121" alt="Ghost" style={{width: 18}}/>
+                      <span className="cms-label">Ghost</span>
+                    </div>
                   </div>
                   <div className="connection-path">
                     <div className="data-packet"></div>
+                    <div className="data-packet" style={{animationDelay: '1s'}}></div>
                   </div>
                   <div className="BlogzzUP-node">
-                    <Sparkles size={24} className="logo-icon block" />
+                    <Sparkles size={22} />
+                    <span className="cms-node-label">BlogzzUP</span>
                   </div>
                 </div>
               </div>
@@ -1814,10 +1829,29 @@ function App() {
               
               <div className="demo-visual-card">
                 <div className="pipeline-demo">
-                  <div className="pipeline-item">Analyzing SEO Gap...</div>
-                  <div className="pipeline-item">Drafting Outline & Structure...</div>
-                  <div className="pipeline-item">Optimizing NLP Entities...</div>
-                  <div className="pipeline-item">Ready to Publish!</div>
+                  <div className="pipeline-item pipeline-item-done">
+                    <span className="pipeline-dot dot-green"></span>
+                    <span className="pipeline-emoji">🔍</span>
+                    <span>Analyzing SEO Gap</span>
+                    <span className="pipeline-check">✓</span>
+                  </div>
+                  <div className="pipeline-item pipeline-item-done">
+                    <span className="pipeline-dot dot-green"></span>
+                    <span className="pipeline-emoji">✍️</span>
+                    <span>Drafting Outline &amp; Structure</span>
+                    <span className="pipeline-check">✓</span>
+                  </div>
+                  <div className="pipeline-item pipeline-item-active">
+                    <span className="pipeline-dot dot-violet"></span>
+                    <span className="pipeline-emoji">🧠</span>
+                    <span>Optimizing NLP Entities</span>
+                    <span className="pipeline-spinner"></span>
+                  </div>
+                  <div className="pipeline-item pipeline-item-pending">
+                    <span className="pipeline-dot dot-gray"></span>
+                    <span className="pipeline-emoji">🚀</span>
+                    <span>Ready to Publish!</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1835,18 +1869,69 @@ function App() {
               
               <div className="demo-visual-card">
                 <div className="graph-demo">
-                  <svg className="growth-line" viewBox="0 0 100 50">
-                    <path className="growth-path" d="M0,45 Q20,40 40,25 T70,15 T100,5" fill="none" stroke="url(#gradient)" strokeWidth="3" />
-                    <circle cx="20" cy="37" r="2.5" fill="#F59E0B" className="pulse-dot delay-1"/>
-                    <circle cx="55" cy="20" r="2.5" fill="#F59E0B" className="pulse-dot delay-2"/>
-                    <circle cx="85" cy="10" r="2.5" fill="#F59E0B" className="pulse-dot delay-3"/>
-                    <defs>
-                      <linearGradient id="gradient">
-                         <stop offset="0%" stopColor="#7C3AED" />
-                         <stop offset="100%" stopColor="#F59E0B" />
-                      </linearGradient>
-                    </defs>
-                  </svg>
+                  <div className="graph-stats">
+                    <div className="graph-stat-chip chip-green">↑ +2,340 visits/mo</div>
+                    <div className="graph-stat-chip chip-violet">SEO: 94/100</div>
+                  </div>
+                  <div className="live-graph-wrap">
+                    <svg viewBox="0 0 200 90" preserveAspectRatio="none" style={{width:'100%',height:'110px',overflow:'visible',display:'block'}}>
+                      <defs>
+                        <linearGradient id="trafficLineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                          <stop offset="0%" stopColor="#7C3AED"/>
+                          <stop offset="60%" stopColor="#06B6D4"/>
+                          <stop offset="100%" stopColor="#F59E0B"/>
+                        </linearGradient>
+                        <linearGradient id="trafficFillGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                          <stop offset="0%" stopColor="#7C3AED" stopOpacity="0.22"/>
+                          <stop offset="100%" stopColor="#7C3AED" stopOpacity="0"/>
+                        </linearGradient>
+                        <filter id="trafficGlow">
+                          <feGaussianBlur stdDeviation="1.5" result="blur"/>
+                          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                        </filter>
+                      </defs>
+                      {/* Grid lines */}
+                      <line x1="0" y1="22" x2="200" y2="22" stroke="rgba(148,163,184,0.12)" strokeWidth="0.5"/>
+                      <line x1="0" y1="44" x2="200" y2="44" stroke="rgba(148,163,184,0.12)" strokeWidth="0.5"/>
+                      <line x1="0" y1="66" x2="200" y2="66" stroke="rgba(148,163,184,0.12)" strokeWidth="0.5"/>
+                      {/* Y-axis labels */}
+                      <text x="0" y="20" fontSize="7" fill="rgba(148,163,184,0.6)" fontFamily="Inter,sans-serif">3K</text>
+                      <text x="0" y="42" fontSize="7" fill="rgba(148,163,184,0.6)" fontFamily="Inter,sans-serif">2K</text>
+                      <text x="0" y="64" fontSize="7" fill="rgba(148,163,184,0.6)" fontFamily="Inter,sans-serif">1K</text>
+                      {/* Filled area */}
+                      <path
+                        d="M14,80 C30,75 45,68 60,58 C75,48 85,42 100,34 C115,26 130,20 145,14 C160,8 175,5 190,3 L190,85 L14,85 Z"
+                        fill="url(#trafficFillGrad)"
+                      />
+                      {/* Main line */}
+                      <path
+                        d="M14,80 C30,75 45,68 60,58 C75,48 85,42 100,34 C115,26 130,20 145,14 C160,8 175,5 190,3"
+                        fill="none"
+                        stroke="url(#trafficLineGrad)"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        filter="url(#trafficGlow)"
+                        style={{
+                          strokeDasharray: 320,
+                          strokeDashoffset: 320,
+                          animation: 'drawTrafficLine 2.2s cubic-bezier(0.4,0,0.2,1) forwards'
+                        }}
+                      />
+                      {/* Data point circles */}
+                      <circle cx="60"  cy="58" r="3.5" fill="#06B6D4" stroke="white" strokeWidth="1.5" style={{animation:'trafficDotPop 0.4s 1.0s both'}}/>
+                      <circle cx="100" cy="34" r="3.5" fill="#06B6D4" stroke="white" strokeWidth="1.5" style={{animation:'trafficDotPop 0.4s 1.5s both'}}/>
+                      <circle cx="145" cy="14" r="3.5" fill="#F59E0B" stroke="white" strokeWidth="1.5" style={{animation:'trafficDotPop 0.4s 1.9s both'}}/>
+                      {/* Peak indicator */}
+                      <circle cx="190" cy="3"  r="4.5" fill="#10B981" stroke="white" strokeWidth="2"   style={{animation:'trafficDotPop 0.4s 2.1s both'}}/>
+                      <line x1="190" y1="3" x2="190" y2="85" stroke="rgba(16,185,129,0.2)" strokeWidth="1" strokeDasharray="3,3"/>
+                    </svg>
+                    <div className="graph-x-labels">
+                      <span>Jan</span><span>Mar</span><span>Jun</span><span>Sep</span><span>Now ↑</span>
+                    </div>
+                  </div>
+                  <div className="graph-footer-badge">
+                    <span className="gfb-dot"></span> Live traffic tracking
+                  </div>
                 </div>
               </div>
             </div>

@@ -60,6 +60,7 @@ const TONE_OPTIONS = [
   { value: 'conversational',  label: 'Conversational',  desc: 'Friendly, readable, approachable' },
   { value: 'authoritative',   label: 'Authoritative',   desc: 'Expert-led, confident, credible' },
   { value: 'educational',     label: 'Educational',     desc: 'Structured, clear, informative' },
+  { value: 'genz',            label: 'GenZ 🔥',         desc: 'No cap, hits different fr fr ✨' },
 ];
 
 const GENERATION_STEPS = [
@@ -70,6 +71,16 @@ const GENERATION_STEPS = [
   { text: 'Running SEO optimization pass',   pct: 76 },
   { text: 'Humanizing content',              pct: 88 },
   { text: 'Structuring featured snippets',   pct: 95 },
+];
+
+const GENZ_GENERATION_STEPS = [
+  { text: '👀 lowkey scanning the SERP fr...',         pct: 12 },
+  { text: '🔥 finding gaps that slap...',              pct: 25 },
+  { text: '✨ building the content brief bestie...',    pct: 40 },
+  { text: '⚡ drafting the blog — no cap...',           pct: 60 },
+  { text: '🎯 SEO optimization era...',                pct: 76 },
+  { text: '💅 humanizing — understood the assignment...',pct: 88 },
+  { text: '🏆 snippet structure — ate that fr fr...',    pct: 95 },
 ];
 
 // ─── Helper ─────────────────────────────────────────────────────────────────
@@ -149,6 +160,43 @@ const API_KEYS = [
 ].filter(Boolean);
 
 const getScoreColor = (s) => s >= 90 ? '#10B981' : s >= 80 ? '#34D399' : s >= 70 ? '#FBBF24' : s >= 55 ? '#F59E0B' : '#EF4444';
+
+const showGenZToast = () => {
+  // Remove existing toast
+  const existing = document.getElementById('genz-activation-toast');
+  if (existing) existing.remove();
+  
+  const toast = document.createElement('div');
+  toast.id = 'genz-activation-toast';
+  toast.style.cssText = `
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(0px);
+    background: linear-gradient(135deg, #FF6B6B, #FFD93D, #C77DFF);
+    background-size: 200%;
+    animation: genz-border 2s ease infinite;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 700;
+    z-index: 9999;
+    box-shadow: 0 8px 32px rgba(199, 125, 255, 0.5);
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+  `;
+  toast.textContent = '⚡ GenZ Mode activated — no cap fr fr 🔥';
+  document.body.appendChild(toast);
+  
+  // Fade out after 3 seconds
+  setTimeout(() => {
+    toast.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateX(-50%) translateY(20px)';
+    setTimeout(() => toast.remove(), 500);
+  }, 3000);
+};
 
 // ─── Main Component ──────────────────────────────────────────────────────────
 const BlogEditor = ({ callGemini, publishBlog, uid }) => {
@@ -261,10 +309,11 @@ const BlogEditor = ({ callGemini, publishBlog, uid }) => {
     setStage('generating');
     setProgress({ pct: 0, text: 'Starting...' });
 
+    const activeSteps = tone === 'genz' ? GENZ_GENERATION_STEPS : GENERATION_STEPS;
     let stepIndex = 0;
     const interval = setInterval(() => {
-      if (stepIndex < GENERATION_STEPS.length) {
-        setProgress({ pct: GENERATION_STEPS[stepIndex].pct, text: GENERATION_STEPS[stepIndex].text });
+      if (stepIndex < activeSteps.length) {
+        setProgress({ pct: activeSteps[stepIndex].pct, text: activeSteps[stepIndex].text });
         stepIndex++;
       }
     }, 700);
@@ -272,11 +321,33 @@ const BlogEditor = ({ callGemini, publishBlog, uid }) => {
     const geoText   = geo ? `Target location: ${geo}. Include local entities and city-specific examples.` : '';
     const extraText = instructions ? `Additional requirements: ${instructions}` : '';
 
+    // GenZ tone system prompt injection
+    const toneInstructions = {
+      professional: 'Use a formal, authoritative, and trustworthy tone. Write like a senior industry expert.',
+      conversational: 'Use a friendly, warm, and approachable tone. Write like you are talking to a friend.',
+      authoritative: 'Use a confident, expert-led tone backed by data and credibility.',
+      educational: 'Use a structured, clear, and informative tone. Break things down simply.',
+      genz: `Use an authentic GenZ writing style. Rules:
+    - Use these words/phrases naturally: "no cap", "fr fr", "hits different", "lowkey", "highkey", "bussin", "slay", "vibe", "FOMO", "main character energy", "understood the assignment", "it's giving", "era", "rent free", "NGL", "ate that", "based", "W", "L", "mid", "fire", "goated", "rizz", "snatched", "period", "bestie", "bet", "touch grass", "giving", "the audacity"
+    - Mix casual language with real information
+    - Use em dashes for dramatic effect — like this
+    - Add occasional rhetorical questions
+    - Short punchy sentences. Then longer ones for context.
+    - Use "we" and "you" to feel inclusive
+    - Add relevant emojis sparingly in headings only (max 1 per H2)
+    - Still be SEO-optimized but make it feel authentic, not corporate
+    - Start with a hook that would stop someone mid-scroll
+    - Make statistics and facts sound exciting, not boring
+    - End sections with a mic-drop statement`
+    };
+
+    const activeToneInstruction = toneInstructions[tone] || toneInstructions.professional;
+
     const prompt = `You are an expert SEO content writer for Indian startups and businesses.
 
 Write a comprehensive, SEO-optimized blog post with these specifications:
 - Primary keyword: "${keyword}"
-- Tone: ${tone}
+- Tone instruction: ${activeToneInstruction}
 - Target word count: ${wordCount} words
 - ${geoText}
 - ${extraText}
@@ -903,21 +974,112 @@ Return ONLY a valid JSON object:
               <div className="form-group">
                 <label className="form-label" htmlFor="be-tone">Writing Tone</label>
                 <div className="be-tone-grid" role="radiogroup" aria-labelledby="be-tone">
-                  {TONE_OPTIONS.map(t => (
-                    <label
-                      key={t.value}
-                      className={`be-tone-card${tone === t.value ? ' selected' : ''}`}
-                    >
-                      <input
-                        type="radio" name="tone" value={t.value}
-                        checked={tone === t.value}
-                        onChange={() => setTone(t.value)}
-                        className="sr-only"
-                      />
-                      <span className="be-tone-label">{t.label}</span>
-                      <span className="be-tone-desc">{t.desc}</span>
-                    </label>
-                  ))}
+                  {TONE_OPTIONS.map(t => {
+                    if (t.value === 'genz') {
+                      return (
+                        <label
+                          key={t.value}
+                          className={`be-tone-card genz-card${tone === 'genz' ? ' selected' : ''}`}
+                          style={{
+                            position: 'relative',
+                            overflow: 'hidden',
+                            cursor: 'pointer',
+                            gridColumn: 'span 2',
+                            padding: 0,
+                            border: 'none',
+                            background: 'none'
+                          }}
+                        >
+                          <input
+                            type="radio" name="tone" value="genz"
+                            checked={tone === 'genz'}
+                            onChange={() => {
+                              setTone('genz');
+                              showGenZToast();
+                            }}
+                            className="sr-only"
+                          />
+                          {/* Animated gradient border for GenZ card */}
+                          <div style={{
+                            position: 'absolute',
+                            inset: 0,
+                            background: 'linear-gradient(135deg, #FF6B6B, #FFD93D, #6BCB77, #4D96FF, #C77DFF)',
+                            backgroundSize: '300% 300%',
+                            animation: 'genz-border 3s ease infinite',
+                            borderRadius: 'inherit',
+                            zIndex: 0,
+                            padding: '2px'
+                          }}/>
+                          <div style={{
+                            position: 'relative',
+                            zIndex: 1,
+                            background: tone === 'genz' 
+                              ? 'transparent' 
+                              : 'var(--color-bg-card, #141B2D)',
+                            borderRadius: 'inherit',
+                            padding: '12px 16px',
+                            height: '100%',
+                            boxSizing: 'border-box'
+                          }}>
+                            <div style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '10px',
+                              marginBottom: '6px'
+                            }}>
+                              <span style={{ fontSize: '20px' }}>⚡</span>
+                              <span style={{
+                                fontWeight: 700,
+                                fontSize: '15px',
+                                background: 'linear-gradient(135deg, #FF6B6B, #FFD93D, #C77DFF)',
+                                backgroundSize: '200%',
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent',
+                                animation: 'genz-border 2s ease infinite'
+                              }}>
+                                GenZ Mode 🔥
+                              </span>
+                              <span style={{
+                                fontSize: '10px',
+                                background: 'linear-gradient(135deg, #FF6B6B, #C77DFF)',
+                                color: 'white',
+                                borderRadius: '999px',
+                                padding: '2px 8px',
+                                fontWeight: 700,
+                                WebkitTextFillColor: 'white'
+                              }}>
+                                NEW
+                              </span>
+                            </div>
+                            <span style={{
+                              fontSize: '13px',
+                              color: tone === 'genz' ? 'white' : '#94A3B8'
+                            }}>
+                              No cap, hits different fr fr ✨
+                            </span>
+                          </div>
+                        </label>
+                      );
+                    }
+                    return (
+                      <label
+                        key={t.value}
+                        className={`be-tone-card${tone === t.value ? ' selected' : ''}`}
+                      >
+                        <input
+                          type="radio" name="tone" value={t.value}
+                          checked={tone === t.value}
+                          onChange={() => {
+                            setTone(t.value);
+                            if (t.value === 'genz') showGenZToast();
+                          }}
+                          className="sr-only"
+                        />
+                        <span className="be-tone-label">{t.label}</span>
+                        <span className="be-tone-desc">{t.desc}</span>
+                      </label>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -1045,7 +1207,7 @@ Return ONLY a valid JSON object:
               <div className="be-progress-pct">{progress.pct}%</div>
 
               {/* Step stepper */}
-              <GenerationStepper steps={GENERATION_STEPS} currentPct={progress.pct} currentText={progress.text} />
+              <GenerationStepper steps={tone === 'genz' ? GENZ_GENERATION_STEPS : GENERATION_STEPS} currentPct={progress.pct} currentText={progress.text} />
 
               {/* Keyword context */}
               <div className="be-gen-context">

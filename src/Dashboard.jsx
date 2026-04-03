@@ -1947,20 +1947,76 @@ Use clear headings and keep it actionable. Write in a professional consulting to
               </div>
             );
           } else if (sec.id === 'billing') {
+            const plans = [
+              {
+                name: 'Starter',
+                price: '₹1,999',
+                per: '/month',
+                subtitle: 'For early-stage startups building organic presence',
+                freeNote: '(First month free)',
+                features: ['15 SEO blogs/month', 'Real-time SEO Scorer', 'Auto-publish to 1 website', 'SERP Gap Scanner (5/month)', 'Content Calendar', 'Email support'],
+              },
+              {
+                name: 'Growth',
+                price: '₹4,999',
+                per: '/month',
+                subtitle: 'For startups replacing their marketing team',
+                features: ['Everything in Starter', '50 SEO blogs/month', 'GEO Optimization Engine', 'Content Cluster Map (unlimited)', 'Social Repurpose Engine', 'Voice-to-Blog (10/month)', 'ROI & Traffic Tracker', 'Priority support'],
+                active: true,
+                blogs: '50',
+              },
+              {
+                name: 'Scale',
+                price: 'Custom',
+                per: '',
+                subtitle: 'For agencies and high-growth teams',
+                features: ['Unlimited blogs', 'Multi-website support', 'Custom brand voice training', 'Full API access', 'White-label option', 'Dedicated onboarding', 'SLA + Priority support', 'Advanced analytics'],
+              }
+            ];
             content = (
-              <div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
-                  {[
-                    { name: 'Starter', price: '₹2,499', blogs: '10 blogs/mo' },
-                    { name: 'Growth', price: '₹6,499', blogs: '50 blogs/mo', active: true },
-                    { name: 'Scale', price: '₹16,500', blogs: '200 blogs/mo' }
-                  ].map(plan => (
-                    <div key={plan.name} style={{ background: plan.active ? 'rgba(124,58,237,0.1)' : '#141B2D', border: plan.active ? '1px solid #7C3AED' : '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '32px', textAlign: 'center', position: 'relative' }}>
-                      {plan.active && <div style={{ position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', background: '#7C3AED', color: 'white', fontSize: '11px', fontWeight: 'bold', padding: '4px 12px', borderRadius: '99px' }}>Current Plan</div>}
-                      <h3 style={{ color: 'white', fontSize: '20px', margin: '0 0 8px' }}>{plan.name}</h3>
-                      <div style={{ fontSize: '36px', color: 'white', fontWeight: 'bold', marginBottom: '16px' }}>{plan.price}<span style={{ fontSize: '14px', color: '#94A3B8' }}>/mo</span></div>
-                      <div style={{ color: '#A78BFA', fontWeight: 'bold', fontSize: '14px', marginBottom: '24px' }}>{plan.blogs}</div>
-                      <button style={{ width: '100%', background: plan.active ? 'transparent' : 'rgba(255,255,255,0.05)', color: plan.active ? '#A78BFA' : 'white', border: plan.active ? '1px solid #A78BFA' : 'none', padding: '12px', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold' }}>{plan.active ? 'Manage Plan' : 'Upgrade'}</button>
+              <div style={{paddingTop: '20px'}}>
+                <div className="pricing-grid-3">
+                  {plans.map(plan => (
+                    <div key={plan.name} className={`pc-card${plan.active ? ' popular' : ''}`}>
+                      {plan.active && <div className="pc-most-pop">✦ Current Plan</div>}
+                      <h3 className="pc-header">{plan.name}</h3>
+                      <div className="pc-price-wrap">
+                        <span className="pc-price">{plan.price}</span>
+                        <span className="pc-per">{plan.per}</span>
+                      </div>
+                      {plan.freeNote && <div style={{fontSize:'12px', color:'#10B981', marginTop:'4px'}}>{plan.freeNote}</div>}
+                      <p className="pc-desc">{plan.subtitle}</p>
+                      {plan.active && (
+                        <div className="billing-usage-bar-wrap" style={{marginBottom:'16px'}}>
+                          <div className="billing-usage-label">
+                            <span>Usage this month</span>
+                            <span style={{fontWeight:700}}>0 / {plan.blogs} blogs</span>
+                          </div>
+                          <div className="billing-usage-track">
+                            <div className="billing-usage-fill" style={{width:'0%'}}></div>
+                          </div>
+                        </div>
+                      )}
+                      <div className="pc-divider"></div>
+                      <ul className="pc-feat-list">
+                        {plan.features.map((f, i) => (
+                          <li key={i} className="pc-feat">
+                            <span className="pc-feat-check">✓</span>{f}
+                          </li>
+                        ))}
+                      </ul>
+                      <button
+                        className={
+                          plan.active ? 'pc-btn-solid'
+                          : plan.name === 'Scale' ? 'pc-btn-outline-cyan'
+                          : 'pc-btn-outline'
+                        }
+                        style={{marginTop: '24px'}}
+                      >
+                        {plan.active ? 'Manage Current Plan'
+                          : plan.name === 'Scale' ? 'Contact Sales →'
+                          : `Start Free →`}
+                      </button>
                     </div>
                   ))}
                 </div>
